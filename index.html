@@ -3687,7 +3687,7 @@
       <div class="fields">
         <div class="field-group">
           <label class="field-label"><span data-lk="lk_field_cid" class="editable-text">Existing CID</span><span class="req-star" id="star-cid" style="color:rgba(96,165,250,0.4);">★</span></label>
-          <input class="field-input" type="text" id="f-cid" placeholder="" disabled style="opacity:0.4;cursor:not-allowed;" maxlength="999999" spellcheck="false">
+          <input class="field-input" type="text" id="f-cid" placeholder="" maxlength="999999" spellcheck="false">
         </div>
         <div class="field-group">
           <label class="field-label"><span data-lk="lk_field_name" class="editable-text">Customer Name</span><span class="req-star" id="star-name">★</span></label>
@@ -7220,12 +7220,16 @@
       var cidStar = document.getElementById('star-cid');
       var isExisting = value === 'Existing Customer';
       if (cidEl) {
-        cidEl.disabled = !isExisting;
-        cidEl.style.opacity = isExisting ? '1' : '0.4';
-        cidEl.style.cursor  = isExisting ? '' : 'not-allowed';
-        cidEl.style.borderColor = isExisting ? 'rgba(248,113,113,0.5)' : '';
-        cidEl.style.background  = isExisting ? 'rgba(248,113,113,0.05)' : '';
-        if (!isExisting) { cidEl.value = ''; _updateAddrSourceBadge && _updateAddrSourceBadge(); }
+        cidEl.disabled = false;
+        cidEl.style.opacity = '1';
+        cidEl.style.cursor  = '';
+        if (isExisting) {
+          cidEl.style.borderColor = 'rgba(248,113,113,0.5)';
+          cidEl.style.background  = 'rgba(248,113,113,0.05)';
+        } else {
+          cidEl.style.borderColor = '';
+          cidEl.style.background  = '';
+        }
       }
       if (cidStar) {
         cidStar.style.color = isExisting ? '#f87171' : 'rgba(96,165,250,0.4)';
@@ -7365,7 +7369,7 @@
     // Reset CID
     var cidR = document.getElementById('f-cid');
     var cidStarR = document.getElementById('star-cid');
-    if (cidR) { cidR.disabled = true; cidR.style.opacity = '0.4'; cidR.style.cursor = 'not-allowed'; cidR.style.borderColor = ''; cidR.style.background = ''; cidR.style.boxShadow = ''; }
+    if (cidR) { cidR.disabled = false; cidR.style.opacity = ''; cidR.style.cursor = ''; cidR.style.borderColor = ''; cidR.style.background = ''; cidR.style.boxShadow = ''; }
     if (cidStarR) cidStarR.style.color = 'rgba(96,165,250,0.4)';
     // Reset required field stars + borders
     ['star-name','star-phone','star-email'].forEach(function(id) {
