@@ -8965,7 +8965,11 @@
   function resumeRecord(id) {
     var r = (_archiveCache||[]).find(function(x){ return String(x.id)===String(id); });
     if (!r) return;
+    // Clear archive view state so closeResearchPopup doesn't restore stale data
+    _prevArchiveState = null;
+    window._viewingArchiveRecord = null;
     closeArchivePopout();
+    try { closeResearchPopup(); } catch(e) {}
     unlockForm();
     _submissionLock = false;
     _assignOverride = r.assignOverride || null;
@@ -13919,13 +13923,20 @@
     if (footerBtns) {
       var copyIco  = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
       if (isSaved) {
+        // Check if this is a research-only / incomplete record
+        var _viewRec = window._viewingArchiveRecord;
+        var _isROSaved = _viewRec && (_viewRec.status === 'research' || _viewRec.status === 'incomplete');
         // Already sent — copy only, no HOT, no send buttons
         var copyLabel = hasAI ? 'Re-send Email' : 'Re-send Email';
         var copyStyle = hasAI
           ? 'background:rgba(29,158,117,0.1);border:1px solid rgba(29,158,117,0.5);color:#5DCAA5;'
           : 'background:rgba(139,143,168,0.15);border:1px solid rgba(139,143,168,0.4);color:#B8BBCC;';
         var emailIcoSaved = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>';
-        footerBtns.innerHTML =
+        var editIco = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>';
+        var editBtn = _isROSaved
+          ? '<button onclick="resumeRecord(' + _viewRec.id + ')" style="height:32px;padding:0 14px;border-radius:8px;font-size:12px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.4);color:#f59e0b;">' + editIco + ' Edit Record</button>'
+          : '';
+        footerBtns.innerHTML = editBtn +
           '<button onclick="_resendSavedRecord();" style="height:32px;padding:0 14px;border-radius:8px;font-size:12px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;' + copyStyle + '">' + emailIcoSaved + ' ' + copyLabel + '</button>';
       } else {
         // Not yet sent — check if research-only or full scorecard
