@@ -6837,6 +6837,7 @@
         var emailIcon = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>';
         var copyIcon13 = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
         var wasDup = isDuplicate(recToSave);
+        recToSave.duplicate = wasDup;
         saveRecord(recToSave);
         if (!wasDup) showCompliment();
         lockForm();
@@ -8143,20 +8144,35 @@
   }
 
   function isDuplicate(rec) {
-    var records = getRecords();
+    var records = getRecords().concat(_archiveCache || []);
     var today    = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
     var nameKey  = (rec.name  || '').trim().toLowerCase();
     var phoneKey = (rec.phone || '').replace(/\D/g, '');
     var emailKey = (rec.email || '').trim().toLowerCase();
+    var companyKey = (rec.company || '').trim().toLowerCase();
+    var websiteKey = _normDomain(rec.website || '');
+    var emailDomain = emailKey.indexOf('@') !== -1 ? _normDomain(emailKey.split('@')[1]) : '';
     return records.some(function(r) {
       if (r.date !== today) return false;  // only check same-day records
+      if (r.id === rec.id) return false;   // don't match self
       var rName  = (r.name  || '').trim().toLowerCase();
       var rPhone = (r.phone || '').replace(/\D/g, '');
       var rEmail = (r.email || '').trim().toLowerCase();
-      var nameMatch  = nameKey  && rName  && nameKey  === rName;
-      var phoneMatch = phoneKey && rPhone && phoneKey === rPhone;
-      var emailMatch = emailKey && rEmail && emailKey === rEmail;
-      return nameMatch && (phoneMatch || emailMatch);
+      var rCompany = (r.company || '').trim().toLowerCase();
+      var rWebDomain = _normDomain(r.website || '');
+      var rEmailDomain = rEmail.indexOf('@') !== -1 ? _normDomain(rEmail.split('@')[1]) : '';
+      // Name match + any secondary match
+      var nameMatch    = nameKey && rName && nameKey === rName;
+      var phoneMatch   = phoneKey && rPhone && phoneKey === rPhone;
+      var emailMatch   = emailKey && rEmail && emailKey === rEmail;
+      var companyMatch = companyKey && rCompany && companyKey === rCompany;
+      var domainMatch  = (websiteKey && rWebDomain && websiteKey === rWebDomain) ||
+                         (emailDomain && rEmailDomain && emailDomain === rEmailDomain);
+      // Duplicate if: exact email match, or name + any other signal, or company + domain
+      if (emailMatch) return true;
+      if (nameMatch && (phoneMatch || domainMatch || companyMatch)) return true;
+      if (companyMatch && domainMatch) return true;
+      return false;
     });
   }
 
@@ -15717,6 +15733,7 @@
       if (_savedRecordId && _savedRecordId !== 'pending') { return; } // already saved
       _savedRecordId = 'pending';
       var wasDup = isDuplicate(recToSave);
+      recToSave.duplicate = wasDup;
       saveRecord(recToSave);
       if (!wasDup) showCompliment();
       lockForm();
