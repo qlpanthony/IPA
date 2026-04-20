@@ -8983,23 +8983,50 @@
     _assignOverride = r.assignOverride || null;
     _dupBannerDismissed = false; _dupSearchAnyway = false; hideDupBanner();
 
-    // Clear research data for fresh run
-    _researchData = {
-      companyName:'', domain:'', employees:'', industry:'', blurb:'',
-      ivState:'none', ivYourTier:'', ivYourScore:0, ivAiTier:'', ivAiScore:0,
-      eventsSite:[], eventsWeb:[], observances:[], emailResearchBlock:'',
-      companyLinkedIn:'', contactLinkedIn:'', revenue:'', foundedYear:'', recentNews:[], socialMedia:{}, searchCostUSD:0, searchDuration:null, salesHooks:[], keyPeople:[], tradeShows:[]
-    };
+    // Restore research data from record if available, otherwise start fresh
+    var _rdRestore = {};
+    try { _rdRestore = typeof r.researchData === 'string' ? JSON.parse(r.researchData) : (r.researchData || {}); } catch(e) { _rdRestore = {}; }
+    var _hasRestoredRd = _rdRestore && (_rdRestore.industry || _rdRestore.blurb || (_rdRestore.eventsSite && _rdRestore.eventsSite.length) || (_rdRestore.eventsWeb && _rdRestore.eventsWeb.length));
+    if (_hasRestoredRd) {
+      _researchData.companyName    = String(_rdRestore.companyName || r.company || '');
+      _researchData.domain         = String(_rdRestore.domain || '');
+      _researchData.employees      = String(_rdRestore.employees || '');
+      _researchData.industry       = String(_rdRestore.industry || '');
+      _researchData.blurb          = String(_rdRestore.blurb || '');
+      _researchData.revenue        = String(_rdRestore.revenue || '');
+      _researchData.foundedYear    = String(_rdRestore.foundedYear || '');
+      _researchData.socialMedia    = (_rdRestore.socialMedia && typeof _rdRestore.socialMedia === 'object') ? _rdRestore.socialMedia : {};
+      _researchData.recentNews     = Array.isArray(_rdRestore.recentNews)   ? _rdRestore.recentNews   : [];
+      _researchData.eventsSite     = Array.isArray(_rdRestore.eventsSite)   ? _rdRestore.eventsSite   : [];
+      _researchData.eventsWeb      = Array.isArray(_rdRestore.eventsWeb)    ? _rdRestore.eventsWeb    : [];
+      _researchData.observances    = Array.isArray(_rdRestore.observances)  ? _rdRestore.observances  : [];
+      _researchData.companyLinkedIn= _rdRestore.companyLinkedIn || '';
+      _researchData.contactLinkedIn= _rdRestore.contactLinkedIn || '';
+      _researchData.contactPerson  = _rdRestore.contactPerson  || null;
+      _researchData.decisionMakers = _rdRestore.decisionMakers || null;
+      _researchData.salesHooks     = Array.isArray(_rdRestore.salesHooks)   ? _rdRestore.salesHooks   : [];
+      _researchData.keyPeople      = Array.isArray(_rdRestore.keyPeople)    ? _rdRestore.keyPeople    : [];
+      _researchData.tradeShows     = Array.isArray(_rdRestore.tradeShows)   ? _rdRestore.tradeShows.filter(function(t){ return t && t.title; }) : [];
+      _researchData.searchCostUSD  = parseFloat(_rdRestore.searchCostUSD) || 0;
+      _researchData.searchDuration = _rdRestore.searchDuration || null;
+    } else {
+      _researchData = {
+        companyName:'', domain:'', employees:'', industry:'', blurb:'',
+        ivState:'none', ivYourTier:'', ivYourScore:0, ivAiTier:'', ivAiScore:0,
+        eventsSite:[], eventsWeb:[], observances:[], emailResearchBlock:'',
+        companyLinkedIn:'', contactLinkedIn:'', revenue:'', foundedYear:'', recentNews:[], socialMedia:{}, searchCostUSD:0, searchDuration:null, salesHooks:[], keyPeople:[], tradeShows:[]
+      };
+    }
     _ivAccepted = false;
     var ivBadgeR = document.getElementById('iv-ai-badge'); if (ivBadgeR) ivBadgeR.style.display = 'none';
     _lastResearchKey = '';
     _researchInProgress = false;
     if (_researchTimer) { clearTimeout(_researchTimer); _researchTimer = null; }
-    setPhaseIndicator('reset');
+    setPhaseIndicator(_hasRestoredRd ? 'done' : 'reset');
     _resetTitleBar();
     setLightbulbLoading(false);
-    setLightbulb(false);
-    setResearchCtrlBtn('none');
+    setLightbulb(_hasRestoredRd);
+    setResearchCtrlBtn(_hasRestoredRd ? 'rerun' : 'none');
 
     // Link to existing record so next send is an UPDATE
     _savedRecordId = r.id;
