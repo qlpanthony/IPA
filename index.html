@@ -6551,11 +6551,11 @@
     var pdfBtn   = document.getElementById('pdf-btn');
     // Don't override P2 lock
     if (pdfBtn && pdfBtn._p2Locked) return;
-    // Don't override post-save button state (Re-send Email)
-    if (_savedRecordId && _savedRecordId !== 'pending') return;
-    // Research-ready: IV scored + research data present, PV or AV missing, not yet saved
+    // Don't override post-save button state (Re-send Email) — only when form is locked
+    if (_savedRecordId && _savedRecordId !== 'pending' && _formLocked) return;
+    // Research-ready: IV scored + research data present, PV or AV missing
     var hasRd = !!((_researchData.industry || _researchData.blurb || (_researchData.eventsSite && _researchData.eventsSite.length) || (_researchData.eventsWeb && _researchData.eventsWeb.length) || (_researchData.observances && _researchData.observances.length) || _researchData.companyLinkedIn || _researchData.revenue || (_researchData.recentNews && _researchData.recentNews.length) || (_researchData.decisionMakers && (_researchData.decisionMakers.ownerExec || _researchData.decisionMakers.marketing || _researchData.decisionMakers.procurement)) || (_researchData.salesHooks && _researchData.salesHooks.length) || (_researchData.tradeShows && _researchData.tradeShows.length)));
-    var ivOnly = scores.iv !== null && (scores.pv === null || scores.av === null) && hasRd && !_savedRecordId;
+    var ivOnly = scores.iv !== null && (scores.pv === null || scores.av === null) && hasRd;
     if (emailBtn) {
       var lblEl = document.getElementById('email-btn-label');
       if (ready && hasRd) {
@@ -7074,13 +7074,19 @@
       if (lblL) lblL.style.cssText = inactiveStyle;
       if (lblR) {
         if (type === 'budget') {
-          lblR.style.cssText = 'padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:rgba(139,143,168,0.12);color:#B8BBCC;border:1px solid rgba(139,143,168,0.3);transition:all 0.15s;';
+          lblR.style.cssText = 'padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:rgba(251,113,133,0.15);color:#FB7185;border:1px solid rgba(251,113,133,0.3);transition:all 0.15s;';
         } else {
-          lblR.style.cssText = 'padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:rgba(245,158,11,0.12);color:#EF9F27;border:1px solid rgba(245,158,11,0.25);transition:all 0.15s;';
+          lblR.style.cssText = 'padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:rgba(251,191,36,0.12);color:#FBBF24;border:1px solid rgba(251,191,36,0.25);transition:all 0.15s;';
         }
       }
     } else {
-      if (lblL) lblL.style.cssText = 'padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:rgba(29,158,117,0.15);color:#5DCAA5;border:1px solid rgba(29,158,117,0.3);transition:all 0.15s;';
+      if (lblL) {
+        if (type === 'budget') {
+          lblL.style.cssText = 'padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:rgba(96,165,250,0.15);color:#60A5FA;border:1px solid rgba(96,165,250,0.3);transition:all 0.15s;';
+        } else {
+          lblL.style.cssText = 'padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:rgba(167,139,250,0.15);color:#A78BFA;border:1px solid rgba(167,139,250,0.3);transition:all 0.15s;';
+        }
+      }
       if (lblR) lblR.style.cssText = inactiveStyle;
     }
   }
@@ -7097,10 +7103,10 @@
       if (dir === 'right') {
         value = 'Project';
         lblL.style.cssText = inactiveStyle;
-        lblR.style.cssText = 'padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:rgba(139,143,168,0.12);color:#B8BBCC;border:1px solid rgba(139,143,168,0.3);transition:all 0.15s;';
+        lblR.style.cssText = 'padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:rgba(251,113,133,0.15);color:#FB7185;border:1px solid rgba(251,113,133,0.3);transition:all 0.15s;';
       } else {
         value = 'Yearly';
-        lblL.style.cssText = 'padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:rgba(29,158,117,0.15);color:#5DCAA5;border:1px solid rgba(29,158,117,0.3);transition:all 0.15s;';
+        lblL.style.cssText = 'padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:rgba(96,165,250,0.15);color:#60A5FA;border:1px solid rgba(96,165,250,0.3);transition:all 0.15s;';
         lblR.style.cssText = inactiveStyle;
       }
     } else {
@@ -7109,10 +7115,10 @@
       if (dir === 'right') {
         value = 'Existing Customer';
         lblL.style.cssText = inactiveStyle;
-        lblR.style.cssText = 'padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:rgba(245,158,11,0.12);color:#EF9F27;border:1px solid rgba(245,158,11,0.25);transition:all 0.15s;';
+        lblR.style.cssText = 'padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:rgba(251,191,36,0.12);color:#FBBF24;border:1px solid rgba(251,191,36,0.25);transition:all 0.15s;';
       } else {
         value = 'New Customer';
-        lblL.style.cssText = 'padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:rgba(29,158,117,0.15);color:#5DCAA5;border:1px solid rgba(29,158,117,0.3);transition:all 0.15s;';
+        lblL.style.cssText = 'padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:rgba(167,139,250,0.15);color:#A78BFA;border:1px solid rgba(167,139,250,0.3);transition:all 0.15s;';
         lblR.style.cssText = inactiveStyle;
       }
     }
@@ -7663,7 +7669,8 @@
       var col = getRepColor(r.rep);
       var dot = '<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:'+col+';margin-right:4px;vertical-align:middle;"></span>';
       var pc  = r.pillClass||'asst';
-      var scoreDisplay = r.score > 0 ? r.score + '/9' : '—/9';
+      var isROArc = r.status === 'research' || (r.status === 'incomplete' && r.iv > 0 && !r.pv && !r.av);
+      var scoreDisplay = isROArc ? 'IV '+(r.iv||0)+'/3' : (r.score > 0 ? r.score + '/9' : '—/9');
       var ownerDisplay = r.owner || '—';
       var dateDisplay  = r.date  || '—';
       var timeDisplay  = r.time  || '';
@@ -7672,11 +7679,11 @@
       return '<div class="record-card" style="opacity:0.95;padding:12px 14px;">' +
         '<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">' +
           '<div style="min-width:0;">' +
-            '<div class="record-name" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+(r.hot?'🔥 ':'')+(r.name||'—')+'<span class="archive-badge" style="margin-left:6px;">Archive</span>'+(r.recordNum?'<span style="margin-left:6px;font-size:9px;font-weight:700;letter-spacing:0.06em;color:#5DCAA5;background:rgba(29,158,117,0.12);border:1px solid rgba(29,158,117,0.25);border-radius:3px;padding:1px 5px;">'+r.recordNum+'</span>':'')+(r.status==='research'?'<span style="margin-left:6px;font-size:9px;font-weight:700;letter-spacing:0.06em;color:var(--text-dim, #b0b2b6);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:3px;padding:1px 5px;">RESEARCH</span>':'')+'</div>' +
+            '<div class="record-name" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+(r.hot?'🔥 ':'')+(r.name||'—')+'<span class="archive-badge" style="margin-left:6px;">Archive</span>'+(r.recordNum?'<span style="margin-left:6px;font-size:9px;font-weight:700;letter-spacing:0.06em;color:#5DCAA5;background:rgba(29,158,117,0.12);border:1px solid rgba(29,158,117,0.25);border-radius:3px;padding:1px 5px;">'+r.recordNum+'</span>':'')+(isROArc?'<span style="margin-left:6px;font-size:9px;font-weight:700;letter-spacing:0.06em;color:var(--text-dim, #b0b2b6);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:3px;padding:1px 5px;">RESEARCH</span>':'')+'</div>' +
             '<div style="font-size:11px;color:var(--text-dim, #b0b2b6);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+(r.company||'—')+'</div>' +
           '</div>' +
-          (r.status === 'research'
-            ? '<span class="record-score-badge research" style="flex-shrink:0;">Research</span>'
+          (isROArc
+            ? '<span class="record-score-badge research" style="flex-shrink:0;">' + scoreDisplay + '</span>'
             : '<span class="record-score-badge '+pc+'" style="flex-shrink:0;">'+scoreDisplay+'</span>') +
         '</div>' +
         '<div style="display:flex;align-items:center;gap:10px;margin-top:7px;font-size:11px;color:var(--text-dim, #b0b2b6);flex-wrap:wrap;">' +
@@ -8061,7 +8068,7 @@
 
     var archive = _archiveCache || [];
     var myRecs = archive.filter(function(r){ return r.rep === currentRep; });
-    var myScRecs = myRecs.filter(function(r){ return r.status !== 'research'; });
+    var myScRecs = myRecs.filter(function(r){ return r.status === 'complete' || (r.iv > 0 && r.pv > 0 && r.av > 0); });
     var myAvg = myScRecs.length ? (myScRecs.reduce(function(s,r){ return s + (Number(r.score)||0); }, 0) / myScRecs.length) : 0;
 
     // Streak
@@ -8113,7 +8120,7 @@
       rowsHtml = '<div style="font-size:11px;color:#717378;text-align:center;display:flex;align-items:center;justify-content:center;flex:1;">No entries yet.</div>';
     } else {
       pageSlice.forEach(function(r, i) {
-        var isRO = r.status === 'research';
+        var isRO = r.status === 'research' || (r.status === 'incomplete' && r.iv > 0 && !r.pv && !r.av);
         var col = isRO ? '#b0b2b6' : pillColor(r.pillClass || 'asst');
         var scoreLabel = isRO ? ((r.iv || '?') + '/3') : ((r.score || '?') + '/9');
         var bg = i % 2 === 0 ? 'background:rgba(255,255,255,0.02);' : '';
@@ -8970,6 +8977,7 @@
     window._viewingArchiveRecord = null;
     closeArchivePopout();
     try { closeResearchPopup(); } catch(e) {}
+    try { closeRecords(); } catch(e) {}
     unlockForm();
     _submissionLock = false;
     _assignOverride = r.assignOverride || null;
@@ -9032,6 +9040,15 @@
       fEmp.value = r.employees;
       _updateFieldLabel('emp-count-label', r.employees);
       autoSelectIV(r.employees);
+    } else if (r.iv > 0) {
+      // No employee count but IV was scored (e.g. keyword inference) — select directly
+      var ivOpt = document.querySelector('[data-group="iv"][data-val="' + r.iv + '"]');
+      if (ivOpt) {
+        document.querySelectorAll('[data-group="iv"]').forEach(function(o) { o.classList.remove('selected'); });
+        ivOpt.classList.add('selected');
+        scores.iv = r.iv;
+        labels.iv = r.ivLabel || ivOpt.dataset.label || '';
+      }
     } else {
       autoSelectIV('');
     }
@@ -9368,6 +9385,12 @@
       var copyIcon = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
       var emailIcon = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>';
       var editIcon = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>';
+      var isROCard = r.status === 'research' || (r.status === 'incomplete' && r.iv > 0 && !r.pv && !r.av);
+      var scoreBadgeClass = isROCard ? 'research' : r.pillClass;
+      var scoreBadgeText = isROCard ? ('IV ' + (r.iv||0) + '/3 — Research Only') : (r.score + '/9 — ' + r.owner);
+      var actionBtn = isROCard
+        ? '<button class="record-email-btn" onclick="resumeRecord(' + r.id + ')" title="Resume and edit this record">' + editIcon + ' Edit Record</button>'
+        : '<button class="record-email-btn" onclick="emailRecordHTML(' + r.id + ', this)" title="Email scorecard as HTML">' + emailIcon + ' Email Scorecard</button>';
       return '<div class="record-card">' +
         '<button class="record-delete" onclick="deleteRecord(' + r.id + ')" title="Delete">✕</button>' +
         '<div class="record-top">' +
@@ -9375,7 +9398,7 @@
             '<div class="record-name">' + (r.hot ? '🔥 ' : '') + (r.name || '—') + (r.duplicate ? ' <span class="record-dup-badge">⚠ Duplicate</span>' : '') + (r.aiResearch === 'YES' ? ' <span style="font-size:10px;background:rgba(29,158,117,0.15);color:#5DCAA5;border:1px solid rgba(29,158,117,0.3);border-radius:999px;padding:1px 7px;margin-left:4px;">✦ AI</span>' : '') + '</div>' +
             '<div class="record-company">' + (r.company || '—') + '</div>' +
           '</div>' +
-          '<span class="record-score-badge ' + r.pillClass + '">' + r.score + '/9 — ' + r.owner + '</span>' +
+          '<span class="record-score-badge ' + scoreBadgeClass + '">' + scoreBadgeText + '</span>' +
         '</div>' +
         '<div class="record-meta">' +
           '<span>📅 ' + _fmtDisplayDate(r.date) + ' ' + _fmtDisplayTime(r.time) + '</span>' +
@@ -9386,9 +9409,7 @@
           (r.address && r.address !== '—' ? '<span>📍 ' + r.address + '</span>' : '') +
         '</div>' +
         '<div class="record-btn-row">' +
-          '<button class="record-email-btn" onclick="emailRecordHTML(' + r.id + ', this)" title="Email scorecard as HTML">' +
-            emailIcon + ' Email Scorecard' +
-          '</button>' +
+          actionBtn +
           '<button class="record-copy-btn" onclick="viewRecordOrPopout(' + r.id + ')">View ↗</button>' +
         '</div>' +
       '</div>';
@@ -9689,6 +9710,7 @@
       }
     }
     renderLeaderboard();
+    _renderActivityCard();
     gsPost(
       { action: 'saveRecordBatch', record: rec, rep: rec.duplicate ? null : (rec.rep || null), plainText: false },
       { requestId: reqId }
@@ -12289,7 +12311,8 @@
         !(_researchData.eventsWeb && _researchData.eventsWeb.length)) return;
     try {
       var rec = _buildCurrentRecord();
-      rec.status = 'incomplete';
+      // Status from _buildCurrentRecord via _classifyStatus (research/incomplete/complete)
+      // Backend skips email for both 'incomplete' and 'research'
       rec.id = Date.now();
       _savedRecordId = rec.id;
       // Optimistic local cache update
