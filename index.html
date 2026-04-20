@@ -314,6 +314,12 @@
   .options.amount-locked .option.selected {
     pointer-events: none;
   }
+  #card-iv.iv-pending-lock .card-body {
+    opacity: 0.35;
+    pointer-events: none;
+    cursor: not-allowed;
+    transition: opacity 0.3s;
+  }
 
   .option.selected {
     border-color: rgba(139,143,168,0.5);
@@ -3502,7 +3508,7 @@
   <!-- COL 1: Signals -->
   <div class="col">
 
-    <div class="card" id="card-iv">
+    <div class="card iv-pending-lock" id="card-iv">
       <div class="card-header">
         <span class="card-num">01</span>
         <span class="card-title"><span data-lk="lk_iv_title" class="editable-text">Implied Value — Size</span><span class="req-star">★</span></span><span id="iv-ai-badge" style="display:none;font-size:9px;font-weight:600;letter-spacing:0.04em;color:#5DCAA5;background:rgba(93,202,165,0.12);border:1px solid rgba(93,202,165,0.3);border-radius:3px;padding:1px 5px;margin-left:6px;vertical-align:middle;">AI</span>
@@ -6867,9 +6873,24 @@
             }
           }, 2000);
         }
-      } else {
-        // Already saved — just re-email, no new record
+      } else if (_savedRecordId) {
+        // Already saved (auto-save or prior send) — update record + send email
+        var rec = _buildCurrentRecord();
+        rec.id = _savedRecordId;
+        // Update status from 'incomplete' to proper classification
+        var rdJ2 = (function(){ try { var rd = _researchData; return (rd.industry||rd.blurb||(rd.eventsSite&&rd.eventsSite.length)||(rd.eventsWeb&&rd.eventsWeb.length)||(rd.observances&&rd.observances.length)||rd.companyLinkedIn||rd.revenue||(rd.recentNews&&rd.recentNews.length)||(rd.decisionMakers&&(rd.decisionMakers.ownerExec||rd.decisionMakers.marketing||rd.decisionMakers.procurement))||(rd.salesHooks&&rd.salesHooks.length)||(rd.tradeShows&&rd.tradeShows.length)) ? 'yes' : ''; } catch(e){ return ''; } })();
+        rec.status = _classifyStatus(rdJ2, scores.iv, scores.pv, scores.av);
+        rec.rep = window._currentRep || '';
+        gsPost({ action: 'updateRecord', record: rec });
+        gsPost({ action: 'emailRecord', record: rec, plainText: false });
+        // Increment tally (auto-save skipped it)
+        if (rec.rep && rec.rep !== '—') {
+          gsPost({ action: 'incrementTally', rep: rec.rep });
+          _tallyCache[rec.rep] = (_tallyCache[rec.rep] || 0) + 1;
+          renderLeaderboard();
+        }
         lockForm();
+        showCompliment();
         if (emailBtn) {
           var origEmailHTML2 = emailBtn.innerHTML;
           emailBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Sent';
@@ -7284,6 +7305,9 @@
 
     document.querySelectorAll('.field-input').forEach(function(f) { f.value = ''; });
     autoSelectIV('');
+    // Re-lock IV tile until next AI research
+    var ivCardR = document.getElementById('card-iv');
+    if (ivCardR) ivCardR.classList.add('iv-pending-lock');
     autoSelectPV('');
 
     // Reset employee count
@@ -8015,7 +8039,8 @@
 
     var archive = _archiveCache || [];
     var myRecs = archive.filter(function(r){ return r.rep === currentRep; });
-    var myAvg = myRecs.length ? (myRecs.reduce(function(s,r){ return s + (Number(r.score)||0); }, 0) / myRecs.length) : 0;
+    var myScRecs = myRecs.filter(function(r){ return r.status !== 'research'; });
+    var myAvg = myScRecs.length ? (myScRecs.reduce(function(s,r){ return s + (Number(r.score)||0); }, 0) / myScRecs.length) : 0;
 
     // Streak
     var streak = 0;
@@ -8066,16 +8091,18 @@
       rowsHtml = '<div style="font-size:11px;color:#717378;text-align:center;display:flex;align-items:center;justify-content:center;flex:1;">No entries yet.</div>';
     } else {
       pageSlice.forEach(function(r, i) {
-        var col = pillColor(r.pillClass || 'asst');
+        var isRO = r.status === 'research';
+        var col = isRO ? '#b0b2b6' : pillColor(r.pillClass || 'asst');
+        var scoreLabel = isRO ? ((r.iv || '?') + '/3') : ((r.score || '?') + '/9');
         var bg = i % 2 === 0 ? 'background:rgba(255,255,255,0.02);' : '';
         var dateStr = fmtDateShort(r.date);
         var timeStr = fmtTime(r.time || '');
         var dtLabel = dateStr + (timeStr ? ' · ' + timeStr : '');
-        var statusTag = r.status === 'research' ? 'RO' : 'SC';
+        var statusTag = isRO ? 'RO' : 'SC';
         rowsHtml +=
           '<div data-record-id="' + r.id + '" onclick="activityRowClick(' + r.id + ')" onmouseenter="activityRowHover(this,true)" onmouseleave="activityRowHover(this,false)"' +
           ' style="display:flex;align-items:center;padding:7px 8px;border-radius:5px;cursor:pointer;transition:background 0.15s;flex:1;' + bg + '">' +
-          '<span style="font-size:12px;font-weight:700;color:' + col + ';width:32px;flex-shrink:0;">' + (r.score || '?') + '/9</span>' +
+          '<span style="font-size:12px;font-weight:700;color:' + col + ';width:32px;flex-shrink:0;">' + scoreLabel + '</span>' +
           '<span style="font-size:12px;color:var(--text);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 8px;">' + (r.company || r.name || '\u2014') + '</span>' +
           '<span style="font-size:10px;color:var(--text-dim, #b0b2b6);flex-shrink:0;">' + dtLabel + '</span>' +
           '<span style="font-size:8px;font-weight:600;color:#717378;width:20px;text-align:right;flex-shrink:0;margin-left:6px;letter-spacing:0.03em;">' + statusTag + '</span>' +
@@ -8867,6 +8894,9 @@
     _submissionLock = false;
     document.querySelectorAll('.option').forEach(function(o){ o.classList.remove('selected'); });
     autoSelectIV('');
+    // Re-lock IV tile until next AI research
+    var ivCardN = document.getElementById('card-iv');
+    if (ivCardN) ivCardN.classList.add('iv-pending-lock');
     autoSelectPV('');
     var fComp = document.getElementById('f-company'); if (fComp) fComp.value = r.company || '';
     var fEmail = document.getElementById('f-email');  if (fEmail) fEmail.value = '';
@@ -11402,6 +11432,11 @@
         var ivBadge = document.getElementById('iv-ai-badge');
         if (ivBadge) ivBadge.style.display = 'inline';
       } else { _researchData.ivState = 'none'; }
+      // Unlock IV tile once AI has applied a score
+      if (scores.iv !== null) {
+        var ivCard = document.getElementById('card-iv');
+        if (ivCard) ivCard.classList.remove('iv-pending-lock');
+      }
     }
     function _hasData() {
       var dm = _researchData.decisionMakers;
@@ -11756,7 +11791,16 @@
               try { _refreshSegCounts(); } catch(e) {}
               try { showDigButton(); } catch(e) {}
               try { updateFollowupCard(); } catch(e) {}
-              _checkPipelineEnd();
+              // Settle pipeline now — unlock buttons immediately. Dig passes run in background.
+              // Also unlock IV tile if still pending (AI couldn't determine IV)
+              var ivCardS = document.getElementById('card-iv');
+              if (ivCardS) ivCardS.classList.remove('iv-pending-lock');
+              if (!_pipelineSettled) {
+                _pipelineSettled = true;
+                _onFetchSettled();
+              }
+              // Auto-save research data so it persists even without manual send
+              try { _autoSaveResearch(); } catch(e) {}
             }
 
             fetch(GS_URL, { method: 'POST', body: JSON.stringify({ action: 'runResearch', prompt: _buildHooksPrompt(), rep: window._currentRep || '', noSearch: true }) })
@@ -12082,9 +12126,45 @@
     }
   }
 
+  // ── Auto-save research data after pipeline completes ──────────
+  function _autoSaveResearch() {
+    // Skip if already saved, or no research data, or form already locked
+    if (_savedRecordId || _formLocked) return;
+    if (!_researchData.industry && !_researchData.blurb &&
+        !(_researchData.eventsSite && _researchData.eventsSite.length) &&
+        !(_researchData.eventsWeb && _researchData.eventsWeb.length)) return;
+    try {
+      var rec = _buildCurrentRecord();
+      rec.status = 'incomplete';
+      rec.id = Date.now();
+      _savedRecordId = rec.id;
+      // Optimistic local cache update
+      _recordsCache.push(rec);
+      _archiveCache = (_archiveCache || []).concat([rec]);
+      _activityPage = 0;
+      updateTabCounts();
+      // Save to backend (rep: null skips tally, status: incomplete skips email)
+      gsPost(
+        { action: 'saveRecordBatch', record: rec, rep: null, plainText: false }
+      ).then(function(res) {
+        if (res && res.recordNum) {
+          rec.recordNum = res.recordNum;
+          window._lastSavedRecordNum = res.recordNum;
+          var numBadge = document.getElementById('save-record-num');
+          var numLabel = document.getElementById('save-record-num-label');
+          if (numBadge) { numBadge.textContent = res.recordNum; numBadge.style.display = 'inline'; }
+          if (numLabel) numLabel.style.display = 'inline';
+        }
+      }).catch(function() {});
+    } catch(e) { console.warn('[VRC] Auto-save failed:', e); }
+  }
+
   // ── Edit / Resubmit flow ────────────────────────────────────────
   function onEditClick() {
     unlockForm();
+    // Unlock IV tile since scores are already set
+    var ivCardE = document.getElementById('card-iv');
+    if (ivCardE) ivCardE.classList.remove('iv-pending-lock');
     // Keep email button hidden during edit mode
     var emailBtn = document.getElementById('email-btn');
     if (emailBtn) { emailBtn.style.display = 'none'; emailBtn.disabled = true; emailBtn.style.pointerEvents = 'none'; }
@@ -15730,7 +15810,20 @@
     };
     function onAISuccess() {
       var emailBtnAI = document.getElementById('email-btn');
-      if (_savedRecordId && _savedRecordId !== 'pending') { return; } // already saved
+      if (_savedRecordId && _savedRecordId !== 'pending') {
+        // Auto-saved — update record with full data + send email
+        recToSave.id = _savedRecordId;
+        recToSave.recordNum = window._lastSavedRecordNum || '';
+        gsPost({ action: 'updateRecord', record: recToSave });
+        gsPost({ action: 'emailRecord', record: recToSave, plainText: false });
+        if (recToSave.rep && recToSave.rep !== '—') {
+          gsPost({ action: 'incrementTally', rep: recToSave.rep });
+          _tallyCache[recToSave.rep] = (_tallyCache[recToSave.rep] || 0) + 1;
+          renderLeaderboard();
+        }
+        lockForm();
+        showCompliment();
+      } else {
       _savedRecordId = 'pending';
       var wasDup = isDuplicate(recToSave);
       recToSave.duplicate = wasDup;
@@ -15761,6 +15854,7 @@
           emailBtnAI.classList.remove('copied');
         }, 2000);
       }
+      } // end else (fresh save)
     }
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(text).then(onAISuccess).catch(function() {
