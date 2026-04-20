@@ -9082,6 +9082,9 @@
       autoSelectIV(r.employees);
     } else if (r.iv > 0) {
       // No employee count but IV was scored (e.g. keyword inference) — select directly
+      if (fEmp) { fEmp.value = ''; fEmp.classList.remove('ai-filled'); }
+      _updateFieldLabel('emp-count-label', '');
+      var empClearBtn = document.getElementById('emp-clear'); if (empClearBtn) empClearBtn.style.display = 'none';
       var ivOpt = document.querySelector('[data-group="iv"][data-val="' + r.iv + '"]');
       if (ivOpt) {
         document.querySelectorAll('[data-group="iv"]').forEach(function(o) { o.classList.remove('selected'); });
@@ -9090,6 +9093,9 @@
         labels.iv = r.ivLabel || ivOpt.dataset.label || '';
       }
     } else {
+      if (fEmp) { fEmp.value = ''; fEmp.classList.remove('ai-filled'); }
+      _updateFieldLabel('emp-count-label', '');
+      var empClearBtn2 = document.getElementById('emp-clear'); if (empClearBtn2) empClearBtn2.style.display = 'none';
       autoSelectIV('');
     }
     // Unlock IV tile since we have form data loaded
@@ -9100,12 +9106,17 @@
     if (r.budgetType) {
       window._budgetType = r.budgetType;
       setIosToggleState('budget', r.budgetType);
+    } else {
+      window._budgetType = '';
+      var budTog = document.getElementById('budget-toggle');
+      if (budTog) { budTog.dataset.value = ''; var _inact = 'padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:transparent;color:var(--text-dim, #4e4f52);border:1px solid var(--border);transition:all 0.15s;'; budTog.querySelectorAll('.pill-toggle-btn').forEach(function(l){ l.style.cssText = _inact; }); }
     }
     var fBudget = document.getElementById('f-budget');
     if (fBudget && r.budgetAmount) {
       fBudget.value = r.budgetAmount;
       autoSelectPV(r.budgetAmount);
     } else {
+      if (fBudget) fBudget.value = '';
       autoSelectPV('');
     }
 
@@ -9113,7 +9124,44 @@
     if (r.customerType) {
       window._customerType = r.customerType;
       setIosToggleState('customer', r.customerType);
+    } else {
+      window._customerType = '';
+      var custTog = document.getElementById('customer-toggle');
+      if (custTog) { custTog.dataset.value = ''; var _inact2 = 'padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:transparent;color:var(--text-dim, #4e4f52);border:1px solid var(--border);transition:all 0.15s;'; custTog.querySelectorAll('.pill-toggle-btn').forEach(function(l){ l.style.cssText = _inact2; }); }
     }
+
+    // AV score restoration
+    var fAvAmt = document.getElementById('f-av-amount');
+    if (fAvAmt) { fAvAmt.value = ''; fAvAmt.style.borderColor = ''; fAvAmt.style.boxShadow = ''; }
+    var avDollar = document.getElementById('av-dollar'); if (avDollar) avDollar.style.color = '#717378';
+    var avClear = document.getElementById('av-clear'); if (avClear) avClear.style.display = 'none';
+    var avOpts = document.querySelector('#av-locked-wrap .options'); if (avOpts) avOpts.classList.remove('amount-locked');
+    if (r.av > 0) {
+      var avOpt = document.querySelector('[data-group="av"][data-val="' + r.av + '"]');
+      if (avOpt) {
+        document.querySelectorAll('[data-group="av"]').forEach(function(o) { o.classList.remove('selected'); });
+        avOpt.classList.add('selected');
+        scores.av = r.av;
+        labels.av = r.avLabel || avOpt.dataset.label || '';
+      }
+    } else {
+      document.querySelectorAll('[data-group="av"]').forEach(function(o) { o.classList.remove('selected'); });
+      scores.av = null;
+      labels.av = '';
+    }
+
+    // Clear address fields (address stored as combined string, can't parse back)
+    ['f-street','f-suite','f-city','f-state','f-zip'].forEach(function(id) {
+      var el = document.getElementById(id); if (el) el.value = '';
+    });
+    var fCompAddr = document.getElementById('f-company-addr'); if (fCompAddr) fCompAddr.value = r.company || '';
+    try { clearAiAddress(); } catch(e) {}
+
+    // Update PV/AV option labels and lock states
+    try { _updatePVOptionLabels(); } catch(e) {}
+    try { _updateAVOptionLabels(); } catch(e) {}
+    try { _setPVLock(scores.iv === null); } catch(e) {}
+    try { _setAVLock(scores.iv === null); } catch(e) {}
 
     // Hot button
     var hotBtn = document.getElementById('hot-btn');
