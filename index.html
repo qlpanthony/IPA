@@ -5350,6 +5350,12 @@
     updateCostBadge(monthlyCost, totalCost);
   }
 
+  // ── Cost badge local counters (seeded on load, incremented per API call) ──
+  var _badgeAllTime = 0;
+  var _badgeToday   = 0;
+  var _badgeCount   = 0;
+  var _badgeSeeded  = false;
+
   function updateCostBadge(monthlyCost, lifetimeCost) {
     var badge = document.getElementById('cost-badge');
     if (!badge) return;
@@ -5369,14 +5375,76 @@
       });
     }
     var avg = count > 0 ? allTime / count : 0;
+    // Seed local counters from full dataset
+    _badgeAllTime = allTime;
+    _badgeToday   = todayCost;
+    _badgeCount   = count;
+    _badgeSeeded  = true;
+    _renderCostBadge();
+  }
+
+  function _renderCostBadge() {
+    var badge = document.getElementById('cost-badge');
+    if (!badge) return;
+    badge.style.display = 'flex';
+    var avg = _badgeCount > 0 ? _badgeAllTime / _badgeCount : 0;
     var ltEl  = document.getElementById('cost-label-alltime');
     var tdEl  = document.getElementById('cost-label-today');
     var avgEl = document.getElementById('cost-label-avg');
-    if (ltEl)  ltEl.textContent  = '$' + allTime.toFixed(4);
-    if (tdEl)  tdEl.textContent  = '$' + todayCost.toFixed(4);
+    if (ltEl)  ltEl.textContent  = '$' + _badgeAllTime.toFixed(4);
+    if (tdEl)  tdEl.textContent  = '$' + _badgeToday.toFixed(4);
     if (avgEl) avgEl.textContent = '$' + avg.toFixed(4);
   }
 
+  // Module-scope cost badge updater — callable from anywhere
+  function _updateCostBadge(data, phaseId) {
+    if (!data || data.costUSD === undefined) return;
+    if (phaseId && _processedCosts[phaseId]) return;
+    if (phaseId) _processedCosts[phaseId] = true;
+    var cost = parseFloat(data.costUSD);
+    if (isNaN(cost) || cost < 0) return;
+    _researchData.searchCostUSD = Math.round((_researchData.searchCostUSD || 0) * 1e6 + cost * 1e6) / 1e6;
+    // Increment local counters and update badge instantly
+    if (_badgeSeeded) {
+      _badgeAllTime += cost;
+      _badgeToday   += cost;
+      _badgeCount   += 1;
+      _renderCostBadge();
+    } else {
+      // Not yet seeded — fetch once to initialize, then add this cost
+      initUsageBadge(cost);
+    }
+    try {
+      var costEl = document.getElementById('rp-search-cost');
+      if (costEl && _researchData.searchCostUSD > 0) {
+        costEl.textContent = '$' + _researchData.searchCostUSD.toFixed(4) + ' / search';
+        costEl.style.display = 'inline-block';
+      }
+    } catch(e) {}
+  }
+
+  // Load badge cost on startup
+  function initUsageBadge(pendingCost) {
+    gsJSONP({ payload: JSON.stringify({ action: 'getUsageLog' }) })
+    .then(function(data) {
+      if (!data || data.error) return;
+      if (data.rows) _usageRows = data.rows;
+      var lifetime = data.lifetimeCost;
+      // If GAS doesn't return lifetimeCost, sum it from rows
+      if ((lifetime === undefined || lifetime === null) && data.rows && data.rows.length) {
+        lifetime = data.rows.reduce(function(acc, r) { return acc + (parseFloat(r['Cost (USD)']) || 0); }, 0);
+      }
+      updateCostBadge(data.monthlyCost || 0, lifetime != null ? lifetime : (data.monthlyCost || 0));
+      // If a cost came in before seeding finished, add it now
+      if (pendingCost && !isNaN(pendingCost) && pendingCost > 0) {
+        _badgeAllTime += pendingCost;
+        _badgeToday   += pendingCost;
+        _badgeCount   += 1;
+        _renderCostBadge();
+      }
+    })
+    .catch(function() {});
+  }
   function exportUsageCSV() {
     if (!_usageRows || _usageRows.length === 0) { alert('No usage data to export.'); return; }
     var headers = ['Date','Time','Rep','Company','Input Tokens','Output Tokens','Total Tokens','Cost (USD)','Running Total (USD)'];
@@ -5748,22 +5816,6 @@
     w.document.write(html);
     w.document.close();
     setTimeout(function(){ w.print(); }, 400);
-  }
-
-  // Load badge cost on startup
-  function initUsageBadge() {
-    gsJSONP({ payload: JSON.stringify({ action: 'getUsageLog' }) })
-    .then(function(data) {
-      if (!data || data.error) return;
-      if (data.rows) _usageRows = data.rows;
-      var lifetime = data.lifetimeCost;
-      // If GAS doesn't return lifetimeCost, sum it from rows
-      if ((lifetime === undefined || lifetime === null) && data.rows && data.rows.length) {
-        lifetime = data.rows.reduce(function(acc, r) { return acc + (parseFloat(r['Cost (USD)']) || 0); }, 0);
-      }
-      updateCostBadge(data.monthlyCost || 0, lifetime != null ? lifetime : (data.monthlyCost || 0));
-    })
-    .catch(function() {});
   }
 
   var _editLockEntry = '';
@@ -11281,25 +11333,6 @@
       }
       if (e === -1) return null;
       try { return JSON.parse(text.slice(s, e + 1)); } catch(ex) { return null; }
-    }
-    function _updateCostBadge(data, phaseId) {
-      // phaseId prevents double-counting if same response processed twice
-      if (!data || data.costUSD === undefined) return;
-      if (phaseId && _processedCosts[phaseId]) return;
-      if (phaseId) _processedCosts[phaseId] = true;
-      var cost = parseFloat(data.costUSD);
-      if (isNaN(cost) || cost < 0) return;
-      _researchData.searchCostUSD = Math.round((_researchData.searchCostUSD || 0) * 1e6 + cost * 1e6) / 1e6;
-      try {
-        initUsageBadge();
-      } catch(e) { _logError('cost badge', e); }
-      try {
-        var costEl = document.getElementById('rp-search-cost');
-        if (costEl && _researchData.searchCostUSD > 0) {
-          costEl.textContent = '$' + _researchData.searchCostUSD.toFixed(4) + ' / search';
-          costEl.style.display = 'inline-block';
-        }
-      } catch(e) {}
     }
     function _applyIV(result) {
       var empEl = document.getElementById('f-employees');
