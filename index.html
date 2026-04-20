@@ -7837,6 +7837,10 @@
       '<div style="margin-top:6px;">' +
         '<button onclick="startNewContactFromRecord('+r.id+')" style="width:100%;height:32px;border-radius:7px;border:1px solid rgba(29,158,117,0.35);background:rgba(29,158,117,0.08);color:#5DCAA5;font-size:11px;font-weight:600;cursor:pointer;letter-spacing:0.03em;">+ New Contact — Same Company</button>' +
       '</div>' +
+      (r.status === 'incomplete' || r.status === 'research' ?
+      '<div style="margin-top:6px;">' +
+        '<button onclick="resumeRecord('+r.id+')" style="width:100%;height:32px;border-radius:7px;border:1px solid rgba(245,158,11,0.35);background:rgba(245,158,11,0.08);color:#f59e0b;font-size:11px;font-weight:600;cursor:pointer;letter-spacing:0.03em;">↻ Resume — Rerun Research</button>' +
+      '</div>' : '') +
       ((_daysSince(r.date) >= 30 && r.researchData && r.researchData.length > 2) ?
         '<div id="arc-refresh-wrap-'+r.id+'" style="margin-top:8px;">' +
           '<button id="arc-refresh-btn-'+r.id+'" onclick="refreshArchiveResearch('+r.id+')" style="width:100%;height:34px;border-radius:8px;border:1px solid rgba(139,143,168,0.3);background:rgba(139,143,168,0.07);color:#B8BBCC;font-size:11px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">🔄 Refresh Research <span style="font-size:9px;opacity:0.6;">(' + _daysSince(r.date) + ' days old)</span></button>' +
@@ -8495,6 +8499,9 @@
           '<span style="font-size:10px;color:' + repColor + ';">' + (r.rep||'—') + '</span>' +
           (r.website ? '<span style="font-size:10px;color:var(--text-muted);">· ' + r.website.replace('https://','').replace('http://','') + '</span>' : '') +
         '</div>' +
+        '<div style="margin-top:8px;">' +
+          '<button onclick="resumeRecord('+r.id+')" style="width:100%;height:28px;border-radius:6px;border:1px solid rgba(245,158,11,0.35);background:rgba(245,158,11,0.08);color:#f59e0b;font-size:10px;font-weight:600;cursor:pointer;letter-spacing:0.03em;">↻ Resume — Rerun Research</button>' +
+        '</div>' +
       '</div>';
     }).join('');
   }
@@ -8947,6 +8954,124 @@
     window._parentRecordNum = r.recordNum || '';
     window._parentRecordId  = r.id;
     setTimeout(function(){ var el = document.getElementById('f-name'); if (el) el.focus(); }, 100);
+  }
+
+  function resumeRecord(id) {
+    var r = (_archiveCache||[]).find(function(x){ return String(x.id)===String(id); });
+    if (!r) return;
+    closeArchivePopout();
+    unlockForm();
+    _submissionLock = false;
+    _assignOverride = r.assignOverride || null;
+    _dupBannerDismissed = false; _dupSearchAnyway = false; hideDupBanner();
+
+    // Clear research data for fresh run
+    _researchData = {
+      companyName:'', domain:'', employees:'', industry:'', blurb:'',
+      ivState:'none', ivYourTier:'', ivYourScore:0, ivAiTier:'', ivAiScore:0,
+      eventsSite:[], eventsWeb:[], observances:[], emailResearchBlock:'',
+      companyLinkedIn:'', contactLinkedIn:'', revenue:'', foundedYear:'', recentNews:[], socialMedia:{}, searchCostUSD:0, searchDuration:null, salesHooks:[], keyPeople:[], tradeShows:[]
+    };
+    _ivAccepted = false;
+    var ivBadgeR = document.getElementById('iv-ai-badge'); if (ivBadgeR) ivBadgeR.style.display = 'none';
+    _lastResearchKey = '';
+    _researchInProgress = false;
+    if (_researchTimer) { clearTimeout(_researchTimer); _researchTimer = null; }
+    setPhaseIndicator('reset');
+    _resetTitleBar();
+    setLightbulbLoading(false);
+    setLightbulb(false);
+    setResearchCtrlBtn('none');
+
+    // Link to existing record so next send is an UPDATE
+    _savedRecordId = r.id;
+    window._lastSavedRecordNum = r.recordNum || '';
+    window._parentRecordNum = '';
+    window._parentRecordId  = '';
+
+    // Show record number badge if available
+    var rnBadge = document.getElementById('save-record-num');
+    var rnLabel = document.getElementById('save-record-num-label');
+    if (r.recordNum && rnBadge) { rnBadge.textContent = r.recordNum; rnBadge.style.display = 'inline'; }
+    if (r.recordNum && rnLabel) rnLabel.style.display = 'inline';
+
+    // Clear all selections first
+    scores = { iv: null, pv: null, av: null };
+    labels = { iv: '', pv: '', av: '' };
+    document.querySelectorAll('.option').forEach(function(o){ o.classList.remove('selected'); });
+
+    // Restore form fields
+    var fComp = document.getElementById('f-company'); if (fComp) fComp.value = r.company || '';
+    var fEmail = document.getElementById('f-email');  if (fEmail) fEmail.value = r.email || '';
+    var fName  = document.getElementById('f-name');   if (fName)  fName.value  = r.name || '';
+    var fCid   = document.getElementById('f-cid');    if (fCid)   fCid.value   = r.cid || '';
+    var fNotes = document.getElementById('f-notes');  if (fNotes) fNotes.value = (r.notes && r.notes !== '\u2014') ? r.notes : '';
+
+    // Parse phone + ext back apart
+    var phoneParts = (r.phone || '').split(/\s*x/i);
+    var fPhone = document.getElementById('f-phone'); if (fPhone) fPhone.value = (phoneParts[0] || '').trim();
+    var fExt   = document.getElementById('f-ext');   if (fExt)   fExt.value   = (phoneParts[1] || '').trim();
+
+    // Website
+    var fWebsite = document.getElementById('f-website');
+    if (fWebsite) { fWebsite.value = r.website || ''; fWebsite.disabled = false; fWebsite.style.opacity = ''; fWebsite.style.cursor = ''; fWebsite.style.color = ''; fWebsite.style.borderColor = ''; fWebsite.style.background = ''; }
+
+    // Employee count + IV
+    var fEmp = document.getElementById('f-employees');
+    if (fEmp && r.employees) {
+      fEmp.value = r.employees;
+      _updateFieldLabel('emp-count-label', r.employees);
+      autoSelectIV(r.employees);
+    } else {
+      autoSelectIV('');
+    }
+    // Unlock IV tile since we have form data loaded
+    var ivCardRes = document.getElementById('card-iv');
+    if (ivCardRes) ivCardRes.classList.remove('iv-pending-lock');
+
+    // Budget toggle + amount
+    if (r.budgetType) {
+      window._budgetType = r.budgetType;
+      setIosToggleState('budget', r.budgetType);
+    }
+    var fBudget = document.getElementById('f-budget');
+    if (fBudget && r.budgetAmount) {
+      fBudget.value = r.budgetAmount;
+      autoSelectPV(r.budgetAmount);
+    } else {
+      autoSelectPV('');
+    }
+
+    // Customer toggle
+    if (r.customerType) {
+      window._customerType = r.customerType;
+      setIosToggleState('customer', r.customerType);
+    }
+
+    // Hot button
+    var hotBtn = document.getElementById('hot-btn');
+    if (hotBtn) {
+      hotBtn._isHot = r.hot ? true : false;
+      hotBtn.classList.toggle('active', !!r.hot);
+    }
+
+    // Override buttons
+    ['ag','cp','asst'].forEach(function(t) {
+      var btn = document.getElementById('ovr-' + t);
+      if (btn) btn.className = 'assign-override-btn' + (_assignOverride === t ? ' active' : '');
+    });
+
+    // Rep
+    if (r.rep && r.rep !== '\u2014') {
+      window._currentRep = r.rep;
+      var repName = document.getElementById('rep-bar-name');
+      if (repName) { repName.textContent = r.rep; repName.classList.remove('unset'); }
+    }
+
+    calculate();
+    checkCopyReady();
+    _renderActivityCard();
+    setTimeout(function(){ var ws = document.getElementById('f-website'); if (ws && ws.value) ws.focus(); else { var el = document.getElementById('f-name'); if (el) el.focus(); } }, 100);
   }
 
   function openRecordPopout(id) {
@@ -11054,10 +11179,12 @@
     var chipBg   = 'rgba(' + accentRgb + ',0.10)';
     var chipBrd  = 'rgba(' + accentRgb + ',0.28)';
     var pc       = r.pillClass || 'asst';
-    var scoreCol = pc==='ag' ? '#5DCAA5' : pc==='cp' ? '#BA7517' : '#8B8FA8';
-    var scoreRgb = pc==='ag' ? '29,158,117' : pc==='cp' ? '186,117,23' : '139,143,168';
-    var stars    = (r.score||0)>=7?'★★★★★':(r.score||0)>=4?'★★★':'★';
-    var dateDisplay = days === 0 ? 'Today' : (_fmtDisplayDate(r.date) || r.date || '');
+    var isRO     = r.status === 'research' || r.status === 'incomplete';
+    var scoreCol = isRO ? '#b0b2b6' : (pc==='ag' ? '#5DCAA5' : pc==='cp' ? '#BA7517' : '#8B8FA8');
+    var scoreRgb = isRO ? '176,178,182' : (pc==='ag' ? '29,158,117' : pc==='cp' ? '186,117,23' : '139,143,168');
+    var scoreLabel = isRO ? (r.iv||0) + '/3' : (r.score||0) + '/9';
+    var stars    = isRO ? '' : ((r.score||0)>=7?'★★★★★':(r.score||0)>=4?'★★★':'★');
+    var tierLine = isRO ? '<span style="font-size:9px;font-weight:600;letter-spacing:0.04em;color:#f59e0b;background:rgba(245,158,11,0.10);border:1px solid rgba(245,158,11,0.25);border-radius:3px;padding:1px 5px;">RESEARCH ONLY</span>' : '<span style="font-size:10px;color:var(--text-muted);">' + (r.owner||'') + (r.rep ? ' · by ' + r.rep : '') + '</span>';    var dateDisplay = days === 0 ? 'Today' : (_fmtDisplayDate(r.date) || r.date || '');
     var agoDisplay  = _relativeDate(r.date, days);
     var dateColor   = isRecent ? accent : '#e8eaed';
     var agoColor    = isRecent ? accent : '#9a9ba0';
@@ -11074,7 +11201,7 @@
       '<div style="border:1px solid ' + borderC + ';border-radius:8px;background:' + bgC + ';overflow:hidden;">' +
         '<div style="display:flex;align-items:center;justify-content:space-between;padding:7px 10px;border-bottom:1px solid ' + hdrBrdC + ';background:' + hdrBgC + ';">' +
           '<div style="display:flex;align-items:center;gap:6px;">' + titleIcon +
-            '<span style="font-size:11px;font-weight:600;color:' + accent + ';">Existing record found</span>' +
+            '<span style="font-size:11px;font-weight:600;color:' + accent + ';">' + (isRO ? 'Research record found' : 'Existing record found') + '</span>' +
           '</div>' +
           '<button onclick="dismissDupBanner()" style="background:none;border:none;cursor:pointer;padding:0;color:var(--text-muted);font-size:14px;line-height:1;">✕</button>' +
         '</div>' +
@@ -11084,8 +11211,8 @@
               '<div style="font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + (r.name||'—') + '</div>' +
               '<div style="font-size:11px;color:var(--text-muted);margin-top:1px;">' + (r.company||'—') + '</div>' +
               '<div style="margin-top:5px;display:flex;align-items:center;gap:5px;">' +
-                '<span style="background:rgba(' + scoreRgb + ',0.12);border:1px solid rgba(' + scoreRgb + ',0.3);border-radius:5px;padding:2px 8px;font-size:11px;font-weight:600;color:' + scoreCol + ';white-space:nowrap;">' + (r.score||0) + '/9 ' + stars + '</span>' +
-                '<span style="font-size:10px;color:var(--text-muted);">' + (r.owner||'') + (r.rep ? ' · by ' + r.rep : '') + '</span>' +
+                '<span style="background:rgba(' + scoreRgb + ',0.12);border:1px solid rgba(' + scoreRgb + ',0.3);border-radius:5px;padding:2px 8px;font-size:11px;font-weight:600;color:' + scoreCol + ';white-space:nowrap;">' + scoreLabel + (stars ? ' ' + stars : '') + '</span>' +
+                tierLine +
               '</div>' +
             '</div>' +
             '<div style="display:flex;flex-direction:column;align-items:flex-end;flex-shrink:0;">' +
@@ -11096,7 +11223,7 @@
           '<div style="height:1px;background:rgba(255,255,255,0.05);margin:0 0 8px;"></div>' +
           '<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:9px;">' + chips + '</div>' +
           '<div style="display:flex;gap:6px;">' +
-            '<button style="' + viewBtnStyle + '" onclick="dupViewRecord(' + r.id + ')">View record</button>' +
+            '<button style="' + viewBtnStyle + '" onclick="' + (isRO ? 'resumeRecord(' + r.id + ')' : 'dupViewRecord(' + r.id + ')') + '">' + (isRO ? 'Edit record' : 'View record') + '</button>' +
             '<button style="' + searchBtnStyle + '" onclick="dupSearchAnyway()">Search anyway</button>' +
           '</div>' +
         '</div>' +
