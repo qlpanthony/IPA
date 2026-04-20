@@ -8184,6 +8184,11 @@
     var r = (_archiveCache||[]).find(function(x){ return String(x.id)===String(id); }) ||
             getRecords().find(function(x){ return String(x.id)===String(id); });
     if (!r) return;
+    // RO / incomplete records go straight to resume for editing
+    if (r.status === 'research' || r.status === 'incomplete') {
+      resumeRecord(id);
+      return;
+    }
     // Make sure it's in archive cache for viewRecordOrPopout
     if (!(_archiveCache||[]).find(function(x){ return String(x.id)===String(id); })) {
       _archiveCache = (_archiveCache||[]).concat([r]);
@@ -12287,6 +12292,7 @@
       _archiveCache = (_archiveCache || []).concat([rec]);
       _activityPage = 0;
       updateTabCounts();
+      _renderActivityCard();
       // Save to backend (rep: null skips tally, status: incomplete skips email)
       gsPost(
         { action: 'saveRecordBatch', record: rec, rep: null, plainText: false }
