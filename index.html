@@ -3557,11 +3557,8 @@
         <div class="header-toggle-wrapper">
           <div style="display:flex;flex-direction:column;align-items:center;gap:3px;">
             <div class="ios-toggle" id="budget-toggle" data-value="">
-              <span class="ios-toggle-lbl" id="ios-lbl-yearly" onclick="iosToggleDir('budget','left')">Yearly</span>
-              <div class="ios-track" onclick="iosToggleDir('budget', this.classList.contains('on') ? 'left' : 'right')">
-                <div class="ios-thumb"></div>
-              </div>
-              <span class="ios-toggle-lbl" id="ios-lbl-project" onclick="iosToggleDir('budget','right')">Project</span>
+              <span class="pill-toggle-btn" id="ios-lbl-yearly" onclick="iosToggleDir('budget','left')" style="padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:transparent;color:#4e4f52;border:1px solid rgba(255,255,255,0.08);transition:all 0.15s;">Yearly</span>
+              <span class="pill-toggle-btn" id="ios-lbl-project" onclick="iosToggleDir('budget','right')" style="padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:transparent;color:#4e4f52;border:1px solid rgba(255,255,255,0.08);transition:all 0.15s;">Project</span>
             </div>
           </div>
         </div>
@@ -3618,11 +3615,8 @@
         <div class="header-toggle-wrapper">
           <div style="display:flex;flex-direction:column;align-items:center;gap:3px;">
             <div class="ios-toggle" id="customer-toggle" data-value="">
-              <span class="ios-toggle-lbl" id="ios-lbl-new" onclick="iosToggleDir('customer','left')">New Customer</span>
-              <div class="ios-track" onclick="iosToggleDir('customer', this.classList.contains('on') ? 'left' : 'right')">
-                <div class="ios-thumb"></div>
-              </div>
-              <span class="ios-toggle-lbl" id="ios-lbl-existing" onclick="iosToggleDir('customer','right')">Existing</span>
+              <span class="pill-toggle-btn" id="ios-lbl-new" onclick="iosToggleDir('customer','left')" style="padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:transparent;color:#4e4f52;border:1px solid rgba(255,255,255,0.08);transition:all 0.15s;">New Customer</span>
+              <span class="pill-toggle-btn" id="ios-lbl-existing" onclick="iosToggleDir('customer','right')" style="padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:transparent;color:#4e4f52;border:1px solid rgba(255,255,255,0.08);transition:all 0.15s;">Existing</span>
             </div>
           </div>
         </div>
@@ -4624,7 +4618,8 @@
       var toggleColor = c.active ? '#5DCAA5' : '#4e4f52';
       var toggleBg = c.active ? 'rgba(29,158,117,0.15)' : 'rgba(255,255,255,0.03)';
       var toggleBorder = c.active ? 'rgba(29,158,117,0.3)' : 'rgba(255,255,255,0.08)';
-      return '<div style="display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:7px;background:' + toggleBg + ';border:1px solid ' + toggleBorder + ';">' +
+      return '<div style="border-radius:7px;background:' + toggleBg + ';border:1px solid ' + toggleBorder + ';padding:8px 10px;margin-bottom:2px;">' +
+        '<div style="display:flex;align-items:center;gap:6px;">' +
         '<span style="font-size:13px;font-weight:600;color:#EF9F27;letter-spacing:0.3px;min-width:90px;">' + c.code + '</span>' +
         '<span style="flex:1;font-size:11px;color:#9a9ba0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + (c.desc||'') + '</span>' +
         '<label style="display:flex;align-items:center;gap:4px;cursor:pointer;font-size:10px;color:' + toggleColor + ';flex-shrink:0;">' +
@@ -4632,6 +4627,8 @@
           (c.active ? 'Active' : 'Inactive') +
         '</label>' +
         '<button onclick="_removeCoupon(' + i + ')" style="width:24px;height:24px;border:none;background:transparent;color:#717378;cursor:pointer;font-size:14px;flex-shrink:0;" title="Remove">×</button>' +
+        '</div>' +
+        '<textarea id="cfg-coupon-disc-' + i + '" onchange="_updateCouponDisclaimer(' + i + ',this.value)" placeholder="Disclaimer (shown at bottom of email when this code is used)" rows="2" style="width:100%;margin-top:6px;padding:6px 8px;border-radius:6px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);color:#B8BBCC;font-size:10px;font-family:inherit;resize:vertical;line-height:1.5;box-sizing:border-box;">' + (c.disclaimer||'') + '</textarea>' +
       '</div>';
     }).join('');
     _refreshCouponDropdown();
@@ -4645,10 +4642,15 @@
     if (!_appSettings.couponCodes) _appSettings.couponCodes = [];
     var exists = _appSettings.couponCodes.some(function(c) { return c.code === code; });
     if (exists) { alert('Code "' + code + '" already exists.'); return; }
-    _appSettings.couponCodes.push({ code: code, desc: (descEl ? descEl.value.trim() : ''), active: true });
+    _appSettings.couponCodes.push({ code: code, desc: (descEl ? descEl.value.trim() : ''), active: true, disclaimer: '' });
     if (codeEl) codeEl.value = '';
     if (descEl) descEl.value = '';
     _renderCouponList();
+  }
+
+  function _updateCouponDisclaimer(idx, val) {
+    if (!_appSettings.couponCodes || !_appSettings.couponCodes[idx]) return;
+    _appSettings.couponCodes[idx].disclaimer = val;
   }
 
   var _pendingLogoFile = null;
@@ -6578,8 +6580,8 @@
     document.querySelectorAll('.option').forEach(function(o) {
       o.style.pointerEvents = 'none'; o.style.opacity = '0.5';
     });
-    document.querySelectorAll('.ios-track').forEach(function(b) {
-      b.classList.add('locked');
+    document.querySelectorAll('.pill-toggle-btn').forEach(function(b) {
+      b.style.pointerEvents = 'none'; b.style.opacity = '0.5';
     });
     document.querySelectorAll('.field-input').forEach(function(f) {
       f.disabled = true; f.style.opacity = '0.5';
@@ -6615,8 +6617,8 @@
     document.querySelectorAll('.option').forEach(function(o) {
       o.style.pointerEvents = ''; o.style.opacity = '';
     });
-    document.querySelectorAll('.ios-track').forEach(function(b) {
-      b.classList.remove('locked');
+    document.querySelectorAll('.pill-toggle-btn').forEach(function(b) {
+      b.style.pointerEvents = ''; b.style.opacity = '';
     });
     document.querySelectorAll('.field-input').forEach(function(f) {
       f.disabled = false; f.style.opacity = '';
@@ -6968,49 +6970,60 @@
     var id = type === 'budget' ? 'budget-toggle' : 'customer-toggle';
     var el = document.getElementById(id);
     if (!el) return;
-    var track = el.querySelector('.ios-track');
-    // Yearly/New = left (no 'on'), Project/Existing = right ('on')
     var isRight = (type === 'budget') ? (value === 'Project') : (value === 'Existing Customer');
-    var trackColor = isRight ? (type === 'budget' ? 'slate' : 'amber') : 'teal';
-    var leftClass  = isRight ? '' : 'active-teal';
-    var rightClass = isRight ? (type === 'budget' ? 'active-slate' : 'active-amber') : '';
-    if (track) track.className = 'ios-track ' + (isRight ? 'on ' : 'off ') + trackColor;
     el.dataset.value = isRight ? 'right' : 'left';
+    var inactiveStyle = 'padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:transparent;color:#4e4f52;border:1px solid rgba(255,255,255,0.08);transition:all 0.15s;';
     var lIds = type === 'budget'
       ? ['ios-lbl-yearly', 'ios-lbl-project']
       : ['ios-lbl-new', 'ios-lbl-existing'];
     var lblL = document.getElementById(lIds[0]);
     var lblR = document.getElementById(lIds[1]);
-    if (lblL) lblL.className = 'ios-toggle-lbl' + (leftClass ? ' ' + leftClass : '');
-    if (lblR) lblR.className = 'ios-toggle-lbl' + (rightClass ? ' ' + rightClass : '');
+    if (isRight) {
+      if (lblL) lblL.style.cssText = inactiveStyle;
+      if (lblR) {
+        if (type === 'budget') {
+          lblR.style.cssText = 'padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:rgba(139,143,168,0.12);color:#B8BBCC;border:1px solid rgba(139,143,168,0.3);transition:all 0.15s;';
+        } else {
+          lblR.style.cssText = 'padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:rgba(245,158,11,0.12);color:#EF9F27;border:1px solid rgba(245,158,11,0.25);transition:all 0.15s;';
+        }
+      }
+    } else {
+      if (lblL) lblL.style.cssText = 'padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:rgba(29,158,117,0.15);color:#5DCAA5;border:1px solid rgba(29,158,117,0.3);transition:all 0.15s;';
+      if (lblR) lblR.style.cssText = inactiveStyle;
+    }
   }
 
   function iosToggleDir(type, dir) {
     var el    = document.getElementById(type === 'budget' ? 'budget-toggle' : 'customer-toggle');
-    var track = el.querySelector('.ios-track');
     var cur   = el.dataset.value;
     if ((dir === 'left' && cur === 'left') || (dir === 'right' && cur === 'right')) return;
-    var value, trackColor, leftClass, rightClass;
+    var value;
+    var inactiveStyle = 'padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:transparent;color:#4e4f52;border:1px solid rgba(255,255,255,0.08);transition:all 0.15s;';
     if (type === 'budget') {
       var lblL = document.getElementById('ios-lbl-yearly');
       var lblR = document.getElementById('ios-lbl-project');
       if (dir === 'right') {
-        value = 'Project'; trackColor = 'slate'; leftClass = ''; rightClass = 'active-slate';
+        value = 'Project';
+        lblL.style.cssText = inactiveStyle;
+        lblR.style.cssText = 'padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:rgba(139,143,168,0.12);color:#B8BBCC;border:1px solid rgba(139,143,168,0.3);transition:all 0.15s;';
       } else {
-        value = 'Yearly';  trackColor = 'teal';  leftClass = 'active-teal'; rightClass = '';
+        value = 'Yearly';
+        lblL.style.cssText = 'padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:rgba(29,158,117,0.15);color:#5DCAA5;border:1px solid rgba(29,158,117,0.3);transition:all 0.15s;';
+        lblR.style.cssText = inactiveStyle;
       }
     } else {
       var lblL = document.getElementById('ios-lbl-new');
       var lblR = document.getElementById('ios-lbl-existing');
       if (dir === 'right') {
-        value = 'Existing Customer'; trackColor = 'amber'; leftClass = ''; rightClass = 'active-amber';
+        value = 'Existing Customer';
+        lblL.style.cssText = inactiveStyle;
+        lblR.style.cssText = 'padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:rgba(245,158,11,0.12);color:#EF9F27;border:1px solid rgba(245,158,11,0.25);transition:all 0.15s;';
       } else {
-        value = 'New Customer'; trackColor = 'teal'; leftClass = 'active-teal'; rightClass = '';
+        value = 'New Customer';
+        lblL.style.cssText = 'padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:rgba(29,158,117,0.15);color:#5DCAA5;border:1px solid rgba(29,158,117,0.3);transition:all 0.15s;';
+        lblR.style.cssText = inactiveStyle;
       }
     }
-    track.className = 'ios-track ' + (dir === 'right' ? 'on ' : 'off ') + trackColor;
-    lblL.className  = 'ios-toggle-lbl' + (leftClass  ? ' ' + leftClass  : '');
-    lblR.className  = 'ios-toggle-lbl' + (rightClass ? ' ' + rightClass : '');
     el.dataset.value = dir;
     setToggle(type, value, null);
   }
@@ -7054,9 +7067,8 @@
           var custEl = document.getElementById('customer-toggle');
           if (custEl) {
             custEl.dataset.value = '';
-            var ct = custEl.querySelector('.ios-track');
-            if (ct) ct.className = 'ios-track';
-            custEl.querySelectorAll('.ios-toggle-lbl').forEach(function(l) { l.className = 'ios-toggle-lbl'; });
+            var inactStyle = 'padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:transparent;color:#4e4f52;border:1px solid rgba(255,255,255,0.08);transition:all 0.15s;';
+            custEl.querySelectorAll('.pill-toggle-btn').forEach(function(l) { l.style.cssText = inactStyle; });
           }
         }
       }
@@ -7213,9 +7225,8 @@
       var tog = document.getElementById(id);
       if (!tog) return;
       tog.dataset.value = '';
-      var track = tog.querySelector('.ios-track');
-      if (track) track.className = 'ios-track';
-      tog.querySelectorAll('.ios-toggle-lbl').forEach(function(l) { l.className = 'ios-toggle-lbl'; });
+      var inactStyle = 'padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:transparent;color:#4e4f52;border:1px solid rgba(255,255,255,0.08);transition:all 0.15s;';
+      tog.querySelectorAll('.pill-toggle-btn').forEach(function(l) { l.style.cssText = inactStyle; });
     });
 
     document.querySelectorAll('.field-input').forEach(function(f) { f.value = ''; });
@@ -10169,8 +10180,8 @@
     document.querySelectorAll('.option').forEach(function(o) {
       o.style.pointerEvents = 'none'; o.style.opacity = '0.5';
     });
-    document.querySelectorAll('.ios-track').forEach(function(b) {
-      b.classList.add('locked');
+    document.querySelectorAll('.pill-toggle-btn').forEach(function(b) {
+      b.style.pointerEvents = 'none'; b.style.opacity = '0.5';
     });
     document.querySelectorAll('.field-input').forEach(function(f) {
       f.disabled = true; f.style.opacity = '0.5';
@@ -10199,8 +10210,8 @@
     document.querySelectorAll('.option').forEach(function(o) {
       o.style.pointerEvents = ''; o.style.opacity = '';
     });
-    document.querySelectorAll('.ios-track').forEach(function(b) {
-      b.classList.remove('locked');
+    document.querySelectorAll('.pill-toggle-btn').forEach(function(b) {
+      b.style.pointerEvents = ''; b.style.opacity = '';
     });
     document.querySelectorAll('.field-input').forEach(function(f) {
       f.disabled = false; f.style.opacity = '';
@@ -10734,6 +10745,16 @@
     }
     if (missing.length === 0) missing.push('additional events, newer news headlines, or more decision maker details not already listed above');
 
+    // Social media gaps — lower priority, after LinkedIn and DMs
+    var sm = rd.socialMedia || {};
+    var missingSocial = [];
+    ['facebook','instagram','twitter','tiktok','youtube','snapchat'].forEach(function(p) {
+      if (!sm[p]) missingSocial.push(p);
+    });
+    if (missingSocial.length > 0 && missingSocial.length < 6) {
+      missing.push('Social media profile URLs for ' + company + ' — search "' + company + ' ' + missingSocial.join(' ') + '" and ONLY return URLs you find in actual search results. Do NOT guess or construct URLs. Platforms still needed: ' + missingSocial.join(', '));
+    }
+
     var prompt = [
       'You are researching a company for QLP (promotional products). Return ONLY valid JSON, no markdown.',
       'Company: ' + company + ' | Domain: ' + searchDomain + (contactName ? ' | Contact: ' + contactName : '') + ' | Today: ' + todayStr,
@@ -10742,7 +10763,7 @@
       'WHAT WE NEED YOU TO FIND (use 1-2 searches):',
       missing.map(function(m,i){return (i+1)+'. '+m;}).join('\n'),
       'Return ONLY new data not already listed above. Return ONLY valid JSON:',
-      '{"companyLinkedIn":"https://linkedin.com/company/... or empty","eventsWeb":[{"title":"","date":"Mon D YYYY","venue":"","source":"","recurring":false,"notes":"QLP promo opportunity","summary":["Type:","Turnout:","Address:","Purpose:","QLP Opportunity:"]}],"observances":[{"title":"","date":"Mon D-D YYYY","notes":"QLP promo opportunity","summary":["Type:Industry observance","Purpose:","QLP Opportunity:"]}],"recentNews":[{"headline":"short","date":"Mon YYYY","sourceUrl":""}],"decisionMakers":{"ownerExec":{"name":"","title":"","linkedin":"https://linkedin.com/in/... or empty","email":""},"marketing":{"name":"","title":"","linkedin":"https://linkedin.com/in/... or empty","email":""},"procurement":{"name":"","title":"","linkedin":"https://linkedin.com/in/... or empty","email":""}}}'
+      '{"companyLinkedIn":"https://linkedin.com/company/... or empty","eventsWeb":[{"title":"","date":"Mon D YYYY","venue":"","source":"","recurring":false,"notes":"QLP promo opportunity","summary":["Type:","Turnout:","Address:","Purpose:","QLP Opportunity:"]}],"observances":[{"title":"","date":"Mon D-D YYYY","notes":"QLP promo opportunity","summary":["Type:Industry observance","Purpose:","QLP Opportunity:"]}],"recentNews":[{"headline":"short","date":"Mon YYYY","sourceUrl":""}],"socialMedia":{"facebook":"","instagram":"","twitter":"","tiktok":"","youtube":"","snapchat":""},"decisionMakers":{"ownerExec":{"name":"","title":"","linkedin":"https://linkedin.com/in/... or empty","email":""},"marketing":{"name":"","title":"","linkedin":"https://linkedin.com/in/... or empty","email":""},"procurement":{"name":"","title":"","linkedin":"https://linkedin.com/in/... or empty","email":""}}}'
     ].join('\n');
 
     // ── Fire the supplemental search (90s timeout) ───────────────
@@ -10790,6 +10811,16 @@
               } else if (!_researchData.decisionMakers[k].linkedin && r2.decisionMakers[k].linkedin && r2.decisionMakers[k].linkedin.match(/^https?:\/\//)) {
                 _researchData.decisionMakers[k].linkedin = r2.decisionMakers[k].linkedin;
               }
+            }
+          });
+        }
+        // Merge social media — only fill empty platform slots
+        if (r2.socialMedia && typeof r2.socialMedia === 'object') {
+          if (!_researchData.socialMedia) _researchData.socialMedia = {};
+          ['facebook','instagram','twitter','tiktok','youtube','snapchat'].forEach(function(p) {
+            var url = (r2.socialMedia[p] || '').trim();
+            if (url && url.match(/^https?:\/\//) && !_researchData.socialMedia[p]) {
+              _researchData.socialMedia[p] = url;
             }
           });
         }
@@ -11457,6 +11488,33 @@
       ].join('\n');
     }
 
+    // ── Fire homepage scrape for social links (parallel) ────────
+    if (website) {
+      fetch(GS_URL, { method: 'POST', body: JSON.stringify({ action: 'scrapeSocial', url: website }) })
+      .then(function(r) { return r.text(); })
+      .then(function(raw) {
+        if (_searchToken !== _thisToken) return;
+        var data; try { data = JSON.parse(raw); } catch(e) { return; }
+        if (!data) return;
+        // Scraped URLs are authoritative — overwrite
+        if (data.companyLinkedIn && data.companyLinkedIn.match(/^https?:\/\//)) {
+          _researchData.companyLinkedIn = data.companyLinkedIn;
+        }
+        if (data.socialMedia && typeof data.socialMedia === 'object') {
+          if (!_researchData.socialMedia) _researchData.socialMedia = {};
+          ['facebook','instagram','twitter','tiktok','youtube','snapchat'].forEach(function(p) {
+            var u = (data.socialMedia[p] || '').trim();
+            if (u && u.match(/^https?:\/\//)) {
+              _researchData.socialMedia[p] = u;
+            }
+          });
+        }
+        // Re-render if popup is already open
+        try { var ov = document.getElementById('research-overlay'); if (ov && ov.classList.contains('open')) populateResearchPopup(); } catch(e) {}
+      })
+      .catch(function() {}); // silent fail — AI handles gaps
+    }
+
     // ── Fire Phase 1 — LinkedIn + Events (Sonnet) ───────────────
     _runPhase(0,
       { action: 'runResearch', prompt: p1, rep: window._currentRep || '' },
@@ -11466,7 +11524,7 @@
         // P1: LinkedIn + Events — use typed cleaners
         _researchData.domain = searchDomain;
         var _coLi = _cleanLinkedIn(result.companyLinkedIn, 'company');
-        if (_coLi) _researchData.companyLinkedIn = _coLi;
+        if (_coLi && !_researchData.companyLinkedIn) _researchData.companyLinkedIn = _coLi;
         var _ctLi = _cleanLinkedIn(result.contactLinkedIn, 'in');
         if (_ctLi) _researchData.contactLinkedIn = _ctLi;
         if (result.contactPerson && result.contactPerson.found) {
@@ -11587,14 +11645,13 @@
               if (_rev) { _researchData.revenue = _rev; got = true; }
               var _fy = _stripTags(result.foundedYear || '').replace(/\D/g,'').slice(0,4);
               if (_fy && _fy.length === 4) { _researchData.foundedYear = _fy; got = true; }
-              // Social media — clean each URL, reject if not a real URL
+              // Social media — clean each URL, merge fill-empty-only (scrape results take priority)
               if (result.socialMedia && typeof result.socialMedia === 'object') {
-                var sm = {};
+                if (!_researchData.socialMedia) _researchData.socialMedia = {};
                 ['facebook','instagram','twitter','tiktok','youtube','snapchat'].forEach(function(k) {
                   var u = _cleanUrl(result.socialMedia[k] || '');
-                  if (u) sm[k] = u;
+                  if (u && !_researchData.socialMedia[k]) _researchData.socialMedia[k] = u;
                 });
-                _researchData.socialMedia = sm;
                 _validateSocialUrls();
               }
               if (result.recentNews && result.recentNews.length) {
@@ -13101,6 +13158,12 @@
     .then(function(finalText) {
       if (loading) loading.style.display = 'none';
       textarea.style.opacity = '';
+      // Append coupon disclaimer if applicable
+      if (_liveEmailCoupon) {
+        var _disc = '';
+        (_appSettings.couponCodes || []).forEach(function(c) { if (c.code === _liveEmailCoupon && c.disclaimer) _disc = c.disclaimer; });
+        if (_disc) finalText = finalText.replace(/\s*$/, '') + '\n\n' + _disc;
+      }
       textarea.value = finalText;
       textarea.readOnly = false;
       if (ts) {
@@ -13382,7 +13445,7 @@
       headsup: 'EXAMPLE tone for event heads-up (do NOT copy verbatim, match the vibe and energy):\n"You know I\'m always trying to stay one step ahead for you. I was doing a little digging and came across a few upcoming events and figured I\'d ask if you\'re planning on being at any of them. If you are and want to put something together on the swag side, just give me a shout. Happy to help however you need. Thank you as always and I\'ll keep an eye out for your response. Cheers!"',
       pitch: 'EXAMPLE tone for referral (do NOT copy verbatim, match the vibe and energy):\n"Hey hey! Hope things are rolling on your end. Quick ask. If you come across anyone who could use a hand with swag or promo, I\'d love an intro. I\'ll take great care of them and keep it easy, just like I do with you. Appreciate you as always, and I\'ll keep an eye out for you. Cheers!"',
       congrats: '',
-      reengage: ''
+      reengage: 'EXAMPLE tone for re-engage (do NOT copy verbatim, match the vibe and energy):\n"Hey hey! Long time no talk and that\'s on me. Just wanted to pop in and say hey. Hope things are going well on your end. We\'ve been cooking up some fun stuff over here in logo land and it made me think of you. No ask, no pitch, just genuinely checking back in. If anything ever comes up on the promo side, you know where to find me. I appreciate you as always and hope to hear from you soon. Cheers!"'
     };
     var toneExample = toneExamples[_liveEmailIntent] || '';
 
@@ -13412,7 +13475,11 @@
       _liveStyleBank[Math.floor(Math.random() * _liveStyleBank.length)],
       '',
       _liveEmailInstruction ? 'Rep note (weave in naturally, fix any typos): ' + _liveEmailInstruction : '',
-      _liveEmailCoupon ? 'Coupon code to mention naturally: ' + _liveEmailCoupon + '. Work it in as a current promo or offer.' : '',
+      _liveEmailCoupon ? (function() {
+        var couponDesc = '';
+        (_appSettings.couponCodes || []).forEach(function(c) { if (c.code === _liveEmailCoupon) couponDesc = c.desc || ''; });
+        return 'Coupon code to mention naturally: ' + _liveEmailCoupon + '* (include the asterisk after the code)' + (couponDesc ? '. The code gives them ' + couponDesc : '') + '. In the email body, ONLY mention the code and its discount percentage. Do NOT mention any restrictions, minimums, maximums, or limitations. Those go in a separate disclaimer the system adds automatically.';
+      })() : '',
       '',
       'RULES (non-negotiable):',
       '- Do NOT use any names, company names, or specific details like revenue or employee count. No "Dear", no "[Name]", no placeholders.',
@@ -16147,7 +16214,6 @@
               <div id="live-pill-checkin" onclick="setLiveEmailIntent('checkin')" style="padding:5px 11px;font-size:10px;font-weight:600;border-radius:14px;cursor:pointer;background:#0F6E56;color:#9FE1CB;border:1px solid rgba(159,225,203,0.25);white-space:nowrap;flex-shrink:0;">Friendly check-in</div>
               <div id="live-pill-headsup" onclick="setLiveEmailIntent('headsup')" style="padding:5px 11px;font-size:10px;font-weight:600;border-radius:14px;cursor:pointer;background:transparent;color:#9a9ba0;border:0.5px solid rgba(255,255,255,0.1);white-space:nowrap;flex-shrink:0;">Event heads-up</div>
               <div id="live-pill-pitch" onclick="setLiveEmailIntent('pitch')" style="padding:5px 11px;font-size:10px;font-weight:600;border-radius:14px;cursor:pointer;background:transparent;color:#9a9ba0;border:0.5px solid rgba(255,255,255,0.1);white-space:nowrap;flex-shrink:0;">Referral</div>
-              <div id="live-pill-congrats" onclick="setLiveEmailIntent('congrats')" style="padding:5px 11px;font-size:10px;font-weight:600;border-radius:14px;cursor:pointer;background:transparent;color:#9a9ba0;border:0.5px solid rgba(255,255,255,0.1);white-space:nowrap;flex-shrink:0;">Congrats</div>
               <div id="live-pill-reengage" onclick="setLiveEmailIntent('reengage')" style="padding:5px 11px;font-size:10px;font-weight:600;border-radius:14px;cursor:pointer;background:transparent;color:#9a9ba0;border:0.5px solid rgba(255,255,255,0.1);white-space:nowrap;flex-shrink:0;">Re-engage</div>
               <div style="width:1px;height:18px;background:rgba(255,255,255,0.15);margin:0 2px;flex-shrink:0;"></div>
               <button id="live-evtemail-gen-btn" onclick="generateLiveEmail()" style="height:26px;padding:0 14px;border-radius:14px;border:none;background:#0F6E56;color:#fff;font-size:10px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all 0.15s;" onmouseenter="if(!this._busy)this.style.background='#0d8a6a';" onmouseleave="if(!this._busy)this.style.background='#0F6E56';">Generate Email</button>
