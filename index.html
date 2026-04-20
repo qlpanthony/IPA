@@ -13899,11 +13899,13 @@
         var now = new Date();
         ts.textContent = 'Generated ' + now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',hour12:true});
       }
+      if (genBtn) { genBtn.textContent = '\u2713 Generated'; genBtn.style.background = '#5DCAA5'; genBtn.style.color = '#0a2a1f'; genBtn.style.opacity = '1'; setTimeout(function(){ genBtn._busy = false; genBtn.textContent = 'Generate Email'; genBtn.style.background = '#0F6E56'; genBtn.style.color = '#fff'; }, 1500); }
     })
     .catch(function() {
       if (loading) loading.style.display = 'none';
       textarea.style.opacity = '';
       textarea.value = 'Error generating email. Please try again.';
+      if (genBtn) { genBtn._busy = false; genBtn.textContent = 'Generate Email'; genBtn.style.background = '#0F6E56'; genBtn.style.color = '#fff'; genBtn.style.opacity = '1'; }
     });
   }
 
@@ -16653,6 +16655,9 @@
         <button class="research-tab" id="rtab-people" onclick="switchResearchTab('people')">
           Key People <span class="research-tab-badge" id="rtab-people-badge" style="display:none;"></span>
         </button>
+        <button class="research-tab" id="rtab-competitors" onclick="switchResearchTab('competitors')" style="white-space:nowrap;">
+          Competitors <span class="research-tab-badge" id="rtab-competitors-badge" style="display:none;"></span>
+        </button>
         <button class="research-tab" id="rtab-email" onclick="switchResearchTab('email')" style="display:flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap;">
           S.C. Preview
           <span id="preview-mode-label" style="font-size:9px;font-weight:600;letter-spacing:0.05em;padding:2px 0;border-radius:4px;width:28px;text-align:center;display:inline-block;background:rgba(29,158,117,0.15);color:#5DCAA5;">HTML</span>
@@ -16662,9 +16667,6 @@
         </button>
         <button class="research-tab" id="rtab-custemail" onclick="switchResearchTab('custemail')" style="white-space:nowrap;">
           ✉ Customer Email
-        </button>
-        <button class="research-tab" id="rtab-competitors" onclick="switchResearchTab('competitors')" style="white-space:nowrap;">
-          Competitors <span class="research-tab-badge" id="rtab-competitors-badge" style="display:none;"></span>
         </button>
       </div>
 
@@ -16769,8 +16771,6 @@
           </div>
         </div>
       </div>
-
-    </div>
 
       <!-- Competitors panel -->
       <div class="research-panel" id="rpanel-competitors" style="padding:0;">
