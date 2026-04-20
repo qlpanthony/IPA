@@ -8896,6 +8896,12 @@
       _researchData.competitors    = Array.isArray(rd.competitors) ? rd.competitors : [];
       _researchData.searchCostUSD  = parseFloat(rd.searchCostUSD) || 0;
       _researchData.searchDuration = rd.searchDuration || null;
+      // IV check state is transient (not persisted) — reset to prevent stale mismatch display
+      _researchData.ivState = 'none';
+      _researchData.ivYourTier = '';
+      _researchData.ivYourScore = 0;
+      _researchData.ivAiTier = '';
+      _researchData.ivAiScore = 0;
       // Save live state for restore when popup closes
       _prevArchiveState = {
         company: document.getElementById('f-company').value,
@@ -8972,6 +8978,12 @@
       _researchData.competitors    = Array.isArray(rd.competitors) ? rd.competitors : [];
       _researchData.companyLinkedIn= rd.companyLinkedIn || '';
       _researchData.decisionMakers = rd.decisionMakers  || null;
+      // IV check state is transient — reset
+      _researchData.ivState = 'none';
+      _researchData.ivYourTier = '';
+      _researchData.ivYourScore = 0;
+      _researchData.ivAiTier = '';
+      _researchData.ivAiScore = 0;
       var fWebsite = document.getElementById('f-website');
       if (fWebsite && rd.domain) { fWebsite.value = rd.domain; fWebsite.disabled = false; fWebsite.style.opacity = ''; }
       setLightbulb(true);
@@ -9022,6 +9034,12 @@
       _researchData.competitors    = Array.isArray(_rdRestore.competitors)  ? _rdRestore.competitors  : [];
       _researchData.searchCostUSD  = parseFloat(_rdRestore.searchCostUSD) || 0;
       _researchData.searchDuration = _rdRestore.searchDuration || null;
+      // IV check state is transient (not persisted) — reset to prevent stale mismatch display
+      _researchData.ivState = 'none';
+      _researchData.ivYourTier = '';
+      _researchData.ivYourScore = 0;
+      _researchData.ivAiTier = '';
+      _researchData.ivAiScore = 0;
     } else {
       _researchData = {
         companyName:'', domain:'', employees:'', industry:'', blurb:'',
@@ -9150,12 +9168,50 @@
       labels.av = '';
     }
 
-    // Clear address fields (address stored as combined string, can't parse back)
+    // Restore address fields from combined address string
     ['f-street','f-suite','f-city','f-state','f-zip'].forEach(function(id) {
       var el = document.getElementById(id); if (el) el.value = '';
     });
-    var fCompAddr = document.getElementById('f-company-addr'); if (fCompAddr) fCompAddr.value = r.company || '';
+    if (r.address && r.address !== '\u2014' && r.address.trim()) {
+      var addrClean = r.address.replace(/\s*\[.*?\]\s*$/, '').trim();
+      var parts = addrClean.split(',').map(function(p){ return p.trim(); }).filter(Boolean);
+      var zip = '', st = '', city = '', street = '', suite = '';
+      if (parts.length >= 2) {
+        // Check if last part is a zip code
+        if (/^\d{5}(-\d{4})?$/.test(parts[parts.length - 1])) { zip = parts.pop(); }
+        // Check if (new) last part is a 2-letter state
+        if (parts.length >= 2 && /^[A-Z]{2}$/i.test(parts[parts.length - 1])) { st = parts.pop(); }
+        // Check if (new) last part is city
+        if (parts.length >= 1) { city = parts.pop(); }
+        // Remaining: street and possibly suite
+        if (parts.length >= 2) { street = parts[0]; suite = parts.slice(1).join(', '); }
+        else if (parts.length === 1) { street = parts[0]; }
+      } else if (parts.length === 1) {
+        street = parts[0];
+      }
+      var fStr = document.getElementById('f-street'); if (fStr && street) fStr.value = street;
+      var fSui = document.getElementById('f-suite');  if (fSui && suite)  fSui.value = suite;
+      var fCty = document.getElementById('f-city');   if (fCty && city)   fCty.value = city;
+      var fSta = document.getElementById('f-state');  if (fSta && st)     fSta.value = st;
+      var fZip = document.getElementById('f-zip');    if (fZip && zip)    fZip.value = zip;
+    }
     try { clearAiAddress(); } catch(e) {}
+    // Restore address source badge if available
+    if (r.addressSource) {
+      _aiAddressSource = r.addressSource;
+      var addrCard = document.getElementById('card-address');
+      var badge = document.getElementById('addr-source-badge');
+      if (r.addressSource === 'ai') {
+        if (addrCard) addrCard.classList.add('addr-pending');
+        if (badge) { badge.textContent = '\u2713 AI SUGGESTED ADDRESS.'; badge.style.display = ''; }
+      } else if (r.addressSource === 'rejected') {
+        if (addrCard) addrCard.classList.add('addr-modified');
+        if (badge) { badge.textContent = '\u2717 AI SUGGESTED ADDRESS REJECTED.'; badge.style.display = ''; }
+      } else if (r.addressSource === 'ai-edited') {
+        if (addrCard) addrCard.classList.add('addr-confirmed');
+        if (badge) { badge.textContent = '\u270E AI ADDRESS EDITED.'; badge.style.display = ''; }
+      }
+    }
 
     // Update PV/AV option labels and lock states
     try { _updatePVOptionLabels(); } catch(e) {}
