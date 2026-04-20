@@ -3960,9 +3960,7 @@
   <div class="records-header">
     <div class="records-title">Records Panel</div>
     <div class="records-actions">
-      <button class="records-clear-btn" id="passcode-btn" onclick="openChangePasscodeFlow()" style="display:none;border-color:rgba(139,143,168,0.3);background:rgba(139,143,168,0.08);color:#B8BBCC;">🔑 Passcode</button>
       <button class="archive-toggle-btn" id="archive-toggle-btn" onclick="toggleArchiveMode()">📦 Archive <span class="archive-count-badge" id="archive-count-badge">—</span></button>
-      <button class="records-clear-btn" onclick="clearAllRecords()">Clear All</button>
       <button class="records-close-btn" onclick="closeRecords()">✕</button>
     </div>
   </div>
@@ -8459,7 +8457,10 @@
   }
 
   function updateTabCounts() {
-    var records = getRecords();
+    var records = getRecords().filter(function(r) {
+      // Exclude research-only from tier tabs
+      return !(r.status === 'research' || (r.status === 'incomplete' && r.iv > 0 && !r.pv && !r.av));
+    });
     ['ag','cp','asst'].forEach(function(g) {
       var el = document.getElementById('count-' + g);
       if (el) el.textContent = records.filter(function(r) { return r.pillClass === g; }).length;
@@ -8483,7 +8484,7 @@
 
   function renderIncompleteRecords() {
     var all = getRecords().filter(function(r) {
-      return r.status === 'incomplete';
+      return r.status === 'incomplete' || r.status === 'research';
     });
     var body = document.getElementById('records-body');
     if (!all.length) {
@@ -8536,6 +8537,11 @@
       var aiBadge  = '<span style="font-size:10px;background:rgba(29,158,117,0.15);color:#5DCAA5;border:1px solid rgba(29,158,117,0.3);border-radius:999px;padding:1px 7px;margin-left:6px;">✦ AI</span>';
       var pillColors = { ag: '#1D9E75', cp: '#f59e0b', asst: '#60a5fa' };
       var pillColor  = pillColors[r.pillClass] || '#b0b2b6';
+      var isROAi = r.status === 'research' || (r.status === 'incomplete' && r.iv > 0 && !r.pv && !r.av);
+      var aiScoreDisplay = isROAi ? ('IV ' + (r.iv||0)) : (r.score||0);
+      var aiScoreMax = isROAi ? '/3' : '/9';
+      var aiPillColor = isROAi ? '#b0b2b6' : (pillColors[r.pillClass] || '#b0b2b6');
+      var aiOwnerDisplay = isROAi ? 'Research Only' : (r.owner||'—');
       return '<div class="record-item" style="border-left:3px solid rgba(29,158,117,0.5);">' +
         '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">' +
           '<div style="flex:1;min-width:0;">' +
@@ -8547,14 +8553,14 @@
             '</div>' +
           '</div>' +
           '<div style="text-align:right;flex-shrink:0;">' +
-            '<div style="font-size:15px;font-weight:700;color:' + pillColor + ';">' + (r.score||0) + '<span style="font-size:11px;color:var(--text-muted);">/9</span></div>' +
+            '<div style="font-size:15px;font-weight:700;color:' + aiPillColor + ';">' + aiScoreDisplay + '<span style="font-size:11px;color:var(--text-muted);">' + aiScoreMax + '</span></div>' +
             '<div style="font-size:10px;color:var(--text-muted);">' + (r.date||'') + '</div>' +
           '</div>' +
         '</div>' +
         '<div style="display:flex;align-items:center;gap:6px;margin-top:6px;">' +
           '<span style="font-size:10px;color:' + repColor + ';">' + (r.rep||'—') + '</span>' +
           '<span style="font-size:10px;color:var(--text-muted);">·</span>' +
-          '<span style="font-size:10px;color:' + pillColor + ';">' + (r.owner||'—') + '</span>' +
+          '<span style="font-size:10px;color:' + aiPillColor + ';">' + aiOwnerDisplay + '</span>' +
         '</div>' +
       '</div>';
     }).join('');
@@ -9393,6 +9399,8 @@
     var myRep = window._currentRep || '';
     var records = getRecords().filter(function(r) {
       if (r.pillClass !== group) return false;
+      // Exclude research-only from tier tabs
+      if (r.status === 'research' || (r.status === 'incomplete' && r.iv > 0 && !r.pv && !r.av)) return false;
       // Non-admins only see their own records
       if (perm !== 'admin' && (r.rep || '') !== myRep) return false;
       return true;
