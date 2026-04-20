@@ -1578,7 +1578,7 @@
     cursor: pointer;
   }
   #edit-record-modal select.field-input option {
-    background-color: #1c1d1f;
+    background-color: var(--surface);
     color: #e2e8f0;
   }
 
@@ -1900,8 +1900,8 @@
   .fmt-seg.disabled { opacity:0.35;pointer-events:none; }
   .fmt-opt { padding:4px 8px;font-size:10px;font-weight:600;letter-spacing:0.04em;color:#717378;transition:background .2s,color .2s; }
   .fmt-seg .fmt-html  { background:rgba(139,143,168,0.25);color:#B8BBCC; }
-  .fmt-seg .fmt-plain { color:#4e4f52; }
-  .fmt-seg.on .fmt-html  { background:transparent;color:#4e4f52; }
+  .fmt-seg .fmt-plain { color:var(--text-dim, #4e4f52); }
+  .fmt-seg.on .fmt-html  { background:transparent;color:var(--text-dim, #4e4f52); }
   .fmt-seg.on .fmt-plain { background:rgba(139,143,168,0.25);color:#B8BBCC; }
 
   /* ── Action buttons ──────────────────────────────────── */
@@ -2050,7 +2050,7 @@
   }
   .lb-seg-name {
     font-size:9px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase;
-    transition: color 0.4s ease; color:#4e4f52; line-height:1.2;
+    transition: color 0.4s ease; color:var(--text-dim, #4e4f52); line-height:1.2;
   }
   .lb-seg-time {
     font-size:9px; color:rgba(255,255,255,0.2); line-height:1.2;
@@ -2116,8 +2116,8 @@
     display: flex;
   }
   .research-popup {
-    background: #1c1d1f;
-    border: 1px solid rgba(255,255,255,0.08);
+    background: var(--surface);
+    border: 1px solid var(--border);
     border-radius: 14px;
     width: 100%;
     max-width: 1100px;
@@ -2127,11 +2127,11 @@
     flex-direction: column;
   }
   .research-popup-fixed { flex-shrink: 0; }
-  .research-popup-scroll { flex: 1; overflow-y: auto; min-height: 400px; max-height: 400px; position: relative; scrollbar-width: thin; scrollbar-color: rgba(29,158,117,0.4) transparent; }
+  .research-popup-scroll { flex: 1; overflow-y: auto; min-height: 400px; max-height: 400px; position: relative; scrollbar-width: thin; scrollbar-color: var(--green, rgba(29,158,117,0.4)) transparent; }
   .research-popup-scroll::-webkit-scrollbar { width: 4px; }
   .research-popup-scroll::-webkit-scrollbar-track { background: transparent; }
-  .research-popup-scroll::-webkit-scrollbar-thumb { background: rgba(29,158,117,0.4); border-radius: 2px; }
-  .research-popup-scroll::-webkit-scrollbar-thumb:hover { background: rgba(29,158,117,0.7); }
+  .research-popup-scroll::-webkit-scrollbar-thumb { background: var(--green, rgba(29,158,117,0.4)); border-radius: 2px; }
+  .research-popup-scroll::-webkit-scrollbar-thumb:hover { background: var(--green, rgba(29,158,117,0.7)); }
 
   #apanel-scoring { scrollbar-width: thin; scrollbar-color: rgba(139,143,168,0.3) transparent; }
   #apanel-scoring::-webkit-scrollbar { width: 4px; }
@@ -2145,17 +2145,17 @@
   #apanel-settings::-webkit-scrollbar-thumb:hover { background: rgba(139,143,168,0.55); }
   .research-popup-header {
     padding: 18px 24px;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
+    border-bottom: 1px solid var(--border);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: #1c1d1f;
+    background: var(--surface);
   }
   .research-popup-close {
     background: none;
     border: none;
     font-size: 18px;
-    color: #9a9ba0;
+    color: var(--text-muted);
     cursor: pointer;
     padding: 4px 6px;
     line-height: 1;
@@ -2163,32 +2163,32 @@
   }
   .research-blurb {
     padding: 12px 24px;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-    background: rgba(255,255,255,0.02);
+    border-bottom: 1px solid var(--border);
+    background: var(--surface2);
     font-size: 13px;
-    color: #94a3b8;
+    color: var(--text-muted);
     line-height: 1.7;
   }
 
   /* IV check */
   .iv-check-wrap {
     padding: 14px 24px;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
+    border-bottom: 1px solid var(--border);
   }
   .iv-check-card {
-    border: 1px solid rgba(255,255,255,0.08);
+    border: 1px solid var(--border);
     border-radius: 10px;
     overflow: hidden;
   }
   .iv-check-header {
     padding: 9px 14px;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
+    border-bottom: 1px solid var(--border);
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
-  .iv-check-header-title { font-size: 14px; font-weight: 500; color: #e2e8f0; }
-  .iv-check-header-sub { font-size: 12px; color: #B8BBCC; }
+  .iv-check-header-title { font-size: 14px; font-weight: 500; color: var(--text); }
+  .iv-check-header-sub { font-size: 12px; color: var(--text-muted); }
   .iv-check-body { display: flex; align-items: stretch; }
   .iv-check-side {
     flex: 1;
@@ -2202,7 +2202,7 @@
   .iv-check-side:hover { background: rgba(139,143,168,0.07); }
   .iv-check-side.accept-side:hover { background: rgba(29,158,117,0.07); }
   .iv-check-arrow { display: flex; align-items: center; padding: 0 10px; color: #f87171; font-size: 22px; font-weight: 700; flex-shrink: 0; text-shadow: 0 0 8px rgba(248,113,113,0.5); }
-  .iv-check-label { margin: 0 0 2px; font-size: 10px; color: #9a9ba0; }
+  .iv-check-label { margin: 0 0 2px; font-size: 10px; color: var(--text-muted); }
   .iv-check-names { display: flex; align-items: baseline; gap: 7px; }
   .iv-check-tier { margin: 0; font-size: 15px; font-weight: 500; }
   .iv-check-score { margin: 0; font-size: 12px; }
@@ -2233,23 +2233,23 @@
   }
 
   /* Research tabs */
-  .research-tabs { display: flex; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .research-tabs { display: flex; border-bottom: 1px solid var(--border); }
   .research-tab {
     flex: 1;
     padding: 13px 8px;
     font-size: 14px;
     border: none;
     border-bottom: 2px solid transparent;
-    border-right: 1px solid rgba(255,255,255,0.07);
-    background: #1c1d1f;
-    color: #9a9ba0;
+    border-right: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-muted);
     cursor: pointer;
     transition: all 0.15s;
   }
   .research-tab:last-child { border-right: none; }
   .research-tab.active {
     border-bottom-color: #1D9E75;
-    color: #e2e8f0;
+    color: var(--text);
     font-weight: 500;
   }
   .research-tab-badge {
@@ -2259,7 +2259,7 @@
     margin-left: 4px;
   }
   .research-tab.active .research-tab-badge { background: rgba(29,158,117,0.15); color: #5DCAA5; }
-  .research-tab:not(.active) .research-tab-badge { background: rgba(255,255,255,0.06); color: #9a9ba0; }
+  .research-tab:not(.active) .research-tab-badge { background: var(--accent-light); color: var(--text-muted); }
 
   /* Research panel content */
   .research-panel {
@@ -2282,7 +2282,7 @@
   .research-section-label {
     font-size: 11px;
     font-weight: 500;
-    color: #9a9ba0;
+    color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 0.06em;
     margin: 0 0 10px;
@@ -2290,11 +2290,11 @@
 
   /* Event cards */
   .research-event-card {
-    border: 1px solid rgba(255,255,255,0.08);
+    border: 1px solid var(--border);
     border-radius: 8px;
     margin-bottom: 6px;
     overflow: hidden;
-    background: #1c1d1f;
+    background: var(--surface);
   }
   .research-event-row {
     display: flex;
@@ -2304,17 +2304,17 @@
     cursor: pointer;
     transition: background 0.15s;
   }
-  .research-event-row:hover { background: rgba(255,255,255,0.03); }
-  .research-event-title { margin: 0; font-size: 15px; font-weight: 500; color: #e2e8f0; }
-  .research-event-sub { margin: 0; font-size: 12px; color: #9a9ba0; margin-top: 2px; }
+  .research-event-row:hover { background: var(--accent-light); }
+  .research-event-title { margin: 0; font-size: 15px; font-weight: 500; color: var(--text); }
+  .research-event-sub { margin: 0; font-size: 12px; color: var(--text-muted); margin-top: 2px; }
   .research-event-actions { display: flex; gap: 8px; align-items: center; }
   .research-outlook-btn {
     font-size: 12px;
     padding: 6px 14px;
     border-radius: 7px;
-    border: 1px solid rgba(255,255,255,0.12);
-    background: rgba(255,255,255,0.05);
-    color: #94a3b8;
+    border: 1px solid var(--border-hover);
+    background: var(--accent-light);
+    color: var(--text-muted);
     cursor: pointer;
     transition: all 0.15s;
     white-space: nowrap;
@@ -2328,38 +2328,38 @@
     width: 34px;
     height: 34px;
     border-radius: 6px;
-    border: 1px solid rgba(255,255,255,0.1);
-    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    background: var(--accent-light);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 15px;
-    color: #94a3b8;
+    color: var(--text-muted);
     cursor: pointer;
     flex-shrink: 0;
   }
   .research-event-body {
     display: none;
     padding: 0 12px 12px;
-    border-top: 1px solid rgba(255,255,255,0.06);
+    border-top: 1px solid var(--border);
   }
   .research-event-body.open { display: block; }
   .research-event-summary {
     margin: 10px 0 8px;
     padding-left: 16px;
     font-size: 12px;
-    color: #94a3b8;
+    color: var(--text-muted);
     line-height: 2;
   }
-  .research-event-summary li span { color: #cbd5e1; }
-  .research-notes-label { margin: 0 0 4px; font-size: 10px; color: #9a9ba0; }
+  .research-event-summary li span { color: var(--text); }
+  .research-notes-label { margin: 0 0 4px; font-size: 10px; color: var(--text-muted); }
   .research-notes-area {
     width: 100%;
     box-sizing: border-box;
     font-size: 12px;
-    color: #cbd5e1;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.08);
+    color: var(--text);
+    background: var(--accent-light);
+    border: 1px solid var(--border);
     border-radius: 7px;
     padding: 7px 9px;
     resize: vertical;
@@ -2369,32 +2369,32 @@
     margin-bottom: 8px;
   }
   .research-reminder-row { display: flex; align-items: center; gap: 6px; }
-  .research-reminder-label { font-size: 11px; color: #9a9ba0; }
+  .research-reminder-label { font-size: 11px; color: var(--text-muted); }
   .research-reminder-select {
     font-size: 11px;
     padding: 3px 6px;
     border-radius: 7px;
-    border: 1px solid rgba(255,255,255,0.12);
-    background: #1c1d1f;
-    color: #94a3b8;
+    border: 1px solid var(--border-hover);
+    background: var(--surface);
+    color: var(--text-muted);
     cursor: pointer;
     appearance: auto;
     -webkit-appearance: auto;
     outline: none;
   }
   .research-reminder-select:focus {
-    border-color: rgba(139,143,168,0.4);
+    border-color: var(--accent);
   }
   .research-reminder-select option {
-    background: #1c1d1f;
-    color: #cbd5e1;
+    background: var(--surface);
+    color: var(--text);
     font-size: 12px;
     padding: 6px 8px;
   }
   .research-reminder-select option:checked,
   .research-reminder-select option:hover {
-    background: #2a3a55;
-    color: #e2e8f0;
+    background: var(--surface2);
+    color: var(--text);
   }
 
   /* Email preview */
@@ -2404,7 +2404,7 @@
     border-radius: 0;
     padding: 0;
     font-size: 12px;
-    color: #9a9ba0;
+    color: var(--text-muted);
     font-family: var(--font-mono, monospace);
     line-height: 1.8;
     white-space: pre-wrap;
@@ -2413,17 +2413,17 @@
   /* Research footer */
   .research-footer {
     padding: 12px 20px;
-    border-top: 1px solid rgba(255,255,255,0.06);
+    border-top: 1px solid var(--border);
     display: flex;
     align-items: center;
     justify-content: space-between;
     position: sticky;
     bottom: 0;
-    background: #1c1d1f;
+    background: var(--surface);
     gap: 8px;
     flex-wrap: nowrap;
   }
-  .research-footer-label { font-size: 11px; color: #717378; white-space: nowrap; flex-shrink: 0; }
+  .research-footer-label { font-size: 11px; color: var(--text-dim, #717378); white-space: nowrap; flex-shrink: 0; }
   @keyframes dig-pulse {
     0%,100% { box-shadow: 0 0 0 0 rgba(139,143,168,0.4); border-color: rgba(139,143,168,0.5); }
     50% { box-shadow: 0 0 0 4px rgba(139,143,168,0.15); border-color: rgba(139,143,168,0.8); }
@@ -2457,9 +2457,9 @@
     font-size: 12px;
     padding: 7px 13px;
     border-radius: 8px;
-    border: 1px solid rgba(255,255,255,0.1);
-    background: rgba(255,255,255,0.05);
-    color: #94a3b8;
+    border: 1px solid var(--border-hover);
+    background: var(--accent-light);
+    color: var(--text-muted);
     cursor: pointer;
   }
 
@@ -3050,7 +3050,7 @@
       <!-- Permissions panel -->
       <div id="apanel-perms" style="display:none;">
         <div id="admin-perms-table-wrap" style="overflow-x:auto;"></div>
-        <div style="padding:12px 20px;border-top:1px solid #333436;display:flex;justify-content:flex-end;">
+        <div style="padding:12px 20px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;">
           <button id="save-perms-btn" onclick="saveAllPerms()" style="height:32px;padding:0 18px;border-radius:7px;border:1px solid rgba(29,158,117,0.4);background:rgba(29,158,117,0.12);color:#5DCAA5;font-size:12px;font-weight:600;cursor:pointer;">Save Permissions</button>
         </div>
       </div>
@@ -3091,8 +3091,8 @@
           <div style="flex:1;">
             <div style="font-size:10px;color:#717378;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;font-weight:600;">Actions</div>
             <div style="display:flex;flex-direction:column;gap:6px;">
-              <button onclick="openEditLock();closeAdminPanel();" style="height:38px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:#e2e8f0;font-size:12px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:8px;padding:0 14px;">🔒 Edit labels</button>
-              <button onclick="exportRecordsToExcel ? exportRecordsToExcel() : alert('Export not available');" style="height:38px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:#e2e8f0;font-size:12px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:8px;padding:0 14px;">⬇ Export records</button>
+              <button onclick="openEditLock();closeAdminPanel();" style="height:38px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:var(--text);font-size:12px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:8px;padding:0 14px;">🔒 Edit labels</button>
+              <button onclick="exportRecordsToExcel ? exportRecordsToExcel() : alert('Export not available');" style="height:38px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:var(--text);font-size:12px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:8px;padding:0 14px;">⬇ Export records</button>
               <button onclick="confirmClearAll();" style="height:38px;border-radius:8px;border:1px solid rgba(248,113,113,0.25);background:rgba(248,113,113,0.04);color:#fca5a5;font-size:12px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:8px;padding:0 14px;">🗑 Clear all records</button>
             </div>
           </div>
@@ -3100,9 +3100,9 @@
           <div style="flex:1;">
             <div style="font-size:10px;color:#717378;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;font-weight:600;">Admin Password</div>
             <div style="display:flex;flex-direction:column;gap:6px;">
-              <input type="password" id="admin-pw-current" placeholder="Current password" style="padding:7px 10px;border-radius:7px;border:1px solid rgba(255,255,255,0.1);background:#141516;color:#e2e8f0;font-size:12px;">
-              <input type="password" id="admin-pw-new" placeholder="New password" style="padding:7px 10px;border-radius:7px;border:1px solid rgba(255,255,255,0.1);background:#141516;color:#e2e8f0;font-size:12px;">
-              <input type="password" id="admin-pw-confirm" placeholder="Confirm" style="padding:7px 10px;border-radius:7px;border:1px solid rgba(255,255,255,0.1);background:#141516;color:#e2e8f0;font-size:12px;">
+              <input type="password" id="admin-pw-current" placeholder="Current password" style="padding:7px 10px;border-radius:7px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:12px;">
+              <input type="password" id="admin-pw-new" placeholder="New password" style="padding:7px 10px;border-radius:7px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:12px;">
+              <input type="password" id="admin-pw-confirm" placeholder="Confirm" style="padding:7px 10px;border-radius:7px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:12px;">
               <div style="display:flex;align-items:center;gap:8px;">
                 <button onclick="changeAdminPassword()" style="height:30px;padding:0 14px;border-radius:7px;border:1px solid rgba(29,158,117,0.4);background:rgba(29,158,117,0.1);color:#5DCAA5;font-size:11px;font-weight:600;cursor:pointer;">Update password</button>
                 <span id="admin-pw-msg" style="font-size:12px;"></span>
@@ -3114,8 +3114,8 @@
 
       <!-- Scoring panel -->
       <div id="apanel-scoring" style="display:none;padding:16px 20px;max-height:420px;overflow-y:auto;">
-        <div style="border-left:3px solid rgba(168,144,96,0.5);background:rgba(168,144,96,0.04);border-radius:0 6px 6px 0;padding:10px 12px 2px;margin-bottom:16px;"><div style="font-size:11px;color:#9a9ba0;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;">Potential Value — Project Budget</div><div style="background:var(--surface);border-radius:8px;padding:10px 12px;margin-bottom:14px;"><div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04);"><span style="font-size:12px;color:var(--text-muted);">Tier 1</span><div style="display:flex;align-items:center;gap:12px;"><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:#9a9ba0;margin-right:2px;">Starts at</span><span style="font-size:12px;color:#9a9ba0;">$</span><input type="number" id="cfg-pv-proj-t1" value="0" min="0" readonly style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid transparent;background:transparent;color:var(--text-muted);font-size:12px;text-align:right;pointer-events:none;"></div><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:#9a9ba0;margin-right:2px;">Ends at</span><span style="font-size:12px;color:#9a9ba0;">$</span><input type="number" id="cfg-pv-proj-t1-end" min="0" oninput="cascadeScoringField('cfg-pv-proj-t1-end')" style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;text-align:right;"></div></div></div><div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04);"><span style="font-size:12px;color:var(--text-muted);">Tier 2</span><div style="display:flex;align-items:center;gap:12px;"><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:#9a9ba0;margin-right:2px;">Starts at</span><span style="font-size:12px;color:#9a9ba0;">$</span><input type="number" id="cfg-pv-proj-t2" oninput="cascadeScoringField('cfg-pv-proj-t2')" value="500" min="0" style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;text-align:right;"></div><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:#9a9ba0;margin-right:2px;">Ends at</span><span style="font-size:12px;color:#9a9ba0;">$</span><input type="number" id="cfg-pv-proj-t2-end" min="0" oninput="cascadeScoringField('cfg-pv-proj-t2-end')" style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;text-align:right;"></div></div></div><div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;"><span style="font-size:12px;color:var(--text-muted);">Tier 3</span><div style="display:flex;align-items:center;gap:12px;"><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:#9a9ba0;margin-right:2px;">Starts at</span><span style="font-size:12px;color:#9a9ba0;">$</span><input type="number" id="cfg-pv-proj-t3" oninput="cascadeScoringField('cfg-pv-proj-t3')" value="5000" min="0" style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;text-align:right;"></div><span style="font-size:11px;color:#9a9ba0;font-style:italic;">No ceiling</span></div></div></div>        <div style="font-size:11px;color:#9a9ba0;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;">Potential Value — Yearly Budget</div><div style="background:var(--surface);border-radius:8px;padding:10px 12px;margin-bottom:14px;"><div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04);"><span style="font-size:12px;color:var(--text-muted);">Tier 1</span><div style="display:flex;align-items:center;gap:12px;"><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:#9a9ba0;margin-right:2px;">Starts at</span><span style="font-size:12px;color:#9a9ba0;">$</span><input type="number" id="cfg-pv-yr-t1" value="0" min="0" readonly style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid transparent;background:transparent;color:var(--text-muted);font-size:12px;text-align:right;pointer-events:none;"></div><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:#9a9ba0;margin-right:2px;">Ends at</span><span style="font-size:12px;color:#9a9ba0;">$</span><input type="number" id="cfg-pv-yr-t1-end" min="0" oninput="cascadeScoringField('cfg-pv-yr-t1-end')" style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;text-align:right;"></div></div></div><div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04);"><span style="font-size:12px;color:var(--text-muted);">Tier 2</span><div style="display:flex;align-items:center;gap:12px;"><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:#9a9ba0;margin-right:2px;">Starts at</span><span style="font-size:12px;color:#9a9ba0;">$</span><input type="number" id="cfg-pv-yr-t2" oninput="cascadeScoringField('cfg-pv-yr-t2')" value="5000" min="0" style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;text-align:right;"></div><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:#9a9ba0;margin-right:2px;">Ends at</span><span style="font-size:12px;color:#9a9ba0;">$</span><input type="number" id="cfg-pv-yr-t2-end" min="0" oninput="cascadeScoringField('cfg-pv-yr-t2-end')" style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;text-align:right;"></div></div></div><div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;"><span style="font-size:12px;color:var(--text-muted);">Tier 3</span><div style="display:flex;align-items:center;gap:12px;"><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:#9a9ba0;margin-right:2px;">Starts at</span><span style="font-size:12px;color:#9a9ba0;">$</span><input type="number" id="cfg-pv-yr-t3" oninput="cascadeScoringField('cfg-pv-yr-t3')" value="10000" min="0" style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;text-align:right;"></div><span style="font-size:11px;color:#9a9ba0;font-style:italic;">No ceiling</span></div></div></div>        </div>
-        <div style="border-left:3px solid rgba(29,158,117,0.45);background:rgba(29,158,117,0.04);border-radius:0 6px 6px 0;padding:10px 12px 2px;margin-bottom:16px;"><div style="font-size:11px;color:#9a9ba0;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;">Actual Value — New Customer <span style="font-size:9px;font-weight:600;letter-spacing:0.05em;color:rgba(245,158,11,0.7);text-transform:none;margin-left:4px;">↳ Mirrors Project Budget</span></div><div style="background:var(--surface);border-radius:8px;padding:10px 12px;margin-bottom:14px;"><div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04);"><span style="font-size:12px;color:var(--text-muted);">Tier 1</span><div style="display:flex;align-items:center;gap:12px;"><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:#9a9ba0;margin-right:2px;">Starts at</span><span style="font-size:12px;color:#9a9ba0;">$</span><input type="number" id="cfg-av-new-t1" value="0" min="0" readonly style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid transparent;background:transparent;color:var(--text-muted);font-size:12px;text-align:right;pointer-events:none;"></div><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:#9a9ba0;margin-right:2px;">Ends at</span><span style="font-size:12px;color:#9a9ba0;">$</span><input type="number" id="cfg-av-new-t1-end" min="0" readonly style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid transparent;background:transparent;color:var(--text-muted);font-size:12px;text-align:right;pointer-events:none;"></div></div></div><div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04);"><span style="font-size:12px;color:var(--text-muted);">Tier 2</span><div style="display:flex;align-items:center;gap:12px;"><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:#9a9ba0;margin-right:2px;">Starts at</span><span style="font-size:12px;color:#9a9ba0;">$</span><input type="number" id="cfg-av-new-t2" readonly value="500" min="0" style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid transparent;background:transparent;color:var(--text-muted);font-size:12px;text-align:right;pointer-events:none;"></div><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:#9a9ba0;margin-right:2px;">Ends at</span><span style="font-size:12px;color:#9a9ba0;">$</span><input type="number" id="cfg-av-new-t2-end" min="0" readonly style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid transparent;background:transparent;color:var(--text-muted);font-size:12px;text-align:right;pointer-events:none;"></div></div></div><div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;"><span style="font-size:12px;color:var(--text-muted);">Tier 3</span><div style="display:flex;align-items:center;gap:12px;"><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:#9a9ba0;margin-right:2px;">Starts at</span><span style="font-size:12px;color:#9a9ba0;">$</span><input type="number" id="cfg-av-new-t3" readonly value="10000" min="0" style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid transparent;background:transparent;color:var(--text-muted);font-size:12px;text-align:right;pointer-events:none;"></div><span style="font-size:11px;color:#9a9ba0;font-style:italic;">No ceiling</span></div></div></div>        <div style="font-size:11px;color:#9a9ba0;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;">Actual Value — Existing Customer</div><div style="background:var(--surface);border-radius:8px;padding:10px 12px;margin-bottom:14px;"><div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04);"><span style="font-size:12px;color:var(--text-muted);">Tier 1</span><div style="display:flex;align-items:center;gap:12px;"><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:#9a9ba0;margin-right:2px;">Starts at</span><span style="font-size:12px;color:#9a9ba0;">$</span><input type="number" id="cfg-av-ex-t1" value="0" min="0" readonly style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid transparent;background:transparent;color:var(--text-muted);font-size:12px;text-align:right;pointer-events:none;"></div><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:#9a9ba0;margin-right:2px;">Ends at</span><span style="font-size:12px;color:#9a9ba0;">$</span><input type="number" id="cfg-av-ex-t1-end" min="0" oninput="cascadeScoringField('cfg-av-ex-t1-end')" style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;text-align:right;"></div></div></div><div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04);"><span style="font-size:12px;color:var(--text-muted);">Tier 2</span><div style="display:flex;align-items:center;gap:12px;"><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:#9a9ba0;margin-right:2px;">Starts at</span><span style="font-size:12px;color:#9a9ba0;">$</span><input type="number" id="cfg-av-ex-t2" oninput="cascadeScoringField('cfg-av-ex-t2')" value="5000" min="0" style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;text-align:right;"></div><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:#9a9ba0;margin-right:2px;">Ends at</span><span style="font-size:12px;color:#9a9ba0;">$</span><input type="number" id="cfg-av-ex-t2-end" min="0" oninput="cascadeScoringField('cfg-av-ex-t2-end')" style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;text-align:right;"></div></div></div><div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;"><span style="font-size:12px;color:var(--text-muted);">Tier 3</span><div style="display:flex;align-items:center;gap:12px;"><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:#9a9ba0;margin-right:2px;">Starts at</span><span style="font-size:12px;color:#9a9ba0;">$</span><input type="number" id="cfg-av-ex-t3" oninput="cascadeScoringField('cfg-av-ex-t3')" value="50000" min="0" style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;text-align:right;"></div><span style="font-size:11px;color:#9a9ba0;font-style:italic;">No ceiling</span></div></div></div></div>
+        <div style="border-left:3px solid rgba(168,144,96,0.5);background:rgba(168,144,96,0.04);border-radius:0 6px 6px 0;padding:10px 12px 2px;margin-bottom:16px;"><div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;">Potential Value — Project Budget</div><div style="background:var(--surface);border-radius:8px;padding:10px 12px;margin-bottom:14px;"><div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04);"><span style="font-size:12px;color:var(--text-muted);">Tier 1</span><div style="display:flex;align-items:center;gap:12px;"><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:var(--text-muted);margin-right:2px;">Starts at</span><span style="font-size:12px;color:var(--text-muted);">$</span><input type="number" id="cfg-pv-proj-t1" value="0" min="0" readonly style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid transparent;background:transparent;color:var(--text-muted);font-size:12px;text-align:right;pointer-events:none;"></div><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:var(--text-muted);margin-right:2px;">Ends at</span><span style="font-size:12px;color:var(--text-muted);">$</span><input type="number" id="cfg-pv-proj-t1-end" min="0" oninput="cascadeScoringField('cfg-pv-proj-t1-end')" style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;text-align:right;"></div></div></div><div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04);"><span style="font-size:12px;color:var(--text-muted);">Tier 2</span><div style="display:flex;align-items:center;gap:12px;"><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:var(--text-muted);margin-right:2px;">Starts at</span><span style="font-size:12px;color:var(--text-muted);">$</span><input type="number" id="cfg-pv-proj-t2" oninput="cascadeScoringField('cfg-pv-proj-t2')" value="500" min="0" style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;text-align:right;"></div><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:var(--text-muted);margin-right:2px;">Ends at</span><span style="font-size:12px;color:var(--text-muted);">$</span><input type="number" id="cfg-pv-proj-t2-end" min="0" oninput="cascadeScoringField('cfg-pv-proj-t2-end')" style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;text-align:right;"></div></div></div><div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;"><span style="font-size:12px;color:var(--text-muted);">Tier 3</span><div style="display:flex;align-items:center;gap:12px;"><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:var(--text-muted);margin-right:2px;">Starts at</span><span style="font-size:12px;color:var(--text-muted);">$</span><input type="number" id="cfg-pv-proj-t3" oninput="cascadeScoringField('cfg-pv-proj-t3')" value="5000" min="0" style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;text-align:right;"></div><span style="font-size:11px;color:var(--text-muted);font-style:italic;">No ceiling</span></div></div></div>        <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;">Potential Value — Yearly Budget</div><div style="background:var(--surface);border-radius:8px;padding:10px 12px;margin-bottom:14px;"><div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04);"><span style="font-size:12px;color:var(--text-muted);">Tier 1</span><div style="display:flex;align-items:center;gap:12px;"><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:var(--text-muted);margin-right:2px;">Starts at</span><span style="font-size:12px;color:var(--text-muted);">$</span><input type="number" id="cfg-pv-yr-t1" value="0" min="0" readonly style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid transparent;background:transparent;color:var(--text-muted);font-size:12px;text-align:right;pointer-events:none;"></div><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:var(--text-muted);margin-right:2px;">Ends at</span><span style="font-size:12px;color:var(--text-muted);">$</span><input type="number" id="cfg-pv-yr-t1-end" min="0" oninput="cascadeScoringField('cfg-pv-yr-t1-end')" style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;text-align:right;"></div></div></div><div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04);"><span style="font-size:12px;color:var(--text-muted);">Tier 2</span><div style="display:flex;align-items:center;gap:12px;"><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:var(--text-muted);margin-right:2px;">Starts at</span><span style="font-size:12px;color:var(--text-muted);">$</span><input type="number" id="cfg-pv-yr-t2" oninput="cascadeScoringField('cfg-pv-yr-t2')" value="5000" min="0" style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;text-align:right;"></div><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:var(--text-muted);margin-right:2px;">Ends at</span><span style="font-size:12px;color:var(--text-muted);">$</span><input type="number" id="cfg-pv-yr-t2-end" min="0" oninput="cascadeScoringField('cfg-pv-yr-t2-end')" style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;text-align:right;"></div></div></div><div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;"><span style="font-size:12px;color:var(--text-muted);">Tier 3</span><div style="display:flex;align-items:center;gap:12px;"><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:var(--text-muted);margin-right:2px;">Starts at</span><span style="font-size:12px;color:var(--text-muted);">$</span><input type="number" id="cfg-pv-yr-t3" oninput="cascadeScoringField('cfg-pv-yr-t3')" value="10000" min="0" style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;text-align:right;"></div><span style="font-size:11px;color:var(--text-muted);font-style:italic;">No ceiling</span></div></div></div>        </div>
+        <div style="border-left:3px solid rgba(29,158,117,0.45);background:rgba(29,158,117,0.04);border-radius:0 6px 6px 0;padding:10px 12px 2px;margin-bottom:16px;"><div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;">Actual Value — New Customer <span style="font-size:9px;font-weight:600;letter-spacing:0.05em;color:rgba(245,158,11,0.7);text-transform:none;margin-left:4px;">↳ Mirrors Project Budget</span></div><div style="background:var(--surface);border-radius:8px;padding:10px 12px;margin-bottom:14px;"><div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04);"><span style="font-size:12px;color:var(--text-muted);">Tier 1</span><div style="display:flex;align-items:center;gap:12px;"><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:var(--text-muted);margin-right:2px;">Starts at</span><span style="font-size:12px;color:var(--text-muted);">$</span><input type="number" id="cfg-av-new-t1" value="0" min="0" readonly style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid transparent;background:transparent;color:var(--text-muted);font-size:12px;text-align:right;pointer-events:none;"></div><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:var(--text-muted);margin-right:2px;">Ends at</span><span style="font-size:12px;color:var(--text-muted);">$</span><input type="number" id="cfg-av-new-t1-end" min="0" readonly style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid transparent;background:transparent;color:var(--text-muted);font-size:12px;text-align:right;pointer-events:none;"></div></div></div><div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04);"><span style="font-size:12px;color:var(--text-muted);">Tier 2</span><div style="display:flex;align-items:center;gap:12px;"><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:var(--text-muted);margin-right:2px;">Starts at</span><span style="font-size:12px;color:var(--text-muted);">$</span><input type="number" id="cfg-av-new-t2" readonly value="500" min="0" style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid transparent;background:transparent;color:var(--text-muted);font-size:12px;text-align:right;pointer-events:none;"></div><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:var(--text-muted);margin-right:2px;">Ends at</span><span style="font-size:12px;color:var(--text-muted);">$</span><input type="number" id="cfg-av-new-t2-end" min="0" readonly style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid transparent;background:transparent;color:var(--text-muted);font-size:12px;text-align:right;pointer-events:none;"></div></div></div><div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;"><span style="font-size:12px;color:var(--text-muted);">Tier 3</span><div style="display:flex;align-items:center;gap:12px;"><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:var(--text-muted);margin-right:2px;">Starts at</span><span style="font-size:12px;color:var(--text-muted);">$</span><input type="number" id="cfg-av-new-t3" readonly value="10000" min="0" style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid transparent;background:transparent;color:var(--text-muted);font-size:12px;text-align:right;pointer-events:none;"></div><span style="font-size:11px;color:var(--text-muted);font-style:italic;">No ceiling</span></div></div></div>        <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;">Actual Value — Existing Customer</div><div style="background:var(--surface);border-radius:8px;padding:10px 12px;margin-bottom:14px;"><div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04);"><span style="font-size:12px;color:var(--text-muted);">Tier 1</span><div style="display:flex;align-items:center;gap:12px;"><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:var(--text-muted);margin-right:2px;">Starts at</span><span style="font-size:12px;color:var(--text-muted);">$</span><input type="number" id="cfg-av-ex-t1" value="0" min="0" readonly style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid transparent;background:transparent;color:var(--text-muted);font-size:12px;text-align:right;pointer-events:none;"></div><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:var(--text-muted);margin-right:2px;">Ends at</span><span style="font-size:12px;color:var(--text-muted);">$</span><input type="number" id="cfg-av-ex-t1-end" min="0" oninput="cascadeScoringField('cfg-av-ex-t1-end')" style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;text-align:right;"></div></div></div><div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04);"><span style="font-size:12px;color:var(--text-muted);">Tier 2</span><div style="display:flex;align-items:center;gap:12px;"><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:var(--text-muted);margin-right:2px;">Starts at</span><span style="font-size:12px;color:var(--text-muted);">$</span><input type="number" id="cfg-av-ex-t2" oninput="cascadeScoringField('cfg-av-ex-t2')" value="5000" min="0" style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;text-align:right;"></div><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:var(--text-muted);margin-right:2px;">Ends at</span><span style="font-size:12px;color:var(--text-muted);">$</span><input type="number" id="cfg-av-ex-t2-end" min="0" oninput="cascadeScoringField('cfg-av-ex-t2-end')" style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;text-align:right;"></div></div></div><div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;"><span style="font-size:12px;color:var(--text-muted);">Tier 3</span><div style="display:flex;align-items:center;gap:12px;"><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:var(--text-muted);margin-right:2px;">Starts at</span><span style="font-size:12px;color:var(--text-muted);">$</span><input type="number" id="cfg-av-ex-t3" oninput="cascadeScoringField('cfg-av-ex-t3')" value="50000" min="0" style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;text-align:right;"></div><span style="font-size:11px;color:var(--text-muted);font-style:italic;">No ceiling</span></div></div></div></div>
                 <div style="display:flex;align-items:center;gap:10px;padding-top:4px;">
           <button onclick="applyScoringConfig()" style="height:32px;padding:0 18px;border-radius:7px;border:1px solid rgba(29,158,117,0.4);background:rgba(29,158,117,0.12);color:#5DCAA5;font-size:12px;font-weight:600;cursor:pointer;">Apply &amp; Save</button>
           <span id="scoring-cfg-msg" style="font-size:11px;color:#5DCAA5;display:none;">&#10003; Thresholds updated</span>
@@ -3126,119 +3126,119 @@
       <!-- Settings panel -->
       <div id="apanel-settings" style="display:none;padding:16px 20px;max-height:420px;overflow-y:auto;">
         <!-- Company Profile -->
-        <div style="font-size:11px;color:#9a9ba0;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;font-weight:600;">Company Profile</div>
+        <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;font-weight:600;">Company Profile</div>
         <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:16px;">
-          <input type="text" id="cfg-company-name" placeholder="Company Name" style="padding:7px 10px;border-radius:7px;border:1px solid #4e4f52;background:#141516;color:#e2e8f0;font-size:13px;">
-          <input type="text" id="cfg-company-website" placeholder="Company Website" style="padding:7px 10px;border-radius:7px;border:1px solid #4e4f52;background:#141516;color:#e2e8f0;font-size:13px;">
-          <input type="tel" id="cfg-company-phone" placeholder="Company Phone" style="padding:7px 10px;border-radius:7px;border:1px solid #4e4f52;background:#141516;color:#e2e8f0;font-size:13px;">
-          <input type="text" id="cfg-company-address" placeholder="Company Address" style="padding:7px 10px;border-radius:7px;border:1px solid #4e4f52;background:#141516;color:#e2e8f0;font-size:13px;">
+          <input type="text" id="cfg-company-name" placeholder="Company Name" style="padding:7px 10px;border-radius:7px;border:1px solid var(--border-hover);background:var(--bg);color:var(--text);font-size:13px;">
+          <input type="text" id="cfg-company-website" placeholder="Company Website" style="padding:7px 10px;border-radius:7px;border:1px solid var(--border-hover);background:var(--bg);color:var(--text);font-size:13px;">
+          <input type="tel" id="cfg-company-phone" placeholder="Company Phone" style="padding:7px 10px;border-radius:7px;border:1px solid var(--border-hover);background:var(--bg);color:var(--text);font-size:13px;">
+          <input type="text" id="cfg-company-address" placeholder="Company Address" style="padding:7px 10px;border-radius:7px;border:1px solid var(--border-hover);background:var(--bg);color:var(--text);font-size:13px;">
           <div style="display:flex;gap:6px;align-items:center;">
-            <input type="url" id="cfg-company-logo" placeholder="Company Logo URL" style="flex:1;padding:7px 10px;border-radius:7px;border:1px solid #4e4f52;background:#141516;color:#e2e8f0;font-size:13px;" oninput="var p=document.getElementById('cfg-logo-preview');if(p){p.src=this.value;p.style.display=this.value?'block':'none';}">
+            <input type="url" id="cfg-company-logo" placeholder="Company Logo URL" style="flex:1;padding:7px 10px;border-radius:7px;border:1px solid var(--border-hover);background:var(--bg);color:var(--text);font-size:13px;" oninput="var p=document.getElementById('cfg-logo-preview');if(p){p.src=this.value;p.style.display=this.value?'block':'none';}">
             <input type="file" id="cfg-logo-file" accept="image/png,image/jpeg,image/svg+xml" style="display:none;" onchange="_onLogoSelected(this)">
             <button onclick="_logoButtonClick()" id="cfg-logo-upload-btn" style="height:32px;padding:0 12px;border-radius:7px;border:1px solid rgba(29,158,117,0.4);background:rgba(29,158,117,0.12);color:#5DCAA5;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;">Select</button>
-            <img id="cfg-logo-preview" src="" style="display:none;width:32px;height:32px;object-fit:contain;border-radius:4px;border:1px solid rgba(255,255,255,0.1);flex-shrink:0;background:#141516;"  onerror="this.style.display='none'">
+            <img id="cfg-logo-preview" src="" style="display:none;width:32px;height:32px;object-fit:contain;border-radius:4px;border:1px solid rgba(255,255,255,0.1);flex-shrink:0;background:var(--bg);"  onerror="this.style.display='none'">
           </div>
           <div style="display:flex;gap:6px;align-items:center;">
-            <input type="text" id="cfg-brand-color" placeholder="#1D9E75" maxlength="7" style="width:90px;padding:7px 10px;border-radius:7px;border:1px solid #4e4f52;background:#141516;color:#e2e8f0;font-size:13px;font-family:monospace;" oninput="var s=document.getElementById('cfg-brand-swatch');if(s)s.style.background=this.value;">
+            <input type="text" id="cfg-brand-color" placeholder="#1D9E75" maxlength="7" style="width:90px;padding:7px 10px;border-radius:7px;border:1px solid var(--border-hover);background:var(--bg);color:var(--text);font-size:13px;font-family:monospace;" oninput="var s=document.getElementById('cfg-brand-swatch');if(s)s.style.background=this.value;">
             <div id="cfg-brand-swatch" style="width:28px;height:28px;border-radius:6px;border:1px solid rgba(255,255,255,0.15);background:#1D9E75;flex-shrink:0;"></div>
             <span style="font-size:11px;color:#717378;">Brand Color</span>
           </div>
-          <textarea id="cfg-company-desc" placeholder="Company description for AI context (2-3 sentences: what you sell, who you serve)" rows="2" style="padding:7px 10px;border-radius:7px;border:1px solid #4e4f52;background:#141516;color:#e2e8f0;font-size:13px;font-family:'Inter',sans-serif;resize:vertical;line-height:1.5;"></textarea>
+          <textarea id="cfg-company-desc" placeholder="Company description for AI context (2-3 sentences: what you sell, who you serve)" rows="2" style="padding:7px 10px;border-radius:7px;border:1px solid var(--border-hover);background:var(--bg);color:var(--text);font-size:13px;font-family:'Inter',sans-serif;resize:vertical;line-height:1.5;"></textarea>
         </div>
 
         <!-- Tier Display Names -->
-        <div style="border-top:1px solid #333436;padding-top:12px;margin-bottom:16px;">
-          <div style="font-size:11px;color:#9a9ba0;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;font-weight:600;">Tier Display Names</div>
+        <div style="border-top:1px solid var(--border);padding-top:12px;margin-bottom:16px;">
+          <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;font-weight:600;">Tier Display Names</div>
           <div style="display:flex;flex-direction:column;gap:6px;">
             <div style="display:flex;align-items:center;gap:6px;">
               <span style="font-size:10px;color:#5DCAA5;width:64px;flex-shrink:0;text-align:right;">7-9</span>
-              <input type="text" id="cfg-tier-name-ag" placeholder="AG" style="flex:1;padding:7px 10px;border-radius:7px;border:1px solid #4e4f52;background:#141516;color:#e2e8f0;font-size:13px;">
-              <input type="text" id="cfg-tier-priority-ag" placeholder="HIGH PRIORITY" style="flex:1;padding:7px 10px;border-radius:7px;border:1px solid #4e4f52;background:#141516;color:#e2e8f0;font-size:13px;">
+              <input type="text" id="cfg-tier-name-ag" placeholder="AG" style="flex:1;padding:7px 10px;border-radius:7px;border:1px solid var(--border-hover);background:var(--bg);color:var(--text);font-size:13px;">
+              <input type="text" id="cfg-tier-priority-ag" placeholder="HIGH PRIORITY" style="flex:1;padding:7px 10px;border-radius:7px;border:1px solid var(--border-hover);background:var(--bg);color:var(--text);font-size:13px;">
             </div>
             <div style="display:flex;align-items:center;gap:6px;">
               <span style="font-size:10px;color:#f59e0b;width:64px;flex-shrink:0;text-align:right;">4-6</span>
-              <input type="text" id="cfg-tier-name-cp" placeholder="CP" style="flex:1;padding:7px 10px;border-radius:7px;border:1px solid #4e4f52;background:#141516;color:#e2e8f0;font-size:13px;">
-              <input type="text" id="cfg-tier-priority-cp" placeholder="NURTURE / GROW" style="flex:1;padding:7px 10px;border-radius:7px;border:1px solid #4e4f52;background:#141516;color:#e2e8f0;font-size:13px;">
+              <input type="text" id="cfg-tier-name-cp" placeholder="CP" style="flex:1;padding:7px 10px;border-radius:7px;border:1px solid var(--border-hover);background:var(--bg);color:var(--text);font-size:13px;">
+              <input type="text" id="cfg-tier-priority-cp" placeholder="NURTURE / GROW" style="flex:1;padding:7px 10px;border-radius:7px;border:1px solid var(--border-hover);background:var(--bg);color:var(--text);font-size:13px;">
             </div>
             <div style="display:flex;align-items:center;gap:6px;">
               <span style="font-size:10px;color:#AFA9EC;width:64px;flex-shrink:0;text-align:right;">1-3</span>
-              <input type="text" id="cfg-tier-name-asst" placeholder="Assistants" style="flex:1;padding:7px 10px;border-radius:7px;border:1px solid #4e4f52;background:#141516;color:#e2e8f0;font-size:13px;">
-              <input type="text" id="cfg-tier-priority-asst" placeholder="TRANSACTIONAL" style="flex:1;padding:7px 10px;border-radius:7px;border:1px solid #4e4f52;background:#141516;color:#e2e8f0;font-size:13px;">
+              <input type="text" id="cfg-tier-name-asst" placeholder="Assistants" style="flex:1;padding:7px 10px;border-radius:7px;border:1px solid var(--border-hover);background:var(--bg);color:var(--text);font-size:13px;">
+              <input type="text" id="cfg-tier-priority-asst" placeholder="TRANSACTIONAL" style="flex:1;padding:7px 10px;border-radius:7px;border:1px solid var(--border-hover);background:var(--bg);color:var(--text);font-size:13px;">
             </div>
-            <div style="font-size:10px;color:#4e4f52;margin-top:2px;">Name &nbsp;&nbsp;|&nbsp;&nbsp; Priority label</div>
+            <div style="font-size:10px;color:var(--text-dim, #4e4f52);margin-top:2px;">Name &nbsp;&nbsp;|&nbsp;&nbsp; Priority label</div>
           </div>
         </div>
 
         <!-- Email Delivery -->
-        <div style="border-top:1px solid #333436;padding-top:12px;margin-bottom:16px;">
-          <div style="font-size:11px;color:#9a9ba0;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;font-weight:600;">Email Delivery</div>
+        <div style="border-top:1px solid var(--border);padding-top:12px;margin-bottom:16px;">
+          <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;font-weight:600;">Email Delivery</div>
           <div style="display:flex;flex-direction:column;gap:6px;">
             <div style="display:flex;align-items:center;gap:6px;">
               <span style="font-size:11px;color:#717378;width:60px;flex-shrink:0;text-align:right;">To</span>
-              <input type="email" id="cfg-company-email" placeholder="Scorecard recipient email" style="flex:1;padding:7px 10px;border-radius:7px;border:1px solid #4e4f52;background:#141516;color:#e2e8f0;font-size:13px;">
+              <input type="email" id="cfg-company-email" placeholder="Scorecard recipient email" style="flex:1;padding:7px 10px;border-radius:7px;border:1px solid var(--border-hover);background:var(--bg);color:var(--text);font-size:13px;">
             </div>
             <div style="display:flex;align-items:center;gap:6px;">
               <span style="font-size:11px;color:#717378;width:60px;flex-shrink:0;text-align:right;">CC</span>
-              <input type="email" id="cfg-email-cc" placeholder="CC (optional)" style="flex:1;padding:7px 10px;border-radius:7px;border:1px solid #4e4f52;background:#141516;color:#e2e8f0;font-size:13px;">
+              <input type="email" id="cfg-email-cc" placeholder="CC (optional)" style="flex:1;padding:7px 10px;border-radius:7px;border:1px solid var(--border-hover);background:var(--bg);color:var(--text);font-size:13px;">
             </div>
             <div style="display:flex;align-items:center;gap:6px;">
               <span style="font-size:11px;color:#717378;width:60px;flex-shrink:0;text-align:right;">BCC</span>
-              <input type="email" id="cfg-email-bcc" placeholder="BCC (optional)" style="flex:1;padding:7px 10px;border-radius:7px;border:1px solid #4e4f52;background:#141516;color:#e2e8f0;font-size:13px;">
+              <input type="email" id="cfg-email-bcc" placeholder="BCC (optional)" style="flex:1;padding:7px 10px;border-radius:7px;border:1px solid var(--border-hover);background:var(--bg);color:var(--text);font-size:13px;">
             </div>
             <div style="display:flex;align-items:center;gap:6px;">
               <span style="font-size:11px;color:#717378;width:60px;flex-shrink:0;text-align:right;">Reply-To</span>
-              <input type="email" id="cfg-email-replyto" placeholder="Reply-to (optional)" style="flex:1;padding:7px 10px;border-radius:7px;border:1px solid #4e4f52;background:#141516;color:#e2e8f0;font-size:13px;">
+              <input type="email" id="cfg-email-replyto" placeholder="Reply-to (optional)" style="flex:1;padding:7px 10px;border-radius:7px;border:1px solid var(--border-hover);background:var(--bg);color:var(--text);font-size:13px;">
             </div>
             <div style="display:flex;align-items:center;gap:6px;">
               <span style="font-size:11px;color:#717378;width:60px;flex-shrink:0;text-align:right;">Subject</span>
-              <input type="text" id="cfg-email-subject" placeholder="Subject template (use {company}, {tier}, {score})" style="flex:1;padding:7px 10px;border-radius:7px;border:1px solid #4e4f52;background:#141516;color:#e2e8f0;font-size:13px;">
+              <input type="text" id="cfg-email-subject" placeholder="Subject template (use {company}, {tier}, {score})" style="flex:1;padding:7px 10px;border-radius:7px;border:1px solid var(--border-hover);background:var(--bg);color:var(--text);font-size:13px;">
             </div>
           </div>
         </div>
 
         <!-- Coupon Codes -->
-        <div style="border-top:1px solid #333436;padding-top:12px;margin-bottom:16px;">
+        <div style="border-top:1px solid var(--border);padding-top:12px;margin-bottom:16px;">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-            <div style="font-size:11px;color:#9a9ba0;text-transform:uppercase;letter-spacing:0.05em;font-weight:600;">Coupon Codes</div>
+            <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;font-weight:600;">Coupon Codes</div>
           </div>
           <div id="cfg-coupon-list" style="display:flex;flex-direction:column;gap:6px;margin-bottom:8px;"></div>
           <div style="display:flex;gap:6px;align-items:center;">
-            <input type="text" id="cfg-coupon-new-code" placeholder="Code (e.g. SPRING25)" style="flex:1;padding:7px 10px;border-radius:7px;border:1px solid #4e4f52;background:#141516;color:#EF9F27;font-size:13px;letter-spacing:0.3px;text-transform:uppercase;">
-            <input type="text" id="cfg-coupon-new-desc" placeholder="Description (optional)" style="flex:1.5;padding:7px 10px;border-radius:7px;border:1px solid #4e4f52;background:#141516;color:#e2e8f0;font-size:13px;">
+            <input type="text" id="cfg-coupon-new-code" placeholder="Code (e.g. SPRING25)" style="flex:1;padding:7px 10px;border-radius:7px;border:1px solid #4e4f52;background:var(--bg);color:#EF9F27;font-size:13px;letter-spacing:0.3px;text-transform:uppercase;">
+            <input type="text" id="cfg-coupon-new-desc" placeholder="Description (optional)" style="flex:1.5;padding:7px 10px;border-radius:7px;border:1px solid var(--border-hover);background:var(--bg);color:var(--text);font-size:13px;">
             <button onclick="_addCouponCode()" style="height:32px;padding:0 12px;border-radius:7px;border:1px solid rgba(29,158,117,0.4);background:rgba(29,158,117,0.12);color:#5DCAA5;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;">+ Add</button>
           </div>
         </div>
 
         <!-- Signature Block -->
-        <div style="border-top:1px solid #333436;padding-top:12px;margin-bottom:16px;">
+        <div style="border-top:1px solid var(--border);padding-top:12px;margin-bottom:16px;">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-            <div style="font-size:11px;color:#9a9ba0;text-transform:uppercase;letter-spacing:0.05em;font-weight:600;">Signature Block</div>
-            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:11px;color:#9a9ba0;">
+            <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;font-weight:600;">Signature Block</div>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:11px;color:var(--text-muted);">
               <input type="checkbox" id="cfg-sig-enabled" style="accent-color:#5DCAA5;" onchange="var t=document.getElementById('cfg-sig-text');if(t)t.style.opacity=this.checked?'1':'0.4';">
               <span>Enabled</span>
             </label>
           </div>
-          <textarea id="cfg-sig-text" placeholder="Paste your email signature here..." rows="4" style="width:100%;padding:7px 10px;border-radius:7px;border:1px solid #4e4f52;background:#141516;color:#e2e8f0;font-size:12px;font-family:'Inter',sans-serif;resize:vertical;line-height:1.5;box-sizing:border-box;opacity:0.4;"></textarea>
+          <textarea id="cfg-sig-text" placeholder="Paste your email signature here..." rows="4" style="width:100%;padding:7px 10px;border-radius:7px;border:1px solid var(--border-hover);background:var(--bg);color:var(--text);font-size:12px;font-family:'Inter',sans-serif;resize:vertical;line-height:1.5;box-sizing:border-box;opacity:0.4;"></textarea>
         </div>
 
         <!-- AI Prompts -->
-        <div style="border-top:1px solid #333436;padding-top:12px;margin-bottom:16px;">
-          <div style="font-size:11px;color:#9a9ba0;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;font-weight:600;">AI Prompts</div>
+        <div style="border-top:1px solid var(--border);padding-top:12px;margin-bottom:16px;">
+          <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;font-weight:600;">AI Prompts</div>
           <div style="display:flex;flex-direction:column;gap:6px;">
-            <input type="text" id="cfg-company-tagline" placeholder="Company tagline for AI-generated emails" style="padding:7px 10px;border-radius:7px;border:1px solid #4e4f52;background:#141516;color:#e2e8f0;font-size:13px;">
+            <input type="text" id="cfg-company-tagline" placeholder="Company tagline for AI-generated emails" style="padding:7px 10px;border-radius:7px;border:1px solid var(--border-hover);background:var(--bg);color:var(--text);font-size:13px;">
             <div style="display:flex;align-items:center;gap:6px;">
               <span style="font-size:11px;color:#717378;flex-shrink:0;">Monthly cost alert at $</span>
-              <input type="number" id="cfg-cost-alert" placeholder="50" min="1" step="1" style="width:80px;padding:7px 10px;border-radius:7px;border:1px solid #4e4f52;background:#141516;color:#e2e8f0;font-size:13px;text-align:right;">
+              <input type="number" id="cfg-cost-alert" placeholder="50" min="1" step="1" style="width:80px;padding:7px 10px;border-radius:7px;border:1px solid var(--border-hover);background:var(--bg);color:var(--text);font-size:13px;text-align:right;">
             </div>
           </div>
         </div>
 
         <!-- Timezone -->
-        <div style="border-top:1px solid #333436;padding-top:12px;margin-bottom:16px;">
-          <div style="font-size:11px;color:#9a9ba0;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;font-weight:600;">Operational</div>
+        <div style="border-top:1px solid var(--border);padding-top:12px;margin-bottom:16px;">
+          <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;font-weight:600;">Operational</div>
           <div style="display:flex;align-items:center;gap:6px;">
             <span style="font-size:11px;color:#717378;flex-shrink:0;">Default timezone</span>
-            <select id="cfg-timezone" style="flex:1;padding:7px 10px;border-radius:7px;border:1px solid #4e4f52;background:#141516;color:#e2e8f0;font-size:12px;">
+            <select id="cfg-timezone" style="flex:1;padding:7px 10px;border-radius:7px;border:1px solid var(--border-hover);background:var(--bg);color:var(--text);font-size:12px;">
               <option value="America/Chicago">Central (Chicago)</option>
               <option value="America/New_York">Eastern (New York)</option>
               <option value="America/Denver">Mountain (Denver)</option>
@@ -3412,21 +3412,21 @@
       </div>
       <button onclick="showRepNameView()" style="margin-top:12px;padding:8px 20px;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:transparent;color:var(--text-muted);font-size:12px;font-weight:600;cursor:pointer;letter-spacing:0.03em;">← Back to Users</button>
       <div id="pin-error" style="color:#f87171;font-size:12px;margin-top:12px;display:none;">Incorrect PIN. Try again.</div>
-      <div id="pin-admin-permanent" style="display:none;margin-top:16px;padding-top:14px;border-top:1px solid #333436;">
-        <div style="font-size:10px;color:#9a9ba0;margin-bottom:6px;letter-spacing:0.04em;">Admin override</div>
-        <input type="password" id="pin-admin-permanent-input" placeholder="Admin password" style="width:180px;padding:6px 10px;border-radius:7px;border:1px solid #4e4f52;background:#141516;color:#e2e8f0;font-size:13px;text-align:center;display:block;margin:0 auto 8px;" onkeydown="if(event.key===&apos;Enter&apos;)checkPermanentAdminOverride()">
+      <div id="pin-admin-permanent" style="display:none;margin-top:16px;padding-top:14px;border-top:1px solid var(--border);">
+        <div style="font-size:10px;color:var(--text-muted);margin-bottom:6px;letter-spacing:0.04em;">Admin override</div>
+        <input type="password" id="pin-admin-permanent-input" placeholder="Admin password" style="width:180px;padding:6px 10px;border-radius:7px;border:1px solid var(--border-hover);background:var(--bg);color:var(--text);font-size:13px;text-align:center;display:block;margin:0 auto 8px;" onkeydown="if(event.key===&apos;Enter&apos;)checkPermanentAdminOverride()">
         <button onclick="checkPermanentAdminOverride()" style="height:32px;padding:0 20px;border-radius:7px;border:1px solid rgba(29,158,117,0.4);background:rgba(29,158,117,0.12);color:#5DCAA5;font-size:12px;font-weight:600;cursor:pointer;">Unlock</button>
         <div id="pin-admin-permanent-error" style="color:#f87171;font-size:11px;margin-top:6px;display:none;">Incorrect password.</div>
       </div>
       <div id="pin-nopin" style="display:none;margin-top:12px;">
         <div style="color:#f59e0b;font-size:12px;margin-bottom:8px;">No PIN set for this account.</div>
         <div id="pin-admin-override-section" style="display:none;">
-          <div style="color:#94a3b8;font-size:11px;margin-bottom:6px;">Enter admin password to continue:</div>
-          <input type="password" id="pin-admin-override" placeholder="Admin password" style="width:180px;padding:6px 10px;border-radius:7px;border:1px solid #4e4f52;background:#141516;color:#e2e8f0;font-size:13px;text-align:center;display:block;margin:0 auto 8px;" onkeydown="if(event.key===&apos;Enter&apos;)checkAdminOverride()">
+          <div style="color:var(--text-muted);font-size:11px;margin-bottom:6px;">Enter admin password to continue:</div>
+          <input type="password" id="pin-admin-override" placeholder="Admin password" style="width:180px;padding:6px 10px;border-radius:7px;border:1px solid var(--border-hover);background:var(--bg);color:var(--text);font-size:13px;text-align:center;display:block;margin:0 auto 8px;" onkeydown="if(event.key===&apos;Enter&apos;)checkAdminOverride()">
           <button onclick="checkAdminOverride()" style="height:32px;padding:0 18px;border-radius:7px;border:1px solid rgba(245,158,11,0.4);background:rgba(245,158,11,0.1);color:#f59e0b;font-size:12px;font-weight:600;cursor:pointer;">Unlock</button>
           <div id="pin-admin-error" style="color:#f87171;font-size:11px;margin-top:6px;display:none;">Incorrect password.</div>
         </div>
-        <div id="pin-nopin-msg" style="color:#9a9ba0;font-size:11px;margin-top:4px;">Contact your admin to set a PIN.</div>
+        <div id="pin-nopin-msg" style="color:var(--text-muted);font-size:11px;margin-top:4px;">Contact your admin to set a PIN.</div>
       </div>
     </div>
   </div>
@@ -3557,8 +3557,8 @@
         <div class="header-toggle-wrapper">
           <div style="display:flex;flex-direction:column;align-items:center;gap:3px;">
             <div class="ios-toggle" id="budget-toggle" data-value="">
-              <span class="pill-toggle-btn" id="ios-lbl-yearly" onclick="iosToggleDir('budget','left')" style="padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:transparent;color:#4e4f52;border:1px solid rgba(255,255,255,0.08);transition:all 0.15s;">Yearly</span>
-              <span class="pill-toggle-btn" id="ios-lbl-project" onclick="iosToggleDir('budget','right')" style="padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:transparent;color:#4e4f52;border:1px solid rgba(255,255,255,0.08);transition:all 0.15s;">Project</span>
+              <span class="pill-toggle-btn" id="ios-lbl-yearly" onclick="iosToggleDir('budget','left')" style="padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:transparent;color:var(--text-dim, #4e4f52);border:1px solid var(--border);transition:all 0.15s;">Yearly</span>
+              <span class="pill-toggle-btn" id="ios-lbl-project" onclick="iosToggleDir('budget','right')" style="padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:transparent;color:var(--text-dim, #4e4f52);border:1px solid var(--border);transition:all 0.15s;">Project</span>
             </div>
           </div>
         </div>
@@ -3615,8 +3615,8 @@
         <div class="header-toggle-wrapper">
           <div style="display:flex;flex-direction:column;align-items:center;gap:3px;">
             <div class="ios-toggle" id="customer-toggle" data-value="">
-              <span class="pill-toggle-btn" id="ios-lbl-new" onclick="iosToggleDir('customer','left')" style="padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:transparent;color:#4e4f52;border:1px solid rgba(255,255,255,0.08);transition:all 0.15s;">New Customer</span>
-              <span class="pill-toggle-btn" id="ios-lbl-existing" onclick="iosToggleDir('customer','right')" style="padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:transparent;color:#4e4f52;border:1px solid rgba(255,255,255,0.08);transition:all 0.15s;">Existing</span>
+              <span class="pill-toggle-btn" id="ios-lbl-new" onclick="iosToggleDir('customer','left')" style="padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:transparent;color:var(--text-dim, #4e4f52);border:1px solid var(--border);transition:all 0.15s;">New Customer</span>
+              <span class="pill-toggle-btn" id="ios-lbl-existing" onclick="iosToggleDir('customer','right')" style="padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:transparent;color:var(--text-dim, #4e4f52);border:1px solid var(--border);transition:all 0.15s;">Existing</span>
             </div>
           </div>
         </div>
@@ -3699,7 +3699,7 @@
           </div>
           <div class="field-group" style="margin-bottom: 8px;">
             <label class="field-label" style="color:#5DCAA5;"><span data-lk="lk_field_email" class="editable-text">Email Address</span><span class="req-star" id="star-email" title="Phone or email required">★</span></label>
-            <input class="field-input required-field" type="email" id="f-email" placeholder="" maxlength="999999" style="border-color:rgba(29,158,117,0.8);box-shadow:0 0 0 3px rgba(29,158,117,0.2);background:rgba(29,158,117,0.18);color:#e2e8f0;font-size:14px;padding:10px 12px;">
+            <input class="field-input required-field" type="email" id="f-email" placeholder="" maxlength="999999" style="border-color:rgba(29,158,117,0.8);box-shadow:0 0 0 3px rgba(29,158,117,0.2);background:rgba(29,158,117,0.18);color:var(--text);font-size:14px;padding:10px 12px;">
           </div>
 
           <!-- Duplicate record banner — moved to fixed overlay -->
@@ -3707,7 +3707,7 @@
           <div class="field-group" style="margin-top:4px;">
             <label class="field-label" style="color:#5DCAA5;"><span data-lk="lk_field_website" class="editable-text">Website</span> <span style="font-size:10px;color:#5DCAA5;font-weight:500;">— Powers AI Research</span></label>
             <div style="display:flex;gap:6px;align-items:center;">
-              <input class="field-input" type="url" id="f-website" placeholder="" maxlength="999999" spellcheck="false" style="border-color:rgba(29,158,117,0.8);box-shadow:0 0 0 3px rgba(29,158,117,0.2);background:rgba(29,158,117,0.18);color:#e2e8f0;font-size:14px;padding:10px 12px;flex:1;">
+              <input class="field-input" type="url" id="f-website" placeholder="" maxlength="999999" spellcheck="false" style="border-color:rgba(29,158,117,0.8);box-shadow:0 0 0 3px rgba(29,158,117,0.2);background:rgba(29,158,117,0.18);color:var(--text);font-size:14px;padding:10px 12px;flex:1;">
               <button id="research-ctrl-btn" onclick="researchCtrlClick()" style="display:none;width:32px;height:36px;flex-shrink:0;border-radius:8px;border:1px solid rgba(248,113,113,0.4);background:rgba(248,113,113,0.08);color:#f87171;font-size:14px;cursor:pointer;align-items:center;justify-content:center;transition:all 0.15s;"></button>
               <button id="research-search-btn" onclick="_manualResearchTrigger()" title="Run AI Research" style="height:36px;padding:0 12px;flex-shrink:0;border-radius:8px;border:1px solid rgba(29,158,117,0.5);background:rgba(29,158,117,0.12);color:#5DCAA5;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all 0.15s;font-family:inherit;letter-spacing:0.03em;">Search</button>
             </div>
@@ -4611,7 +4611,7 @@
     if (!list) return;
     var codes = _appSettings.couponCodes || [];
     if (!codes.length) {
-      list.innerHTML = '<div style="font-size:11px;color:#4e4f52;padding:4px 0;">No coupon codes added yet.</div>';
+      list.innerHTML = '<div style="font-size:11px;color:var(--text-dim, #4e4f52);padding:4px 0;">No coupon codes added yet.</div>';
       return;
     }
     list.innerHTML = codes.map(function(c, i) {
@@ -4621,7 +4621,7 @@
       return '<div style="border-radius:7px;background:' + toggleBg + ';border:1px solid ' + toggleBorder + ';padding:8px 10px;margin-bottom:2px;">' +
         '<div style="display:flex;align-items:center;gap:6px;">' +
         '<span style="font-size:13px;font-weight:600;color:#EF9F27;letter-spacing:0.3px;min-width:90px;">' + c.code + '</span>' +
-        '<span style="flex:1;font-size:11px;color:#9a9ba0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + (c.desc||'') + '</span>' +
+        '<span style="flex:1;font-size:11px;color:var(--text-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + (c.desc||'') + '</span>' +
         '<label style="display:flex;align-items:center;gap:4px;cursor:pointer;font-size:10px;color:' + toggleColor + ';flex-shrink:0;">' +
           '<input type="checkbox" ' + (c.active ? 'checked' : '') + ' onchange="_toggleCoupon(' + i + ',this.checked)" style="accent-color:#5DCAA5;">' +
           (c.active ? 'Active' : 'Inactive') +
@@ -4743,7 +4743,7 @@
     if (!menu) return;
     var codes = (_appSettings.couponCodes || []).filter(function(c) { return c.active; });
     var itemStyle = 'padding:8px 12px;font-size:11px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.06);';
-    var html = '<div onclick="_onCouponSelect({value:\'\'})" style="' + itemStyle + 'color:#9a9ba0;">No coupon</div>';
+    var html = '<div onclick="_onCouponSelect({value:\'\'})" style="' + itemStyle + 'color:var(--text-muted);">No coupon</div>';
     codes.forEach(function(c) {
       html += '<div onclick="_onCouponSelect({value:\'' + c.code.replace(/'/g,"\\'") + '\'})" style="' + itemStyle + 'color:#EF9F27;font-weight:600;letter-spacing:0.3px;">' + c.code + (c.desc ? '<span style="font-weight:400;color:#717378;margin-left:6px;">' + c.desc + '</span>' : '') + '</div>';
     });
@@ -4786,7 +4786,7 @@
     list.innerHTML = '';
     if (!reps || !reps.length) {
       var empty = document.createElement('div');
-      empty.style.cssText = 'color:#9a9ba0;font-size:13px;';
+      empty.style.cssText = 'color:var(--text-muted);font-size:13px;';
       empty.textContent = 'No users found.';
       list.appendChild(empty);
       return;
@@ -4796,15 +4796,15 @@
       var isYou = r.name === window._currentRep;
       var userColor = r.color || getRepColor(r.name);
       var card = document.createElement('div');
-      card.style.cssText = 'border-radius:8px;border:1px solid #333436;background:#1c1d1f;overflow:hidden;';
+      card.style.cssText = 'border-radius:8px;border:1px solid var(--border);background:var(--surface);overflow:hidden;';
       var row = document.createElement('div');
       row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:10px 12px;';
       var left = document.createElement('div');
       var nameDiv = document.createElement('div');
-      nameDiv.style.cssText = 'font-size:13px;font-weight:500;color:#e8eaed;';
+      nameDiv.style.cssText = 'font-size:13px;font-weight:500;color:var(--text);';
       nameDiv.textContent = r.name;
       var roleDiv = document.createElement('div');
-      roleDiv.style.cssText = 'font-size:11px;color:#9a9ba0;';
+      roleDiv.style.cssText = 'font-size:11px;color:var(--text-muted);';
       roleDiv.textContent = r.role || '';
       left.appendChild(nameDiv);
       left.appendChild(roleDiv);
@@ -4823,7 +4823,7 @@
       colorInput.maxLength = 7;
       colorInput.placeholder = '#hex';
       colorInput.value = r.color || userColor;
-      colorInput.style.cssText = 'width:62px;font-size:11px;padding:2px 5px;border-radius:5px;border:1px solid #4e4f52;background:#141516;color:#e8eaed;font-family:monospace;';
+      colorInput.style.cssText = 'width:62px;font-size:11px;padding:2px 5px;border-radius:5px;border:1px solid #4e4f52;background:var(--bg);color:var(--text);font-family:monospace;';
       colorInput.dataset.repname = r.name;
       colorInput.addEventListener('change', function() { applyUserColor(this.dataset.repname, this.value); });
       swatchWrap.appendChild(colorInput);
@@ -4838,7 +4838,7 @@
       pinInput.value = r.pin || '';
       // Green if saved PIN exists, white if being entered
       var hasSavedPin = !!(r.pin && r.pin.length >= 4);
-      pinInput.style.cssText = 'width:130px;font-size:13px;padding:3px 8px;border-radius:6px;border:1px solid #4e4f52;background:#141516;color:' + (hasSavedPin ? '#5DCAA5' : '#e8eaed') + ';text-align:center;letter-spacing:3px;font-weight:600;';
+      pinInput.style.cssText = 'width:130px;font-size:13px;padding:3px 8px;border-radius:6px;border:1px solid #4e4f52;background:var(--bg);color:' + (hasSavedPin ? '#5DCAA5' : '#e8eaed') + ';text-align:center;letter-spacing:3px;font-weight:600;';
       pinInput.addEventListener('input', function() {
         this.style.color = '#e8eaed';
       });
@@ -4860,12 +4860,12 @@
       // Role
       if (isYou || r.name === "AG") {
         var youSpan = document.createElement('span');
-        youSpan.style.cssText = 'font-size:10px;color:#9a9ba0;';
+        youSpan.style.cssText = 'font-size:10px;color:var(--text-muted);';
         youSpan.textContent = '(you)';
         right.appendChild(youSpan);
       } else {
         var sel = document.createElement('select');
-        sel.style.cssText = 'font-size:11px;padding:3px 6px;border-radius:6px;border:1px solid #4e4f52;background:#141516;color:#e8eaed;cursor:pointer;';
+        sel.style.cssText = 'font-size:11px;padding:3px 6px;border-radius:6px;border:1px solid #4e4f52;background:var(--bg);color:var(--text);cursor:pointer;';
         sel.dataset.repname = r.name;
         ['admin','rep','assistant'].forEach(function(v) {
           var opt = document.createElement('option');
@@ -5042,7 +5042,7 @@
   function loadAdminPerms() {
     var reps = getReps();
     var wrap = document.getElementById('admin-perms-table-wrap');
-    if (!reps.length) { wrap.innerHTML = '<div style="padding:20px;color:#9a9ba0;">No users.</div>'; return; }
+    if (!reps.length) { wrap.innerHTML = '<div style="padding:20px;color:var(--text-muted);">No users.</div>'; return; }
 
     // Build columns: User | Feature/Action per feature
     // Rows = users, Columns = feature+action combos
@@ -5063,7 +5063,7 @@
     // User col header
     var thUser = document.createElement('th');
     thUser.rowSpan = 2;
-    thUser.style.cssText = 'text-align:left;padding:8px 12px;color:#9a9ba0;font-size:10px;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #333436;white-space:nowrap;vertical-align:bottom;position:sticky;left:0;background:#141516;z-index:2;';
+    thUser.style.cssText = 'text-align:left;padding:8px 12px;color:var(--text-muted);font-size:10px;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid var(--border);white-space:nowrap;vertical-align:bottom;position:sticky;left:0;background:var(--bg);z-index:2;';
     thUser.textContent = 'User';
     row1.appendChild(thUser);
 
@@ -5071,7 +5071,7 @@
     FEAT_DEFS.forEach(function(f) {
       var th = document.createElement('th');
       th.colSpan = f.actions.length;
-      th.style.cssText = 'text-align:center;padding:6px 8px;color:#e8eaed;font-size:11px;font-weight:600;border-bottom:1px solid #333436;border-left:1px solid #333436;white-space:nowrap;';
+      th.style.cssText = 'text-align:center;padding:6px 8px;color:var(--text);font-size:11px;font-weight:600;border-bottom:1px solid var(--border);border-left:1px solid var(--border);white-space:nowrap;';
       th.textContent = f.label;
       row1.appendChild(th);
     });
@@ -5081,7 +5081,7 @@
     var row2 = document.createElement('tr');
     cols.forEach(function(c) {
       var th = document.createElement('th');
-      th.style.cssText = 'text-align:center;padding:4px 8px;color:#9a9ba0;font-size:10px;border-bottom:1px solid #333436;white-space:nowrap;' + (c.firstInFeat ? 'border-left:1px solid #333436;' : '');
+      th.style.cssText = 'text-align:center;padding:4px 8px;color:var(--text-muted);font-size:10px;border-bottom:1px solid var(--border);white-space:nowrap;' + (c.firstInFeat ? 'border-left:1px solid var(--border);' : '');
       th.textContent = c.action.charAt(0).toUpperCase() + c.action.slice(1);
       row2.appendChild(th);
     });
@@ -5094,7 +5094,7 @@
       var tr = document.createElement('tr');
       // User name cell (sticky)
       var tdName = document.createElement('td');
-      tdName.style.cssText = 'padding:8px 12px;color:#e8eaed;font-weight:500;border-bottom:0.5px solid rgba(255,255,255,0.06);white-space:nowrap;position:sticky;left:0;background:#141516;z-index:1;';
+      tdName.style.cssText = 'padding:8px 12px;color:var(--text);font-weight:500;border-bottom:0.5px solid rgba(255,255,255,0.06);white-space:nowrap;position:sticky;left:0;background:var(--bg);z-index:1;';
       var dot = document.createElement('span');
       dot.style.cssText = 'display:inline-block;width:7px;height:7px;border-radius:50%;background:' + getRepColor(r.name) + ';margin-right:6px;vertical-align:middle;';
       tdName.appendChild(dot);
@@ -5105,7 +5105,7 @@
       var isAdminRow = r.name === 'AG' || r.permission === 'admin';
       cols.forEach(function(c) {
         var td = document.createElement('td');
-        td.style.cssText = 'text-align:center;padding:8px 6px;border-bottom:0.5px solid rgba(255,255,255,0.06);' + (c.firstInFeat ? 'border-left:1px solid #333436;' : '');
+        td.style.cssText = 'text-align:center;padding:8px 6px;border-bottom:0.5px solid rgba(255,255,255,0.06);' + (c.firstInFeat ? 'border-left:1px solid var(--border);' : '');
         var cb = document.createElement('input');
         cb.type = 'checkbox';
         if (isAdminRow) {
@@ -5489,16 +5489,16 @@
 
     var html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>QLP API Usage Report</title>' +
     '<style>body{font-family:Arial,sans-serif;font-size:12px;color:#333436;margin:32px;}' +
-    'h1{font-size:18px;margin:0 0 4px;}h2{font-size:12px;font-weight:normal;color:#9a9ba0;margin:0 0 24px;}' +
+    'h1{font-size:18px;margin:0 0 4px;}h2{font-size:12px;font-weight:normal;color:var(--text-muted);margin:0 0 24px;}' +
     '.stats{display:flex;gap:16px;margin-bottom:24px;}' +
     '.stat{flex:1;border:1px solid #e8eaed;border-radius:8px;padding:12px;text-align:center;}' +
     '.stat-val{font-size:18px;font-weight:700;color:#333436;}' +
-    '.stat-lbl{font-size:10px;color:#b0b2b6;margin-top:4px;text-transform:uppercase;}' +
+    '.stat-lbl{font-size:10px;color:var(--text-dim, #b0b2b6);margin-top:4px;text-transform:uppercase;}' +
     'table{width:100%;border-collapse:collapse;font-size:11px;}' +
-    'th{text-align:left;background:#f8fafc;padding:8px 10px;border-bottom:2px solid #e8eaed;font-size:10px;text-transform:uppercase;color:#9a9ba0;}' +
+    'th{text-align:left;background:#f8fafc;padding:8px 10px;border-bottom:2px solid #e8eaed;font-size:10px;text-transform:uppercase;color:var(--text-muted);}' +
     'td{padding:7px 10px;border-bottom:1px solid #f1f5f9;}' +
     'tr:nth-child(even) td{background:#f8fafc;}' +
-    '.footer{margin-top:24px;font-size:10px;color:#b0b2b6;text-align:center;}' +
+    '.footer{margin-top:24px;font-size:10px;color:var(--text-dim, #b0b2b6);text-align:center;}' +
     '</style></head><body>' +
     '<h1>QLP API Usage Report</h1>' +
     '<h2>Generated ' + now.toLocaleDateString() + ' · ' + monthStr + '</h2>' +
@@ -5776,7 +5776,7 @@
     '.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px;}' +
     '.stat{border:1px solid #e2e8f0;border-radius:8px;padding:12px;text-align:center;}' +
     '.stat-val{font-size:18px;font-weight:700;color:#1D9E75;}' +
-    '.stat-lbl{font-size:9px;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em;margin-top:3px;}' +
+    '.stat-lbl{font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-top:3px;}' +
     'h2{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#475569;border-bottom:1px solid #e2e8f0;padding-bottom:6px;margin:20px 0 10px;}' +
     'table{width:100%;border-collapse:collapse;font-size:11px;margin-bottom:16px;}' +
     'th{text-align:left;background:#f8fafc;padding:7px 10px;border-bottom:2px solid #e2e8f0;color:#64748b;font-size:10px;text-transform:uppercase;}' +
@@ -5785,7 +5785,7 @@
     '.tax-table td:first-child{color:#64748b;width:220px;}' +
     '.tax-table td:last-child{font-weight:600;}' +
     '.highlight td{background:#f0fdf4!important;color:#166534;}' +
-    '.footer{margin-top:32px;padding-top:12px;border-top:1px solid #e2e8f0;font-size:9px;color:#94a3b8;display:flex;justify-content:space-between;}' +
+    '.footer{margin-top:32px;padding-top:12px;border-top:1px solid #e2e8f0;font-size:9px;color:var(--text-muted);display:flex;justify-content:space-between;}' +
     '@media print{body{padding:16px;}}' +
     '</style></head><body>' +
     '<div class="header"><h1>AI Cost Statement — ' + s._month + ' ' + s._year + '</h1>' +
@@ -6961,11 +6961,11 @@
     // Inject styles after Maps loads to guarantee override of Google's own styles
     var pacStyle = document.createElement('style');
     pacStyle.textContent = [
-      '.pac-container{border-radius:8px!important;border:1px solid rgba(255,255,255,0.15)!important;background:#1c1d1f!important;box-shadow:0 8px 24px rgba(0,0,0,0.5)!important;font-family:Inter,sans-serif!important;margin-top:4px!important;z-index:9999!important;padding:4px 0!important;}',
-      '.pac-item{padding:8px 12px!important;font-size:12px!important;color:#b0b2b6!important;border-top:1px solid rgba(255,255,255,0.07)!important;cursor:pointer!important;background:transparent!important;line-height:1.5!important;}',
+      '.pac-container{border-radius:8px!important;border:1px solid rgba(255,255,255,0.15)!important;background:var(--surface)!important;box-shadow:0 8px 24px rgba(0,0,0,0.5)!important;font-family:Inter,sans-serif!important;margin-top:4px!important;z-index:9999!important;padding:4px 0!important;}',
+      '.pac-item{padding:8px 12px!important;font-size:12px!important;color:var(--text-dim, #b0b2b6)!important;border-top:1px solid rgba(255,255,255,0.07)!important;cursor:pointer!important;background:transparent!important;line-height:1.5!important;}',
       '.pac-item:first-child{border-top:none!important;}',
-      '.pac-item:hover,.pac-item-selected{background:rgba(139,143,168,0.1)!important;color:#e8eaed!important;}',
-      '.pac-item-query{font-size:13px!important;color:#e8eaed!important;font-family:Inter,sans-serif!important;}',
+      '.pac-item:hover,.pac-item-selected{background:rgba(139,143,168,0.1)!important;color:var(--text)!important;}',
+      '.pac-item-query{font-size:13px!important;color:var(--text)!important;font-family:Inter,sans-serif!important;}',
       '.pac-matched{color:#B8BBCC!important;}',
       '.pac-icon,.hdpi .pac-icon{display:none!important;}',
       '.pac-logo::after{display:none!important;}'
@@ -7024,7 +7024,7 @@
     if (!el) return;
     var isRight = (type === 'budget') ? (value === 'Project') : (value === 'Existing Customer');
     el.dataset.value = isRight ? 'right' : 'left';
-    var inactiveStyle = 'padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:transparent;color:#4e4f52;border:1px solid rgba(255,255,255,0.08);transition:all 0.15s;';
+    var inactiveStyle = 'padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:transparent;color:var(--text-dim, #4e4f52);border:1px solid var(--border);transition:all 0.15s;';
     var lIds = type === 'budget'
       ? ['ios-lbl-yearly', 'ios-lbl-project']
       : ['ios-lbl-new', 'ios-lbl-existing'];
@@ -7050,7 +7050,7 @@
     var cur   = el.dataset.value;
     if ((dir === 'left' && cur === 'left') || (dir === 'right' && cur === 'right')) return;
     var value;
-    var inactiveStyle = 'padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:transparent;color:#4e4f52;border:1px solid rgba(255,255,255,0.08);transition:all 0.15s;';
+    var inactiveStyle = 'padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:transparent;color:var(--text-dim, #4e4f52);border:1px solid var(--border);transition:all 0.15s;';
     if (type === 'budget') {
       var lblL = document.getElementById('ios-lbl-yearly');
       var lblR = document.getElementById('ios-lbl-project');
@@ -7119,7 +7119,7 @@
           var custEl = document.getElementById('customer-toggle');
           if (custEl) {
             custEl.dataset.value = '';
-            var inactStyle = 'padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:transparent;color:#4e4f52;border:1px solid rgba(255,255,255,0.08);transition:all 0.15s;';
+            var inactStyle = 'padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:transparent;color:var(--text-dim, #4e4f52);border:1px solid var(--border);transition:all 0.15s;';
             custEl.querySelectorAll('.pill-toggle-btn').forEach(function(l) { l.style.cssText = inactStyle; });
           }
         }
@@ -7277,7 +7277,7 @@
       var tog = document.getElementById(id);
       if (!tog) return;
       tog.dataset.value = '';
-      var inactStyle = 'padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:transparent;color:#4e4f52;border:1px solid rgba(255,255,255,0.08);transition:all 0.15s;';
+      var inactStyle = 'padding:5px 14px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;background:transparent;color:var(--text-dim, #4e4f52);border:1px solid var(--border);transition:all 0.15s;';
       tog.querySelectorAll('.pill-toggle-btn').forEach(function(l) { l.style.cssText = inactStyle; });
     });
 
@@ -7629,19 +7629,19 @@
       return '<div class="record-card" style="opacity:0.95;padding:12px 14px;">' +
         '<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">' +
           '<div style="min-width:0;">' +
-            '<div class="record-name" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+(r.hot?'🔥 ':'')+(r.name||'—')+'<span class="archive-badge" style="margin-left:6px;">Archive</span>'+(r.recordNum?'<span style="margin-left:6px;font-size:9px;font-weight:700;letter-spacing:0.06em;color:#5DCAA5;background:rgba(29,158,117,0.12);border:1px solid rgba(29,158,117,0.25);border-radius:3px;padding:1px 5px;">'+r.recordNum+'</span>':'')+(r.status==='research'?'<span style="margin-left:6px;font-size:9px;font-weight:700;letter-spacing:0.06em;color:#b0b2b6;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:3px;padding:1px 5px;">RESEARCH</span>':'')+'</div>' +
-            '<div style="font-size:11px;color:#b0b2b6;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+(r.company||'—')+'</div>' +
+            '<div class="record-name" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+(r.hot?'🔥 ':'')+(r.name||'—')+'<span class="archive-badge" style="margin-left:6px;">Archive</span>'+(r.recordNum?'<span style="margin-left:6px;font-size:9px;font-weight:700;letter-spacing:0.06em;color:#5DCAA5;background:rgba(29,158,117,0.12);border:1px solid rgba(29,158,117,0.25);border-radius:3px;padding:1px 5px;">'+r.recordNum+'</span>':'')+(r.status==='research'?'<span style="margin-left:6px;font-size:9px;font-weight:700;letter-spacing:0.06em;color:var(--text-dim, #b0b2b6);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:3px;padding:1px 5px;">RESEARCH</span>':'')+'</div>' +
+            '<div style="font-size:11px;color:var(--text-dim, #b0b2b6);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+(r.company||'—')+'</div>' +
           '</div>' +
           (r.status === 'research'
             ? '<span class="record-score-badge research" style="flex-shrink:0;">Research</span>'
             : '<span class="record-score-badge '+pc+'" style="flex-shrink:0;">'+scoreDisplay+'</span>') +
         '</div>' +
-        '<div style="display:flex;align-items:center;gap:10px;margin-top:7px;font-size:11px;color:#b0b2b6;flex-wrap:wrap;">' +
+        '<div style="display:flex;align-items:center;gap:10px;margin-top:7px;font-size:11px;color:var(--text-dim, #b0b2b6);flex-wrap:wrap;">' +
           '<span>'+dot+ownerDisplay+'</span>' +
           '<span>📅 '+_fmtDisplayDate(dateDisplay)+(timeDisplay?' '+_fmtDisplayTime(timeDisplay):'')+'</span>' +
           '<span>💼 '+budgetDisplay+'</span>' +
         '</div>' +
-        '<div id="'+detailId+'" style="display:none;margin-top:9px;padding-top:9px;border-top:1px solid rgba(255,255,255,0.06);font-size:11px;color:#b0b2b6;">' +
+        '<div id="'+detailId+'" style="display:none;margin-top:9px;padding-top:9px;border-top:1px solid rgba(255,255,255,0.06);font-size:11px;color:var(--text-dim, #b0b2b6);">' +
           '<div style="margin-bottom:3px;">👤 Entered by: '+(r.rep||'—')+' · '+(r.customerType||'—')+'</div>' +
           (r.phone?'<div>📞 '+r.phone+'</div>':'') +
           (r.email?'<div>✉ '+r.email+'</div>':'') +
@@ -7658,7 +7658,7 @@
           return '<button class="record-email-btn" onclick="archiveSmartEmail('+r.id+',this)">'+lbl+'</button>';
         })() +
           '<button class="record-copy-btn" onclick="viewRecordOrPopout('+r.id+')">View ↗</button>' +
-          '<button class="record-copy-btn" onclick="resendNewStyle('+r.id+',this)" style="font-size:9px;color:#b0b2b6;border-color:rgba(139,143,168,0.25);">↻ Re-send (New Style)</button>' +
+          '<button class="record-copy-btn" onclick="resendNewStyle('+r.id+',this)" style="font-size:9px;color:var(--text-dim, #b0b2b6);border-color:rgba(139,143,168,0.25);">↻ Re-send (New Style)</button>' +
         '</div>' +
       '</div>';
     }).join('');
@@ -7790,7 +7790,7 @@
       '</div>' +
       (isResearch ? '' :
       '<div style="margin-top:6px;">' +
-        '<button onclick="resendNewStyle('+r.id+',this)" style="width:100%;height:30px;border-radius:7px;border:1px solid rgba(139,143,168,0.25);background:transparent;color:#9a9ba0;font-size:10px;font-weight:600;cursor:pointer;letter-spacing:0.03em;">↻ Re-send (Updated Style)</button>' +
+        '<button onclick="resendNewStyle('+r.id+',this)" style="width:100%;height:30px;border-radius:7px;border:1px solid rgba(139,143,168,0.25);background:transparent;color:var(--text-muted);font-size:10px;font-weight:600;cursor:pointer;letter-spacing:0.03em;">↻ Re-send (Updated Style)</button>' +
       '</div>') +
       '<div style="margin-top:6px;">' +
         '<button onclick="startNewContactFromRecord('+r.id+')" style="width:100%;height:32px;border-radius:7px;border:1px solid rgba(29,158,117,0.35);background:rgba(29,158,117,0.08);color:#5DCAA5;font-size:11px;font-weight:600;cursor:pointer;letter-spacing:0.03em;">+ New Contact — Same Company</button>' +
@@ -7871,7 +7871,7 @@
       // Show refresh summary
       if (summary && result.refreshSummary) {
         var removed = (result.removedEvents && result.removedEvents.length)
-          ? '<div style="margin-top:6px;font-size:10px;color:#9a9ba0;">Removed: ' + result.removedEvents.join(', ') + '</div>'
+          ? '<div style="margin-top:6px;font-size:10px;color:var(--text-muted);">Removed: ' + result.removedEvents.join(', ') + '</div>'
           : '';
         summary.innerHTML = '✓ ' + result.refreshSummary + removed;
         summary.style.display = 'block';
@@ -8075,18 +8075,18 @@
           '<div data-record-id="' + r.id + '" onclick="activityRowClick(' + r.id + ')" onmouseenter="activityRowHover(this,true)" onmouseleave="activityRowHover(this,false)"' +
           ' style="display:flex;align-items:center;padding:7px 8px;border-radius:5px;cursor:pointer;transition:background 0.15s;flex:1;' + bg + '">' +
           '<span style="font-size:12px;font-weight:700;color:' + col + ';width:32px;flex-shrink:0;">' + (r.score || '?') + '/9</span>' +
-          '<span style="font-size:12px;color:#e8eaed;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 8px;">' + (r.company || r.name || '\u2014') + '</span>' +
-          '<span style="font-size:10px;color:#b0b2b6;flex-shrink:0;">' + dtLabel + '</span>' +
+          '<span style="font-size:12px;color:var(--text);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 8px;">' + (r.company || r.name || '\u2014') + '</span>' +
+          '<span style="font-size:10px;color:var(--text-dim, #b0b2b6);flex-shrink:0;">' + dtLabel + '</span>' +
           '<span style="font-size:8px;font-weight:600;color:#717378;width:20px;text-align:right;flex-shrink:0;margin-left:6px;letter-spacing:0.03em;">' + statusTag + '</span>' +
           '</div>';
       });
     }
 
     // Page arrows (dim when at boundary)
-    var upColor = _activityPage > 0 ? '#b0b2b6' : '#333436';
+    var upColor = _activityPage > 0 ? 'var(--text-dim, #b0b2b6)' : 'var(--border, #333436)';
     var upBorder = _activityPage > 0 ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.06)';
     var upCursor = _activityPage > 0 ? 'cursor:pointer;' : 'cursor:default;';
-    var dnColor = _activityPage < totalPages - 1 ? '#b0b2b6' : '#333436';
+    var dnColor = _activityPage < totalPages - 1 ? 'var(--text-dim, #b0b2b6)' : 'var(--border, #333436)';
     var dnBorder = _activityPage < totalPages - 1 ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.06)';
     var dnCursor = _activityPage < totalPages - 1 ? 'cursor:pointer;' : 'cursor:default;';
     var pageLabel = sorted.length ? ((_activityPage + 1) + '/' + totalPages) : '1/1';
@@ -8557,7 +8557,7 @@
       if (r === role) {
         btn.style.cssText = 'padding:5px 10px;border-radius:4px;border:1px solid ' + rc + '80;background:' + rc + '22;color:' + rc + ';font-size:11px;font-weight:600;cursor:pointer;';
       } else {
-        btn.style.cssText = 'padding:5px 10px;border-radius:4px;border:1px solid rgba(255,255,255,0.07);background:transparent;color:#9a9ba0;font-size:11px;font-weight:500;cursor:pointer;opacity:0.5;';
+        btn.style.cssText = 'padding:5px 10px;border-radius:4px;border:1px solid rgba(255,255,255,0.07);background:transparent;color:var(--text-muted);font-size:11px;font-weight:500;cursor:pointer;opacity:0.5;';
       }
     });
   }
@@ -9091,8 +9091,8 @@
       return;
     }
     // Inject result count above rendered cards
-    var countHtml = '<div style="padding:6px 14px;font-size:10px;font-weight:600;color:#9a9ba0;letter-spacing:0.04em;border-bottom:1px solid rgba(255,255,255,0.05);">' +
-      matches.length + ' result' + (matches.length !== 1 ? 's' : '') + ' for <span style="color:#b0b2b6;">"' + query + '"</span></div>';
+    var countHtml = '<div style="padding:6px 14px;font-size:10px;font-weight:600;color:var(--text-muted);letter-spacing:0.04em;border-bottom:1px solid rgba(255,255,255,0.05);">' +
+      matches.length + ' result' + (matches.length !== 1 ? 's' : '') + ' for <span style="color:var(--text-dim, #b0b2b6);">"' + query + '"</span></div>';
     // Temporarily override the cache for rendering
     var origCache = _archiveMode ? _archiveCache : _recordsCache;
     if (_archiveMode) { _archiveCache = matches; renderArchive(); _archiveCache = origCache; }
@@ -9126,7 +9126,7 @@
       return '<div onclick="ipaLookupSelect(' + r.id + ')" style="padding:8px 12px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:space-between;gap:8px;" onmouseover="this.style.background=\'rgba(255,255,255,0.04)\'" onmouseout="this.style.background=\'\'">'+
         '<div style="min-width:0;flex:1;">'+
           '<div style="font-size:12px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+(r.name||'—')+dupBadge+'</div>'+
-          '<div style="font-size:10px;color:#9a9ba0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+(r.company||'—')+(r.date ? ' · '+r.date : '')+'</div>'+
+          '<div style="font-size:10px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+(r.company||'—')+(r.date ? ' · '+r.date : '')+'</div>'+
         '</div>'+
         '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0;">'+
           (r.recordNum ? '<span style="font-size:9px;font-weight:700;letter-spacing:0.06em;color:#5DCAA5;background:rgba(29,158,117,0.12);border:1px solid rgba(29,158,117,0.25);border-radius:3px;padding:1px 5px;">'+r.recordNum+'</span>' : '')+
@@ -9134,7 +9134,7 @@
         '</div>'+
       '</div>';
     }).join('') + (overflow > 0 ?
-      '<div style="padding:7px 12px;font-size:10px;color:#9a9ba0;text-align:center;cursor:pointer;" onclick="openRecordsWithPin()">+'+overflow+' more — open Records panel</div>' : '');
+      '<div style="padding:7px 12px;font-size:10px;color:var(--text-muted);text-align:center;cursor:pointer;" onclick="openRecordsWithPin()">+'+overflow+' more — open Records panel</div>' : '');
     resultsEl.style.display = 'block';
   }
 
@@ -10324,7 +10324,7 @@
     var s = document.createElement('span');
     s.className = 'seg-clock-sm-s';
     s.textContent = 's';
-    s.style.cssText = 'font-family:\'Rajdhani\',sans-serif;font-size:11px;font-weight:500;color:#9a9ba0;margin-left:1px;padding-bottom:1px;';
+    s.style.cssText = 'font-family:\'Rajdhani\',sans-serif;font-size:11px;font-weight:500;color:var(--text-muted);margin-left:1px;padding-bottom:1px;';
     wrap.appendChild(num);
     wrap.appendChild(s);
     return wrap;
@@ -11006,23 +11006,23 @@
       ? '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="' + accent + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="20 6 9 17 4 12"/></svg>'
       : '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="' + accent + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
     var viewBtnStyle = 'flex:1;padding:6px 10px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;border:1px solid ' + borderC + ';background:' + chipBg + ';color:' + accent + ';';
-    var searchBtnStyle = 'flex:1;padding:6px 10px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#9a9ba0;';
+    var searchBtnStyle = 'flex:1;padding:6px 10px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;border:1px solid rgba(255,255,255,0.1);background:transparent;color:var(--text-muted);';
     banner.innerHTML =
       '<div style="border:1px solid ' + borderC + ';border-radius:8px;background:' + bgC + ';overflow:hidden;">' +
         '<div style="display:flex;align-items:center;justify-content:space-between;padding:7px 10px;border-bottom:1px solid ' + hdrBrdC + ';background:' + hdrBgC + ';">' +
           '<div style="display:flex;align-items:center;gap:6px;">' + titleIcon +
             '<span style="font-size:11px;font-weight:600;color:' + accent + ';">Existing record found</span>' +
           '</div>' +
-          '<button onclick="dismissDupBanner()" style="background:none;border:none;cursor:pointer;padding:0;color:#9a9ba0;font-size:14px;line-height:1;">✕</button>' +
+          '<button onclick="dismissDupBanner()" style="background:none;border:none;cursor:pointer;padding:0;color:var(--text-muted);font-size:14px;line-height:1;">✕</button>' +
         '</div>' +
         '<div style="padding:9px 10px;">' +
           '<div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:8px;">' +
             '<div style="flex:1;min-width:0;">' +
-              '<div style="font-size:13px;font-weight:500;color:#e8eaed;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + (r.name||'—') + '</div>' +
-              '<div style="font-size:11px;color:#9a9ba0;margin-top:1px;">' + (r.company||'—') + '</div>' +
+              '<div style="font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + (r.name||'—') + '</div>' +
+              '<div style="font-size:11px;color:var(--text-muted);margin-top:1px;">' + (r.company||'—') + '</div>' +
               '<div style="margin-top:5px;display:flex;align-items:center;gap:5px;">' +
                 '<span style="background:rgba(' + scoreRgb + ',0.12);border:1px solid rgba(' + scoreRgb + ',0.3);border-radius:5px;padding:2px 8px;font-size:11px;font-weight:600;color:' + scoreCol + ';white-space:nowrap;">' + (r.score||0) + '/9 ' + stars + '</span>' +
-                '<span style="font-size:10px;color:#9a9ba0;">' + (r.owner||'') + (r.rep ? ' · by ' + r.rep : '') + '</span>' +
+                '<span style="font-size:10px;color:var(--text-muted);">' + (r.owner||'') + (r.rep ? ' · by ' + r.rep : '') + '</span>' +
               '</div>' +
             '</div>' +
             '<div style="display:flex;flex-direction:column;align-items:flex-end;flex-shrink:0;">' +
@@ -11969,19 +11969,19 @@
 
     var overlay = document.getElementById('incomplete-overlay');
     var list    = document.getElementById('incomplete-fields');
-    var btnStyle = 'padding:6px 12px;border-radius:6px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:#b0b2b6;font-size:12px;cursor:pointer;font-weight:500;transition:all 0.15s;';
+    var btnStyle = 'padding:6px 12px;border-radius:6px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:var(--text-dim, #b0b2b6);font-size:12px;cursor:pointer;font-weight:500;transition:all 0.15s;';
     var html = '';
 
     if (checks.name) {
       html += '<div><label style="font-size:11px;color:#f87171;font-weight:500;display:block;margin-bottom:4px;">Customer Name ★</label>' +
         '<input id="im-name" type="text" placeholder="Enter customer name" value="' + document.getElementById('f-name').value + '" ' +
-        'style="width:100%;box-sizing:border-box;padding:8px 10px;border-radius:8px;border:1px solid rgba(248,113,113,0.4);background:rgba(248,113,113,0.05);color:#e8eaed;font-size:13px;outline:none;"></div>';
+        'style="width:100%;box-sizing:border-box;padding:8px 10px;border-radius:8px;border:1px solid rgba(248,113,113,0.4);background:rgba(248,113,113,0.05);color:var(--text);font-size:13px;outline:none;"></div>';
     }
     if (checks.contact) {
       html += '<div><label style="font-size:11px;color:#f87171;font-weight:500;display:block;margin-bottom:4px;">Phone or Email ★</label>' +
         '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">' +
-        '<input id="im-phone" type="tel" placeholder="Phone number" style="padding:8px 10px;border-radius:8px;border:1px solid rgba(248,113,113,0.4);background:rgba(248,113,113,0.05);color:#e8eaed;font-size:13px;outline:none;">' +
-        '<input id="im-email" type="email" placeholder="Email address" style="padding:8px 10px;border-radius:8px;border:1px solid rgba(248,113,113,0.4);background:rgba(248,113,113,0.05);color:#e8eaed;font-size:13px;outline:none;">' +
+        '<input id="im-phone" type="tel" placeholder="Phone number" style="padding:8px 10px;border-radius:8px;border:1px solid rgba(248,113,113,0.4);background:rgba(248,113,113,0.05);color:var(--text);font-size:13px;outline:none;">' +
+        '<input id="im-email" type="email" placeholder="Email address" style="padding:8px 10px;border-radius:8px;border:1px solid rgba(248,113,113,0.4);background:rgba(248,113,113,0.05);color:var(--text);font-size:13px;outline:none;">' +
         '</div></div>';
     }
     if (checks.budget) {
@@ -11990,9 +11990,9 @@
         '<button class="im-budget-btn im-btn" data-val="Yearly" data-grp="imbudget" onclick="imSelectBtn(this)" style="' + btnStyle + '">Yearly</button>' +
         '<button class="im-budget-btn im-btn" data-val="Project" data-grp="imbudget" onclick="imSelectBtn(this)" style="' + btnStyle + '">Project</button>' +
         '<div style="display:flex;align-items:center;gap:6px;margin-left:4px;">' +
-          '<span style="font-size:12px;color:#9a9ba0;">$</span>' +
+          '<span style="font-size:12px;color:var(--text-muted);">$</span>' +
           '<input id="im-budget-amount" type="number" placeholder="Amount (optional)" min="0" ' +
-          'style="width:140px;padding:6px 10px;border-radius:6px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:#e8eaed;font-size:12px;outline:none;">' +
+          'style="width:140px;padding:6px 10px;border-radius:6px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:var(--text);font-size:12px;outline:none;">' +
         '</div>' +
         '</div></div>';
     }
@@ -12288,16 +12288,16 @@
     var headerHtml =
       '<div class="section" style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #1D9E75;padding-bottom:14px;margin-bottom:20px;">' +
         '<div>' +
-          '<div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#94a3b8;margin-bottom:3px;">AG&apos;s IPA Report Card &middot; QLP</div>' +
+          '<div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);margin-bottom:3px;">AG&apos;s IPA Report Card &middot; QLP</div>' +
           '<div style="font-size:20px;font-weight:700;color:#0f172a;">'+name+'</div>' +
           (company?'<div style="font-size:13px;color:#475569;margin-top:2px;">'+company+'</div>':'') +
         '</div>' +
         '<div style="text-align:right;">' +
-          '<div style="font-size:34px;font-weight:700;color:'+scoreColor+';line-height:1;">'+total+'<span style="font-size:16px;color:#94a3b8;">/9</span></div>' +
+          '<div style="font-size:34px;font-weight:700;color:'+scoreColor+';line-height:1;">'+total+'<span style="font-size:16px;color:var(--text-muted);">/9</span></div>' +
           '<div style="font-size:13px;color:'+scoreColor+';">'+stars+'</div>' +
-          '<div style="font-size:10px;color:#94a3b8;margin-top:2px;">'+tier+'</div>' +
+          '<div style="font-size:10px;color:var(--text-muted);margin-top:2px;">'+tier+'</div>' +
           '<div style="font-size:10px;color:'+scoreColor+';font-weight:600;margin-top:1px;">Assigned To: '+owner+overrideNote+'</div>' +
-          '<div style="font-size:9px;color:#94a3b8;margin-top:1px;">'+dateStr+' &middot; '+timeStr+'</div>' +
+          '<div style="font-size:9px;color:var(--text-muted);margin-top:1px;">'+dateStr+' &middot; '+timeStr+'</div>' +
         '</div>' +
       '</div>';
 
@@ -12345,10 +12345,10 @@
         'table{width:100%;border-collapse:collapse;}'+
         '@page{size:8.5in 11in;margin:0.6in 0.65in 0.8in 0.65in;}'+
         '.section{margin-bottom:18px;page-break-inside:avoid;break-inside:avoid;}'+
-        '.section-title{font-size:8px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.12em;border-bottom:1px solid #e2e8f0;padding-bottom:4px;margin-bottom:8px;}'+
+        '.section-title{font-size:8px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.12em;border-bottom:1px solid #e2e8f0;padding-bottom:4px;margin-bottom:8px;}'+
         'td.lbl{padding:4px 14px 4px 0;font-size:11px;color:#64748b;white-space:nowrap;width:150px;vertical-align:top;}'+
         'td.val{padding:4px 0;font-size:11px;color:#1e293b;font-weight:500;vertical-align:top;}'+
-        '.footer{position:fixed;bottom:0;left:0;right:0;padding:5px 0.65in;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;font-size:8px;color:#94a3b8;background:#fff;}'+
+        '.footer{position:fixed;bottom:0;left:0;right:0;padding:5px 0.65in;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;font-size:8px;color:var(--text-muted);background:#fff;}'+
       '</style>' +
       '<script>window.onload=function(){'+
         'var spans=document.querySelectorAll(".pg-num");'+
@@ -12465,7 +12465,7 @@
     function _pdfDateBadge(s) {
       var diff = _pdfDaysAway(s);
       if (diff === null) return '';
-      if (diff < 0) return ' <span style="color:#94a3b8;font-size:9px;font-weight:700;">[PAST — '+Math.abs(diff)+'d ago]</span>';
+      if (diff < 0) return ' <span style="color:var(--text-muted);font-size:9px;font-weight:700;">[PAST — '+Math.abs(diff)+'d ago]</span>';
       if (diff === 0) return ' <span style="color:#059669;font-size:9px;font-weight:700;">[TODAY]</span>';
       if (diff <= 30) return ' <span style="color:#c2410c;font-size:9px;font-weight:700;">['+diff+'d away]</span>';
       return ' <span style="color:#64748b;font-size:9px;">['+diff+'d away]</span>';
@@ -12482,7 +12482,7 @@
         return (da||Infinity)-(db||Infinity);
       });
       var tsRows = sortedPdfTS.map(function(t) {
-        var confLabel = t.confidence==='confirmed'?' <span style="color:#059669;font-weight:700;">[CONFIRMED]</span>':t.confidence==='likely'?' <span style="color:#d97706;font-weight:700;">[LIKELY]</span>':' <span style="color:#94a3b8;font-weight:700;">[INDUSTRY MATCH]</span>';
+        var confLabel = t.confidence==='confirmed'?' <span style="color:#059669;font-weight:700;">[CONFIRMED]</span>':t.confidence==='likely'?' <span style="color:#d97706;font-weight:700;">[LIKELY]</span>':' <span style="color:var(--text-muted);font-weight:700;">[INDUSTRY MATCH]</span>';
         return fRow((t.date||'—'), '<strong>'+(t.title||'')+'</strong>'+(t.venue?' &middot; '+t.venue:'')+confLabel+_pdfDateBadge(t.date)+(t.attendees?' <span style="color:#64748b;font-size:9px;">~'+t.attendees+' attendees</span>':''));
       }).join('');
       sectionsHtml += fSec('Trade Shows ('+pdfTS.length+')', tsRows);
@@ -12532,10 +12532,10 @@
         'table{width:100%;border-collapse:collapse;}'+
         '@page{size:8.5in 11in;margin:0.6in 0.65in 0.8in 0.65in;}'+
         '.section{margin-bottom:18px;page-break-inside:avoid;break-inside:avoid;}'+
-        '.section-title{font-size:8px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.12em;border-bottom:1px solid #e2e8f0;padding-bottom:4px;margin-bottom:8px;}'+
+        '.section-title{font-size:8px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.12em;border-bottom:1px solid #e2e8f0;padding-bottom:4px;margin-bottom:8px;}'+
         'td.lbl{padding:4px 14px 4px 0;font-size:11px;color:#64748b;white-space:nowrap;width:150px;vertical-align:top;}'+
         'td.val{padding:4px 0;font-size:11px;color:#1e293b;font-weight:500;vertical-align:top;}'+
-        '.footer{position:fixed;bottom:0;left:0;right:0;padding:5px 0.65in;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;font-size:8px;color:#94a3b8;background:#fff;}'+
+        '.footer{position:fixed;bottom:0;left:0;right:0;padding:5px 0.65in;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;font-size:8px;color:var(--text-muted);background:#fff;}'+
       '</style></head><body>' +
       headerHtml + sectionsHtml +
       '<div class="footer">'+
@@ -12651,7 +12651,7 @@
       function _apDateBadge(s) {
         var d = _apParseDate(s); if(!d) return '';
         var t = new Date(); t.setHours(0,0,0,0); var diff = Math.round((d - t) / 86400000);
-        if (diff < 0) return ' <span style="color:#94a3b8;font-size:9px;font-weight:700;">[PAST]</span>';
+        if (diff < 0) return ' <span style="color:var(--text-muted);font-size:9px;font-weight:700;">[PAST]</span>';
         if (diff === 0) return ' <span style="color:#059669;font-size:9px;font-weight:700;">[TODAY]</span>';
         if (diff <= 30) return ' <span style="color:#c2410c;font-size:9px;font-weight:700;">['+diff+'d away]</span>';
         return ' <span style="color:#64748b;font-size:9px;">['+diff+'d away]</span>';
@@ -12672,7 +12672,7 @@
       var pdfTS = rd.tradeShows || [];
       if (pdfTS.length) {
         var tsRows = pdfTS.map(function(t) {
-          var confLabel = t.confidence==='confirmed'?' <span style="color:#059669;font-weight:700;">[CONFIRMED]</span>':t.confidence==='likely'?' <span style="color:#d97706;font-weight:700;">[LIKELY]</span>':' <span style="color:#94a3b8;font-weight:700;">[INDUSTRY MATCH]</span>';
+          var confLabel = t.confidence==='confirmed'?' <span style="color:#059669;font-weight:700;">[CONFIRMED]</span>':t.confidence==='likely'?' <span style="color:#d97706;font-weight:700;">[LIKELY]</span>':' <span style="color:var(--text-muted);font-weight:700;">[INDUSTRY MATCH]</span>';
           return fRow((t.date||'\u2014'), '<strong>'+(t.title||'')+'</strong>'+(t.venue?' &middot; '+t.venue:'')+confLabel+_apDateBadge(t.date));
         }).join('');
         sectionsHtml += fSec('Trade Shows ('+pdfTS.length+')', tsRows);
@@ -12724,10 +12724,10 @@
         'table{width:100%;border-collapse:collapse;}'+
         '@page{size:8.5in 11in;margin:0.6in 0.65in 0.8in 0.65in;}'+
         '.section{margin-bottom:18px;page-break-inside:avoid;break-inside:avoid;}'+
-        '.section-title{font-size:8px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.12em;border-bottom:1px solid #e2e8f0;padding-bottom:4px;margin-bottom:8px;}'+
+        '.section-title{font-size:8px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.12em;border-bottom:1px solid #e2e8f0;padding-bottom:4px;margin-bottom:8px;}'+
         'td.lbl{padding:4px 14px 4px 0;font-size:11px;color:#64748b;white-space:nowrap;width:150px;vertical-align:top;}'+
         'td.val{padding:4px 0;font-size:11px;color:#1e293b;font-weight:500;vertical-align:top;}'+
-        '.footer{position:fixed;bottom:0;left:0;right:0;padding:5px 0.65in;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;font-size:8px;color:#94a3b8;background:#fff;}'+
+        '.footer{position:fixed;bottom:0;left:0;right:0;padding:5px 0.65in;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;font-size:8px;color:var(--text-muted);background:#fff;}'+
       '</style>' +
       '<script>window.onload=function(){'+
         'var spans=document.querySelectorAll(".pg-num");'+
@@ -12896,7 +12896,7 @@
     var tabEvt     = document.getElementById('arc-tab-evtemail');
     if (!recBody || !followDiv) return;
     var activeStyle   = 'padding:6px 14px;font-size:12px;font-weight:600;background:transparent;border:none;border-bottom:2px solid #f59e0b;color:#f59e0b;cursor:pointer;margin-bottom:-1px;';
-    var inactiveStyle = 'padding:6px 14px;font-size:12px;font-weight:600;background:transparent;border:none;border-bottom:2px solid transparent;color:#9a9ba0;cursor:pointer;margin-bottom:-1px;';
+    var inactiveStyle = 'padding:6px 14px;font-size:12px;font-weight:600;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--text-muted);cursor:pointer;margin-bottom:-1px;';
     recBody.style.display   = tab === 'record'   ? '' : 'none';
     followDiv.style.display = tab === 'followup' ? '' : 'none';
     if (evtDiv) evtDiv.style.display = tab === 'evtemail' ? '' : 'none';
@@ -13070,7 +13070,7 @@
     var upcomingObs    = obs.filter(function(o){ var d=_daysUntilEvt(o.date); return d!==null&&d>=0; });
     _evtEmailItems = upcomingEvents.concat(upcomingObs);
     if (!_evtEmailItems.length) {
-      container.innerHTML = '<div style="font-size:11px;color:#9a9ba0;padding:8px 0;">No upcoming events found. Run AI research on this record first.</div>';
+      container.innerHTML = '<div style="font-size:11px;color:var(--text-muted);padding:8px 0;">No upcoming events found. Run AI research on this record first.</div>';
       return;
     }
     var eventsHtml = '';
@@ -13085,10 +13085,10 @@
       var bgStyle     = prevChecked ? 'rgba(245,158,11,0.06)' : 'rgba(255,255,255,0.03)';
       eventsHtml += '<div id="evtcard-'+i+'" onclick="_toggleEvtCard('+i+')" style="background:'+bgStyle+';border:'+borderStyle+';border-radius:8px;padding:10px 12px;display:flex;align-items:flex-start;gap:10px;margin-bottom:6px;cursor:pointer;">'
         + '<input type="checkbox" id="evtcheck-'+i+'" '+(prevChecked?'checked':'')+' onclick="event.stopPropagation();_updateEvtSelection()" style="width:14px;height:14px;accent-color:#f59e0b;cursor:pointer;flex-shrink:0;margin-top:1px;">'
-        + '<div style="flex:1;min-width:0;"><div style="font-size:12px;font-weight:600;color:#e8eaed;margin-bottom:2px;">'+e.title+'</div>'
-        + (e.venue ? '<div style="font-size:11px;color:#9a9ba0;">'+e.venue+'</div>' : '')
+        + '<div style="flex:1;min-width:0;"><div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px;">'+e.title+'</div>'
+        + (e.venue ? '<div style="font-size:11px;color:var(--text-muted);">'+e.venue+'</div>' : '')
         + '</div>'
-        + '<div style="text-align:right;flex-shrink:0;"><div style="font-size:11px;color:#e8eaed;white-space:nowrap;">'+(e.date||'')+'</div>'
+        + '<div style="text-align:right;flex-shrink:0;"><div style="font-size:11px;color:var(--text);white-space:nowrap;">'+(e.date||'')+'</div>'
         + (days!==null ? '<div style="font-size:10px;color:'+daysColor+';margin-top:2px;white-space:nowrap;">'+days+' days away</div>' : '')
         + '</div></div>';
     });
@@ -13101,9 +13101,9 @@
       var bgStyle     = prevChecked ? 'rgba(245,158,11,0.06)' : 'rgba(255,255,255,0.03)';
       obsHtml += '<div id="evtcard-'+i+'" onclick="_toggleEvtCard('+i+')" style="background:'+bgStyle+';border:'+borderStyle+';border-radius:8px;padding:10px 12px;display:flex;align-items:flex-start;gap:10px;margin-bottom:6px;cursor:pointer;">'
         + '<input type="checkbox" id="evtcheck-'+i+'" '+(prevChecked?'checked':'')+' onclick="event.stopPropagation();_updateEvtSelection()" style="width:14px;height:14px;accent-color:#f59e0b;cursor:pointer;flex-shrink:0;margin-top:1px;">'
-        + '<div style="flex:1;min-width:0;"><div style="font-size:12px;font-weight:600;color:#e8eaed;margin-bottom:2px;">'+o.title+'</div>'
-        + '<div style="font-size:11px;color:#9a9ba0;">Industry observance</div></div>'
-        + '<div style="text-align:right;flex-shrink:0;"><div style="font-size:11px;color:#e8eaed;white-space:nowrap;">'+(o.date||'')+'</div>'
+        + '<div style="flex:1;min-width:0;"><div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px;">'+o.title+'</div>'
+        + '<div style="font-size:11px;color:var(--text-muted);">Industry observance</div></div>'
+        + '<div style="text-align:right;flex-shrink:0;"><div style="font-size:11px;color:var(--text);white-space:nowrap;">'+(o.date||'')+'</div>'
         + (days!==null ? '<div style="font-size:10px;color:'+daysColor+';margin-top:2px;white-space:nowrap;">'+days+' days away</div>' : '')
         + '</div></div>';
     });
@@ -13253,7 +13253,7 @@
       congrats: { id:'live-pill-congrats', bg:'rgba(24,95,165,0.45)', color:'#85B7EB', border:'rgba(133,183,235,0.25)' },
       reengage: { id:'live-pill-reengage', bg:'rgba(99,56,6,0.45)',   color:'#EF9F27', border:'rgba(239,159,39,0.25)' }
     };
-    var inactiveStyle = 'padding:5px 11px;font-size:10px;font-weight:600;border-radius:14px;cursor:pointer;background:transparent;color:#9a9ba0;border:0.5px solid rgba(255,255,255,0.1);white-space:nowrap;flex-shrink:0;';
+    var inactiveStyle = 'padding:5px 11px;font-size:10px;font-weight:600;border-radius:14px;cursor:pointer;background:transparent;color:var(--text-muted);border:0.5px solid rgba(255,255,255,0.1);white-space:nowrap;flex-shrink:0;';
     Object.keys(pills).forEach(function(key) {
       var el = document.getElementById(pills[key].id);
       if (!el) return;
@@ -13352,7 +13352,7 @@
     var hooks = (rd.salesHooks||[]).filter(function(h){ return h && h.finding; }).map(function(h){ return Object.assign({}, h, {_kind:'hook', title: h.finding}); });
     _liveEmailItems = _liveEmailItems.concat(hooks);
     if (!_liveEmailItems.length) {
-      container.innerHTML = '<div style="font-size:11px;color:#9a9ba0;padding:8px 0;">No upcoming events or hooks found. Run AI research first.</div>';
+      container.innerHTML = '<div style="font-size:11px;color:var(--text-muted);padding:8px 0;">No upcoming events or hooks found. Run AI research first.</div>';
       return;
     }
     var eventsHtml = '';
@@ -13368,10 +13368,10 @@
       var bgStyle     = prevChecked ? 'rgba(245,158,11,0.06)' : 'rgba(255,255,255,0.03)';
       eventsHtml += '<div id="live-evtcard-'+i+'" onclick="_toggleLiveEvtCard('+i+')" style="background:'+bgStyle+';border:'+borderStyle+';border-radius:8px;padding:9px 10px;display:flex;align-items:flex-start;gap:8px;margin-bottom:5px;cursor:pointer;">'
         + '<input type="checkbox" id="live-evtcheck-'+i+'" '+(prevChecked?'checked':'')+' onclick="event.stopPropagation();_updateLiveEvtSelection()" style="width:14px;height:14px;accent-color:#f59e0b;cursor:pointer;flex-shrink:0;margin-top:1px;">'
-        + '<div style="flex:1;min-width:0;"><div style="font-size:11.5px;font-weight:600;color:#e8eaed;margin-bottom:1px;">'+e.title+'</div>'
-        + (e.venue ? '<div style="font-size:10px;color:#9a9ba0;">'+e.venue+'</div>' : '')
+        + '<div style="flex:1;min-width:0;"><div style="font-size:11.5px;font-weight:600;color:var(--text);margin-bottom:1px;">'+e.title+'</div>'
+        + (e.venue ? '<div style="font-size:10px;color:var(--text-muted);">'+e.venue+'</div>' : '')
         + '</div>'
-        + '<div style="text-align:right;flex-shrink:0;"><div style="font-size:10px;color:#e8eaed;white-space:nowrap;">'+(e.date||'')+'</div>'
+        + '<div style="text-align:right;flex-shrink:0;"><div style="font-size:10px;color:var(--text);white-space:nowrap;">'+(e.date||'')+'</div>'
         + (days!==null ? '<div style="font-size:9px;color:'+daysColor+';margin-top:1px;white-space:nowrap;">'+days+' days</div>' : '')
         + '</div></div>';
     });
@@ -13384,9 +13384,9 @@
       var bgStyle     = prevChecked ? 'rgba(245,158,11,0.06)' : 'rgba(255,255,255,0.03)';
       obsHtml += '<div id="live-evtcard-'+i+'" onclick="_toggleLiveEvtCard('+i+')" style="background:'+bgStyle+';border:'+borderStyle+';border-radius:8px;padding:9px 10px;display:flex;align-items:flex-start;gap:8px;margin-bottom:5px;cursor:pointer;">'
         + '<input type="checkbox" id="live-evtcheck-'+i+'" '+(prevChecked?'checked':'')+' onclick="event.stopPropagation();_updateLiveEvtSelection()" style="width:14px;height:14px;accent-color:#f59e0b;cursor:pointer;flex-shrink:0;margin-top:1px;">'
-        + '<div style="flex:1;min-width:0;"><div style="font-size:11.5px;font-weight:600;color:#e8eaed;margin-bottom:1px;">'+o.title+'</div>'
-        + '<div style="font-size:10px;color:#9a9ba0;">Industry observance</div></div>'
-        + '<div style="text-align:right;flex-shrink:0;"><div style="font-size:10px;color:#e8eaed;white-space:nowrap;">'+(o.date||'')+'</div>'
+        + '<div style="flex:1;min-width:0;"><div style="font-size:11.5px;font-weight:600;color:var(--text);margin-bottom:1px;">'+o.title+'</div>'
+        + '<div style="font-size:10px;color:var(--text-muted);">Industry observance</div></div>'
+        + '<div style="text-align:right;flex-shrink:0;"><div style="font-size:10px;color:var(--text);white-space:nowrap;">'+(o.date||'')+'</div>'
         + (days!==null ? '<div style="font-size:9px;color:'+daysColor+';margin-top:1px;white-space:nowrap;">'+days+' days</div>' : '')
         + '</div></div>';
     });
@@ -13401,7 +13401,7 @@
         + '<input type="checkbox" id="live-evtcheck-'+i+'" '+(prevChecked?'checked':'')+' onclick="event.stopPropagation();_updateLiveEvtSelection()" style="width:14px;height:14px;accent-color:#f59e0b;cursor:pointer;flex-shrink:0;margin-top:1px;">'
         + '<div style="flex:1;min-width:0;">'
         + '<div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;"><span style="font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:'+tc+';">'+((h.type||'hook'))+'</span></div>'
-        + '<div style="font-size:11px;font-weight:500;color:#e8eaed;line-height:1.3;">'+h.finding+'</div>'
+        + '<div style="font-size:11px;font-weight:500;color:var(--text);line-height:1.3;">'+h.finding+'</div>'
         + (h.pitch ? '<div style="font-size:10px;color:#5DCAA5;margin-top:2px;">'+h.pitch+'</div>' : '')
         + '</div></div>';
     });
@@ -13701,7 +13701,7 @@
           sendAction = 'sendResearchFromPopup(this)';
         } else {
           sendLabel = 'Complete Details First';
-          sendStyle = 'background:rgba(100,116,139,0.1);border:1px solid rgba(100,116,139,0.3);color:#9a9ba0;cursor:not-allowed;';
+          sendStyle = 'background:rgba(100,116,139,0.1);border:1px solid rgba(100,116,139,0.3);color:var(--text-muted);cursor:not-allowed;';
           sendAction = '';
         }
         footerBtns.innerHTML =
@@ -13860,15 +13860,15 @@
       if (indTag) { indTag.style.background = 'rgba(255,255,255,0.18)'; indTag.style.color = '#fff'; indTag.style.borderColor = 'transparent'; }
     } else {
       // State 3: No score
-      if (headerEl) { headerEl.style.background = '#1c1d1f'; headerEl.style.borderBottom = '1px solid rgba(255,255,255,0.06)'; }
+      if (headerEl) { headerEl.style.background = 'var(--surface)'; headerEl.style.borderBottom = '1px solid var(--border)'; }
       if (a2Score) a2Score.style.display = 'none';
       if (a2Divider) a2Divider.style.display = 'none';
       if (a2Pills) a2Pills.style.display = 'none';
       if (a2Tier) a2Tier.style.display = 'none';
       if (scoreRow) scoreRow.style.display = 'none';
-      if (nameEl) nameEl.style.color = '#e8eaed';
-      if (metaEl) metaEl.style.color = '#9a9ba0';
-      if (closeEl) closeEl.style.color = '#9a9ba0';
+      if (nameEl) nameEl.style.color = 'var(--text)';
+      if (metaEl) metaEl.style.color = 'var(--text-muted)';
+      if (closeEl) closeEl.style.color = 'var(--text-muted)';
       if (indTag) { indTag.style.background = 'rgba(29,158,117,0.15)'; indTag.style.color = '#5DCAA5'; indTag.style.borderColor = 'rgba(29,158,117,0.3)'; }
     }
 
@@ -13905,7 +13905,7 @@
         tallyEl.innerHTML = tallyRows.map(function(r) {
           var scoreStr = r.score !== null ? r.score + '/3' : '\u2014/3';
           var color    = r.score === 3 ? '#5DCAA5' : r.score === 2 ? '#60a5fa' : r.score === 1 ? '#f59e0b' : '#4e4f52';
-          return '<span style="font-size:9px;font-weight:700;letter-spacing:0.04em;color:#4e4f52;">' + r.label + '</span>' +
+          return '<span style="font-size:9px;font-weight:700;letter-spacing:0.04em;color:var(--text-dim, #4e4f52);">' + r.label + '</span>' +
             '<span style="font-size:12px;font-weight:700;color:' + color + ';">' + scoreStr + '</span>';
         }).join('<span style="color:#333436;margin:0 2px;">\u00b7</span>');
         // Keep hidden — A2 pills replace this
@@ -13982,11 +13982,11 @@
         var url = sm[s.key] || '';
         if (url) {
           chips += '<div class="intel-pill-wrap" id="ipw-' + s.key + '">' +
-            '<a href="' + url + '" target="_blank" style="display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:4px 10px;border-radius:999px;background:' + s.color + '0.12);border:1px solid ' + s.color + '0.3);color:#e8eaed;text-decoration:none;">' + s.label + '</a>' +
+            '<a href="' + url + '" target="_blank" style="display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:4px 10px;border-radius:999px;background:' + s.color + '0.12);border:1px solid ' + s.color + '0.3);color:var(--text);text-decoration:none;">' + s.label + '</a>' +
             '<span class="intel-edit-ico" onclick="_editIntelPill(\'' + s.key + '\')">' + _editPencil + '</span></div>';
         } else {
           chips += '<div class="intel-pill-wrap" id="ipw-' + s.key + '">' +
-            '<span onclick="_editIntelPill(\'' + s.key + '\')" style="display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);color:#4e4f52;cursor:pointer;text-decoration:none;">' +
+            '<span onclick="_editIntelPill(\'' + s.key + '\')" style="display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);color:var(--text-dim, #4e4f52);cursor:pointer;text-decoration:none;">' +
             '<svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>' +
             s.label + '</span>' +
             '<span class="intel-edit-ico" onclick="_editIntelPill(\'' + s.key + '\')">' + _editPencil + '</span></div>';
@@ -14001,7 +14001,7 @@
           return tb - ta;
         });
         chips += '<div style="width:100%;margin-top:4px;">' +
-          '<p style="font-size:10px;font-weight:500;color:#9a9ba0;text-transform:uppercase;letter-spacing:0.06em;margin:0 0 5px;">Recent News</p>' +
+          '<p style="font-size:10px;font-weight:500;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin:0 0 5px;">Recent News</p>' +
           sortedNews.map(function(n) {
             var head = n.sourceUrl
               ? '<a href="' + n.sourceUrl + '" target="_blank" style="color:#D3D1C7;text-decoration:underline;text-underline-offset:2px;">' + (n.headline||'') + '</a>'
@@ -14037,7 +14037,7 @@
       editArea.innerHTML =
         '<div style="display:flex;align-items:center;gap:8px;">' +
           '<span style="font-size:11px;color:#5DCAA5;font-weight:600;min-width:80px;">' + (labels[key]||key) + '</span>' +
-          '<input id="intel-edit-url" type="text" value="' + currentUrl.replace(/"/g,'&quot;') + '" onkeydown="if(event.key===\'Enter\')_saveIntelPill(\'' + key + '\')" style="flex:1;height:28px;padding:0 10px;border-radius:8px;border:1px solid rgba(29,158,117,0.4);background:rgba(255,255,255,0.08);color:#e8eaed;font-size:12px;font-family:\'Inter\',sans-serif;outline:none;box-sizing:border-box;">' +
+          '<input id="intel-edit-url" type="text" value="' + currentUrl.replace(/"/g,'&quot;') + '" onkeydown="if(event.key===\'Enter\')_saveIntelPill(\'' + key + '\')" style="flex:1;height:28px;padding:0 10px;border-radius:8px;border:1px solid rgba(29,158,117,0.4);background:rgba(255,255,255,0.08);color:var(--text);font-size:12px;font-family:\'Inter\',sans-serif;outline:none;box-sizing:border-box;">' +
           '<button onclick="_saveIntelPill(\'' + key + '\')" style="height:28px;padding:0 12px;border-radius:8px;border:none;background:#0F6E56;color:#fff;font-size:11px;font-weight:600;cursor:pointer;">Save</button>' +
           '<button onclick="_cancelIntelEdit()" style="height:28px;padding:0 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#999;font-size:11px;cursor:pointer;">Cancel</button>' +
         '</div>';
@@ -14435,7 +14435,7 @@
         var confBadge = '';
         if (t.confidence === 'confirmed') confBadge = '<span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:999px;background:rgba(93,202,165,0.12);border:1px solid rgba(93,202,165,0.3);color:#5DCAA5;vertical-align:middle;letter-spacing:0.04em;">&#10003; CONFIRMED</span> ';
         else if (t.confidence === 'likely') confBadge = '<span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:999px;background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.3);color:#f59e0b;vertical-align:middle;letter-spacing:0.04em;">LIKELY</span> ';
-        else confBadge = '<span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:999px;background:rgba(148,163,184,0.12);border:1px solid rgba(148,163,184,0.3);color:#94a3b8;vertical-align:middle;letter-spacing:0.04em;">INDUSTRY MATCH</span> ';
+        else confBadge = '<span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:999px;background:rgba(148,163,184,0.12);border:1px solid rgba(148,163,184,0.3);color:var(--text-muted);vertical-align:middle;letter-spacing:0.04em;">INDUSTRY MATCH</span> ';
         // Inject badges into the event object for buildEventCard
         var evtCopy = { title: t.title, date: t.date, venue: t.venue, source: t.source, recurring: t.recurring, notes: t.notes, summary: t.summary };
         var card = buildEventCard(evtCopy);
@@ -14446,7 +14446,7 @@
         if (t.attendees) {
           card = card.replace('class="research-event-sub">', 'class="research-event-sub">') ;
           var subEnd = card.indexOf('</p>', card.indexOf('research-event-sub'));
-          if (subEnd !== -1) card = card.slice(0, subEnd) + '<br><span style="font-size:10px;color:#9a9ba0;">~' + t.attendees + ' attendees</span>' + card.slice(subEnd);
+          if (subEnd !== -1) card = card.slice(0, subEnd) + '<br><span style="font-size:10px;color:var(--text-muted);">~' + t.attendees + ' attendees</span>' + card.slice(subEnd);
         }
         return card;
       }).join('');
@@ -15021,13 +15021,13 @@
         var tsBadge = '<span style="font-size:9px;font-weight:700;padding:1px 5px;border-radius:999px;background:rgba(99,102,241,0.15);color:#818cf8;border:1px solid rgba(99,102,241,0.3);">TRADESHOW</span> ';
         var confBadge = t.confidence==='confirmed'?'<span style="font-size:9px;font-weight:700;padding:1px 5px;border-radius:999px;background:rgba(93,202,165,0.12);color:#5DCAA5;border:1px solid rgba(93,202,165,0.3);">&#10003; CONFIRMED</span> ':'';
         if (t.confidence==='likely') confBadge = '<span style="font-size:9px;font-weight:700;padding:1px 5px;border-radius:999px;background:rgba(245,158,11,0.12);color:#f59e0b;border:1px solid rgba(245,158,11,0.3);">LIKELY</span> ';
-        if (t.confidence==='industry-match') confBadge = '<span style="font-size:9px;font-weight:700;padding:1px 5px;border-radius:999px;background:rgba(148,163,184,0.12);color:#94a3b8;border:1px solid rgba(148,163,184,0.3);">INDUSTRY MATCH</span> ';
+        if (t.confidence==='industry-match') confBadge = '<span style="font-size:9px;font-weight:700;padding:1px 5px;border-radius:999px;background:rgba(148,163,184,0.12);color:var(--text-muted);border:1px solid rgba(148,163,184,0.3);">INDUSTRY MATCH</span> ';
         var _tsD = new Date((t.date||'').replace(/(\w+ \d+)[-\u2013]\d+/,'$1').replace(/varies/i,'')); var _tsToday = new Date(); _tsToday.setHours(0,0,0,0); var _tsDiff = isNaN(_tsD)?null:Math.round((_tsD-_tsToday)/86400000);
         var _tsDaysBadge = '';
-        if (_tsDiff!==null && _tsDiff<0) _tsDaysBadge = ' <span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;background:#f1f5f9;color:#94a3b8;border:1px solid #e2e8f0;">PAST</span>';
+        if (_tsDiff!==null && _tsDiff<0) _tsDaysBadge = ' <span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;background:#f1f5f9;color:var(--text-muted);border:1px solid #e2e8f0;">PAST</span>';
         else if (_tsDiff===0) _tsDaysBadge = ' <span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;background:rgba(93,202,165,0.12);color:#5DCAA5;border:1px solid rgba(93,202,165,0.3);">Today</span>';
         else if (_tsDiff!==null && _tsDiff<=30) _tsDaysBadge = ' <span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;background:#fff7ed;color:#c2410c;border:1px solid #fed7aa;">'+_tsDiff+' days away</span>';
-        else if (_tsDiff!==null) _tsDaysBadge = ' <span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;background:rgba(139,143,168,0.1);color:#94a3b8;border:1px solid rgba(139,143,168,0.25);">'+_tsDiff+' days away</span>';
+        else if (_tsDiff!==null) _tsDaysBadge = ' <span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;background:rgba(139,143,168,0.1);color:var(--text-muted);border:1px solid rgba(139,143,168,0.25);">'+_tsDiff+' days away</span>';
         rHtml += '<tr><td colspan="2" style="padding:6px 0;">' +
           '<table style="width:100%;border-collapse:collapse;"><tr>' +
           '<td style="font-size:13px;color:#1e293b;vertical-align:middle;">' +
@@ -15044,14 +15044,14 @@
       allEvts.forEach(function(evt) {
         var recurBadge = evt.recurring ? ' <span style="font-size:9px;font-weight:600;padding:1px 5px;border-radius:999px;background:rgba(251,146,60,0.15);color:#fb923c;border:1px solid rgba(251,146,60,0.3);">RECURRING</span>' : '';
         var _evtD = new Date((evt.date||'').replace(/(\w+ \d+)[-\u2013]\d+/,'$1').replace(/varies/i,'')); var _evtToday = new Date(); _evtToday.setHours(0,0,0,0); var _evtDiff = isNaN(_evtD) ? null : Math.round((_evtD - _evtToday)/86400000);
-        var pastBadge = (_evtDiff !== null && _evtDiff < 0) ? ' <span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;background:#f1f5f9;color:#94a3b8;border:1px solid #e2e8f0;">PAST</span>' : '';
+        var pastBadge = (_evtDiff !== null && _evtDiff < 0) ? ' <span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;background:#f1f5f9;color:var(--text-muted);border:1px solid #e2e8f0;">PAST</span>' : '';
         var evtTitle   = (document.getElementById('f-company').value.trim() || 'Company') + ' — ' + (evt.title||'Event') + ' (QLP)';
         var evtBody    = 'QLP OPPORTUNITY\nCustomer: ' + (document.getElementById('f-name').value.trim()||'—') + '\nCompany: ' + (document.getElementById('f-company').value.trim()||'—') + '\n\nNotes: ' + (evt.notes||'');
         var outlookUrl = 'https://outlook.office.com/calendar/action/compose?subject=' + encodeURIComponent(evtTitle) + '&body=' + encodeURIComponent(evtBody) + '&location=' + encodeURIComponent(evt.venue||'');
         rHtml += '<tr><td colspan="2" style="padding:6px 0;' + (_evtDiff !== null && _evtDiff < 0 ? 'opacity:0.5;' : '') + '">' +
           '<table style="width:100%;border-collapse:collapse;"><tr>' +
           '<td style="font-size:13px;color:#1e293b;vertical-align:middle;">' +
-            '<span style="color:#cbd5e1;">★ </span>' + (evt.source && evt.source.match && evt.source.match(/^https?:/) ? '<a href="' + evt.source + '" target="_blank" style="color:#1e293b;font-weight:600;text-decoration:underline;text-underline-offset:2px;">' + (evt.title||'') + '</a>' : '<strong style="color:#1e293b;">' + (evt.title||'') + '</strong>') + recurBadge + pastBadge +
+            '<span style="color:var(--text);">★ </span>' + (evt.source && evt.source.match && evt.source.match(/^https?:/) ? '<a href="' + evt.source + '" target="_blank" style="color:#1e293b;font-weight:600;text-decoration:underline;text-underline-offset:2px;">' + (evt.title||'') + '</a>' : '<strong style="color:#1e293b;">' + (evt.title||'') + '</strong>') + recurBadge + pastBadge +
             '<br><span style="font-size:11px;color:#64748b;">' + (evt.date||'') + (evt.venue ? ' · ' + evt.venue : '') + '</span>' +
           '</td>' +
           '<td style="text-align:right;vertical-align:middle;white-space:nowrap;padding-left:8px;">' +
@@ -15071,11 +15071,11 @@
         var diff = isNaN(d) ? null : Math.round((d-today)/86400000);
         var daysBadge = '';
         if (diff !== null) {
-          if (diff < 0) daysBadge = ' <span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;background:#f1f5f9;color:#94a3b8;border:1px solid #e2e8f0;">PAST</span>';
+          if (diff < 0) daysBadge = ' <span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;background:#f1f5f9;color:var(--text-muted);border:1px solid #e2e8f0;">PAST</span>';
           else if (diff === 0) daysBadge = ' <span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;background:#fff7ed;color:#c2410c;border:1px solid #fed7aa;">Today</span>';
           else daysBadge = ' <span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;background:' + (diff<=30?'#fff7ed':'#f5f3ff') + ';color:' + (diff<=30?'#c2410c':'#6d28d9') + ';border:1px solid ' + (diff<=30?'#fed7aa':'#ddd6fe') + ';">' + diff + ' days away</span>';
         }
-        rHtml += '<tr><td colspan="2" style="padding:5px 0;font-size:13px;color:#1e293b;' + (diff !== null && diff < 0 ? 'opacity:0.5;' : '') + '"><span style="color:#64748b;">★ </span><strong>' + (o.title||'') + '</strong>' + daysBadge + '<br><span style="font-size:11px;color:#94a3b8;">' + (o.date||'') + '</span></td></tr>';
+        rHtml += '<tr><td colspan="2" style="padding:5px 0;font-size:13px;color:#1e293b;' + (diff !== null && diff < 0 ? 'opacity:0.5;' : '') + '"><span style="color:#64748b;">★ </span><strong>' + (o.title||'') + '</strong>' + daysBadge + '<br><span style="font-size:11px;color:var(--text-muted);">' + (o.date||'') + '</span></td></tr>';
       });
     }
     if (_researchData.salesHooks && _researchData.salesHooks.length) {
@@ -15104,7 +15104,7 @@
           // Time label
           var timeLabel = '';
           if(diff===null){ timeLabel='<span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;background:#fefce8;color:#a16207;border:1px solid #fde68a;">Ongoing</span>'; }
-          else if(diff<0){ var ago=Math.abs(diff),isOld=ago>730; var agoLabel=ago>=365?Math.round(ago/365)+'yr ago':ago+' days ago'; timeLabel='<span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;background:#f8fafc;color:#94a3b8;border:1px solid #e2e8f0;">'+agoLabel+'</span>'; }
+          else if(diff<0){ var ago=Math.abs(diff),isOld=ago>730; var agoLabel=ago>=365?Math.round(ago/365)+'yr ago':ago+' days ago'; timeLabel='<span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;background:#f8fafc;color:var(--text-muted);border:1px solid #e2e8f0;">'+agoLabel+'</span>'; }
           else{ var ul=diff===0?'Today':diff+' days away'; var ubg=diff<=30?'#fff7ed':'#f0fdf4'; var uc=diff<=30?'#c2410c':'#166534'; var ub=diff<=30?'#fed7aa':'#86efac'; timeLabel='<span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;background:'+ubg+';color:'+uc+';border:1px solid '+ub+';">'+ul+'</span>'; }
           // Product links for this hook
           var prodHtml = '';
@@ -15166,8 +15166,8 @@
           '<table style="width:100%;border-collapse:collapse;">' +
           psec('Signals') +
           '<tr><td colspan="2" style="padding:5px 0;"><span style="display:inline-block;padding:2px 10px;border-radius:999px;background:#eff6ff;color:#3E4460;font-size:11px;font-weight:700;margin-right:8px;">IV (Size) '+(_scIv||0)+'/3</span><span style="font-size:13px;color:#1e293b;">'+(_lbIv||'—')+'</span></td></tr>' +
-          '<tr><td colspan="2" style="padding:5px 0;"><span style="display:inline-block;padding:2px 10px;border-radius:999px;background:#fefce8;color:#854d0e;font-size:11px;font-weight:700;margin-right:8px;">PV (Budget) —/3</span><span style="font-size:13px;color:#94a3b8;">—</span></td></tr>' +
-          '<tr><td colspan="2" style="padding:5px 0;"><span style="display:inline-block;padding:2px 10px;border-radius:999px;background:#f0fdf4;color:#15803d;font-size:11px;font-weight:700;margin-right:8px;">AV (Spend) —/3</span><span style="font-size:13px;color:#94a3b8;">—</span></td></tr>' +
+          '<tr><td colspan="2" style="padding:5px 0;"><span style="display:inline-block;padding:2px 10px;border-radius:999px;background:#fefce8;color:#854d0e;font-size:11px;font-weight:700;margin-right:8px;">PV (Budget) —/3</span><span style="font-size:13px;color:var(--text-muted);">—</span></td></tr>' +
+          '<tr><td colspan="2" style="padding:5px 0;"><span style="display:inline-block;padding:2px 10px;border-radius:999px;background:#f0fdf4;color:#15803d;font-size:11px;font-weight:700;margin-right:8px;">AV (Spend) —/3</span><span style="font-size:13px;color:var(--text-muted);">—</span></td></tr>' +
           psec('Customer Details') +
           prow('Entered By', window._currentRep || '—') +
           prow('Name', name) +
@@ -15412,7 +15412,7 @@
           '<div style="display:flex;align-items:center;gap:10px;">' +
             '<div style="width:36px;height:36px;border-radius:50%;background:rgba(139,143,168,0.15);border:1.5px solid rgba(139,143,168,0.35);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#B8BBCC;flex-shrink:0;">' + cpInitials + '</div>' +
             '<div>' +
-              '<div style="font-size:14px;font-weight:600;color:#e2e8f0;">' + contactName + '</div>' +
+              '<div style="font-size:14px;font-weight:600;color:var(--text);">' + contactName + '</div>' +
               '<div style="font-size:11px;color:#B8BBCC;margin-top:1px;">' + (cp.title || '') + (cp.title ? ' (AI inferred)' : '') + '</div>' +
             '</div>' +
           '</div>' +
@@ -15447,12 +15447,12 @@
         var socialLinks = '';
         if (p.linkedin) { var _liUrl = p.linkedin.match(/^https?:\/\//) ? p.linkedin : 'https://' + p.linkedin; socialLinks += '<a href="' + _liUrl + '" target="_blank" style="display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:600;color:#60a5fa;background:rgba(96,165,250,0.1);border:1px solid rgba(96,165,250,0.25);border-radius:4px;padding:2px 7px;text-decoration:none;margin-right:4px;">in LinkedIn</a>'; }
         if (p.email) socialLinks += '<a href="mailto:' + p.email + '" style="display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:600;color:#34d399;background:rgba(52,211,153,0.1);border:1px solid rgba(52,211,153,0.25);border-radius:4px;padding:2px 7px;text-decoration:none;margin-right:4px;">✉ Email</a>';
-        if (p.twitter) socialLinks += '<a href="' + p.twitter + '" target="_blank" style="display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:600;color:#94a3b8;background:rgba(148,163,184,0.1);border:1px solid rgba(148,163,184,0.2);border-radius:4px;padding:2px 7px;text-decoration:none;margin-right:4px;">𝕏 Twitter</a>';
+        if (p.twitter) socialLinks += '<a href="' + p.twitter + '" target="_blank" style="display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:600;color:var(--text-muted);background:rgba(148,163,184,0.1);border:1px solid rgba(148,163,184,0.2);border-radius:4px;padding:2px 7px;text-decoration:none;margin-right:4px;">𝕏 Twitter</a>';
         return '<div style="background:#211f30;border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px 14px;margin-bottom:8px;">' +
           '<div style="display:flex;align-items:center;gap:10px;">' +
             '<div style="width:36px;height:36px;border-radius:50%;background:' + r.avatarBg + ';border:1.5px solid ' + r.avatarBorder + ';display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:' + r.color + ';flex-shrink:0;">' + initials + '</div>' +
             '<div style="flex:1;min-width:0;">' +
-              '<div style="font-size:14px;font-weight:600;color:#e2e8f0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + (p.name||'—') + '</div>' +
+              '<div style="font-size:14px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + (p.name||'—') + '</div>' +
               '<div style="font-size:11px;color:' + r.color + ';margin-top:1px;">' + (p.title || r.label) + '</div>' +
             '</div>' +
           '</div>' +
@@ -15478,7 +15478,7 @@
           '<div style="display:flex;align-items:center;gap:10px;">' +
             '<div style="width:36px;height:36px;border-radius:50%;background:' + avatarBg + ';border:1.5px solid ' + color + '44;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:' + color + ';flex-shrink:0;">' + initials + '</div>' +
             '<div style="flex:1;min-width:0;">' +
-              '<div style="font-size:14px;font-weight:600;color:#e2e8f0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + (p.name||'—') + '</div>' +
+              '<div style="font-size:14px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + (p.name||'—') + '</div>' +
               '<div style="font-size:11px;color:' + color + ';margin-top:1px;">' + (p.title||'') + '</div>' +
             '</div>' +
             '<span style="font-size:9px;font-weight:700;color:' + confColor + ';opacity:0.8;flex-shrink:0;">' + (p.confidence||'').toUpperCase() + '</span>' +
@@ -15543,14 +15543,14 @@
       } else {
         var ago = Math.abs(diff);
         var agoLabel = ago >= 365 ? Math.round(ago/365) + 'yr ago' : ago + ' days ago';
-        daysTag = '<span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;background:rgba(100,116,139,0.1);color:#94a3b8;border:1px solid rgba(100,116,139,0.25);">' + agoLabel + '</span>';
+        daysTag = '<span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;background:rgba(100,116,139,0.1);color:var(--text-muted);border:1px solid rgba(100,116,139,0.25);">' + agoLabel + '</span>';
       }
       return '<div style="background:' + c.bg + ';border:1px solid ' + c.border + ';border-radius:10px;padding:12px 14px;margin-bottom:8px;">' +
         '<div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">' +
           '<span style="font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:' + c.text + ';background:' + c.bg + ';border:1px solid ' + c.border + ';border-radius:4px;padding:1px 6px;">' + (h.type || 'news') + '</span>' +
           daysTag +
         '</div>' +
-        '<div style="font-size:13px;color:#e2e8f0;font-weight:500;line-height:1.4;margin-bottom:6px;">' + (h.finding || '') + '</div>' +
+        '<div style="font-size:13px;color:var(--text);font-weight:500;line-height:1.4;margin-bottom:6px;">' + (h.finding || '') + '</div>' +
         '<div style="font-size:11px;color:' + c.text + ';opacity:0.85;line-height:1.4;padding-top:6px;border-top:1px solid rgba(255,255,255,0.05);">💡 ' + (h.pitch || '') + '</div>' +
         (h.source && h.source.match(/^https?:\/\//) ? '<div style="margin-top:5px;"><a href="' + h.source + '" target="_blank" style="font-size:10px;color:#60a5fa;text-decoration:none;" onclick="event.stopPropagation()">↗ ' + h.source.replace(/^https?:\/\/(www\.)?/,'').replace(/\/.*$/,'') + '</a></div>' : '') +
       '</div>';
@@ -15773,18 +15773,18 @@
 </script>
 <!-- Incomplete warning modal -->
 <div id="incomplete-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:99998;align-items:center;justify-content:center;">
-  <div style="background:#1c1d1f;border:1px solid rgba(248,113,113,0.4);border-radius:14px;padding:24px 28px;max-width:500px;width:94%;box-shadow:0 8px 40px rgba(0,0,0,0.5);max-height:90vh;overflow-y:auto;">
+  <div style="background:var(--surface);border:1px solid rgba(248,113,113,0.4);border-radius:14px;padding:24px 28px;max-width:500px;width:94%;box-shadow:0 8px 40px rgba(0,0,0,0.5);max-height:90vh;overflow-y:auto;">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
       <div style="display:flex;align-items:center;gap:10px;">
         <span style="font-size:20px;">⚠</span>
         <p style="margin:0;font-size:15px;font-weight:600;color:#f87171;">Complete Before Sending</p>
       </div>
-      <button onclick="document.getElementById('incomplete-overlay').style.display='none';document.getElementById('incomplete-overlay')._resolve(false);" style="background:none;border:none;color:#9a9ba0;font-size:18px;cursor:pointer;padding:0;">✕</button>
+      <button onclick="document.getElementById('incomplete-overlay').style.display='none';document.getElementById('incomplete-overlay')._resolve(false);" style="background:none;border:none;color:var(--text-muted);font-size:18px;cursor:pointer;padding:0;">✕</button>
     </div>
-    <p style="margin:0 0 16px;font-size:12px;color:#9a9ba0;">Fill in the missing details below then click Send.</p>
+    <p style="margin:0 0 16px;font-size:12px;color:var(--text-muted);">Fill in the missing details below then click Send.</p>
     <div id="incomplete-fields" style="display:flex;flex-direction:column;gap:12px;margin-bottom:18px;"></div>
     <div style="display:flex;gap:10px;justify-content:flex-end;border-top:1px solid rgba(255,255,255,0.06);padding-top:16px;">
-      <button onclick="document.getElementById('incomplete-overlay').style.display='none';document.getElementById('incomplete-overlay')._resolve(false);" style="padding:8px 16px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:#b0b2b6;font-size:13px;cursor:pointer;">Cancel</button>
+      <button onclick="document.getElementById('incomplete-overlay').style.display='none';document.getElementById('incomplete-overlay')._resolve(false);" style="padding:8px 16px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:var(--text-dim, #b0b2b6);font-size:13px;cursor:pointer;">Cancel</button>
       <button onclick="incompleteModalSend();" style="padding:8px 20px;border-radius:8px;border:1px solid rgba(29,158,117,0.5);background:rgba(29,158,117,0.1);color:#5DCAA5;font-size:13px;cursor:pointer;font-weight:500;">Send Now</button>
     </div>
   </div>
@@ -15792,12 +15792,12 @@
 
 <!-- Custom AI confirm dialog -->
 <div id="ai-confirm-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:999999;align-items:center;justify-content:center;">
-  <div style="background:#1c1d1f;border:1px solid rgba(29,158,117,0.4);border-radius:14px;padding:24px 28px;max-width:380px;width:90%;box-shadow:0 8px 40px rgba(0,0,0,0.6);">
+  <div style="background:var(--surface);border:1px solid rgba(29,158,117,0.4);border-radius:14px;padding:24px 28px;max-width:380px;width:90%;box-shadow:0 8px 40px rgba(0,0,0,0.6);">
     <div style="display:flex;flex-direction:column;align-items:center;gap:8px;margin-bottom:14px;text-align:center;">
       <span style="font-size:24px;line-height:1;">🤖</span>
-      <p style="margin:0;font-size:15px;font-weight:600;color:#e8eaed;">AI-Filled Field</p>
+      <p style="margin:0;font-size:15px;font-weight:600;color:var(--text);">AI-Filled Field</p>
     </div>
-    <p id="ai-confirm-msg" style="margin:0 0 20px;font-size:13px;color:#b0b2b6;line-height:1.6;text-align:center;"></p>
+    <p id="ai-confirm-msg" style="margin:0 0 20px;font-size:13px;color:var(--text-dim, #b0b2b6);line-height:1.6;text-align:center;"></p>
     <div style="display:flex;gap:10px;justify-content:center;">
       <button onclick="document.getElementById('ai-confirm-overlay')._resolve(false);document.getElementById('ai-confirm-overlay').style.display='none';"
         style="padding:8px 18px;border-radius:8px;border:1px solid rgba(29,158,117,0.5);background:rgba(29,158,117,0.1);color:#5DCAA5;font-size:13px;cursor:pointer;">
@@ -15832,8 +15832,8 @@
 <div class="rep-modal" id="ai-research-view-overlay" onclick="if(event.target===this)closeAIResearchView()" style="z-index:10000;">
   <div class="rep-modal-box" style="max-width:680px;width:96%;max-height:88vh;display:flex;flex-direction:column;padding:0;overflow:hidden;">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid rgba(255,255,255,0.08);flex-shrink:0;">
-      <div style="font-weight:600;font-size:14px;color:#e8eaed;">✦ AI Research</div>
-      <button onclick="closeAIResearchView()" style="background:none;border:none;color:#b0b2b6;font-size:18px;cursor:pointer;line-height:1;">✕</button>
+      <div style="font-weight:600;font-size:14px;color:var(--text);">✦ AI Research</div>
+      <button onclick="closeAIResearchView()" style="background:none;border:none;color:var(--text-dim, #b0b2b6);font-size:18px;cursor:pointer;line-height:1;">✕</button>
     </div>
     <iframe id="ai-research-view-frame" style="flex:1;border:none;width:100%;min-height:520px;background:#fff;" sandbox="allow-scripts"></iframe>
   </div>
@@ -15844,21 +15844,21 @@
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
       <div style="display:flex;gap:0;border-bottom:1px solid rgba(255,255,255,0.08);width:100%;">
         <button id="arc-tab-record" onclick="switchArcPopoutTab('record')" style="padding:6px 14px;font-size:12px;font-weight:600;background:transparent;border:none;border-bottom:2px solid #f59e0b;color:#f59e0b;cursor:pointer;margin-bottom:-1px;">Record</button>
-        <button id="arc-tab-evtemail" onclick="switchArcPopoutTab('evtemail')" style="padding:6px 14px;font-size:12px;font-weight:600;background:transparent;border:none;border-bottom:2px solid transparent;color:#9a9ba0;cursor:pointer;margin-bottom:-1px;">📅 Events & Email</button>
-        <button id="arc-tab-followup" onclick="switchArcPopoutTab('followup')" style="padding:6px 14px;font-size:12px;font-weight:600;background:transparent;border:none;border-bottom:2px solid transparent;color:#9a9ba0;cursor:pointer;margin-bottom:-1px;">✉ Follow-Up Email</button>
+        <button id="arc-tab-evtemail" onclick="switchArcPopoutTab('evtemail')" style="padding:6px 14px;font-size:12px;font-weight:600;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--text-muted);cursor:pointer;margin-bottom:-1px;">📅 Events & Email</button>
+        <button id="arc-tab-followup" onclick="switchArcPopoutTab('followup')" style="padding:6px 14px;font-size:12px;font-weight:600;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--text-muted);cursor:pointer;margin-bottom:-1px;">✉ Follow-Up Email</button>
         <div style="flex:1;"></div>
-        <button onclick="closeArchivePopout()" style="background:none;border:none;color:#b0b2b6;font-size:18px;cursor:pointer;line-height:1;padding:0 0 8px 8px;">✕</button>
+        <button onclick="closeArchivePopout()" style="background:none;border:none;color:var(--text-dim, #b0b2b6);font-size:18px;cursor:pointer;line-height:1;padding:0 0 8px 8px;">✕</button>
       </div>
     </div>
     <div id="arc-popout-body"></div>
     <div id="arc-popout-followup" style="display:none;">
-      <div id="arc-followup-loading" style="display:none;text-align:center;padding:20px;font-size:12px;color:#9a9ba0;">
+      <div id="arc-followup-loading" style="display:none;text-align:center;padding:20px;font-size:12px;color:var(--text-muted);">
         <div style="display:inline-block;width:14px;height:14px;border:2px solid rgba(29,158,117,0.3);border-top-color:#5DCAA5;border-radius:50%;animation:spin 0.8s linear infinite;margin-right:8px;vertical-align:middle;"></div>
         Drafting follow-up email...
       </div>
       <textarea id="arc-followup-text" readonly placeholder="Click Generate to draft a follow-up email for this customer." style="width:100%;min-height:200px;padding:10px 12px;font-size:12px;line-height:1.7;font-family:'Inter',sans-serif;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:7px;color:var(--text);resize:vertical;outline:none;box-sizing:border-box;margin-bottom:10px;"></textarea>
       <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
-        <span id="arc-followup-timestamp" style="font-size:10px;color:#9a9ba0;"></span>
+        <span id="arc-followup-timestamp" style="font-size:10px;color:var(--text-muted);"></span>
         <div style="display:flex;gap:8px;">
           <button onclick="copyArcFollowupEmail()" style="height:28px;padding:0 12px;border-radius:6px;border:1px solid rgba(139,143,168,0.3);background:rgba(139,143,168,0.08);color:#B8BBCC;font-size:11px;font-weight:600;cursor:pointer;">Copy</button>
           <button onclick="generateArcFollowupEmail()" style="height:28px;padding:0 14px;border-radius:6px;border:1px solid rgba(29,158,117,0.4);background:rgba(29,158,117,0.1);color:#5DCAA5;font-size:11px;font-weight:600;cursor:pointer;">↻ Generate</button>
@@ -15868,7 +15868,7 @@
     <div id="arc-popout-evtemail" style="display:none;">
       <div style="font-size:9px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:#717378;margin-bottom:8px;">Upcoming Events &amp; Reminders</div>
       <div id="arc-evtemail-events"></div>
-      <div id="arc-evtemail-sel-summary" style="font-size:10px;color:#9a9ba0;margin-top:8px;min-height:14px;">No events selected — email will use all upcoming events.</div>
+      <div id="arc-evtemail-sel-summary" style="font-size:10px;color:var(--text-muted);margin-top:8px;min-height:14px;">No events selected — email will use all upcoming events.</div>
       <hr style="border:none;border-top:0.5px solid rgba(255,255,255,0.07);margin:12px 0;">
       <div style="font-size:9px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:#717378;margin-bottom:10px;">Contextual Email</div>
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
@@ -15879,14 +15879,14 @@
         </div>
         <button onclick="generateEvtEmail()" style="height:28px;padding:0 12px;border-radius:6px;border:1px solid rgba(29,158,117,0.4);background:rgba(29,158,117,0.1);color:#5DCAA5;font-size:11px;font-weight:600;cursor:pointer;">↻ Generate</button>
       </div>
-      <input id="arc-evtemail-instr" type="text" placeholder="Adjust tone, focus, or add a note..." oninput="_evtEmailInstruction=this.value" style="width:100%;height:28px;padding:0 10px;border-radius:6px;border:0.5px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);color:#b0b2b6;font-size:11px;font-family:'Inter',sans-serif;outline:none;box-sizing:border-box;margin-bottom:8px;">
-      <div id="arc-evtemail-loading" style="display:none;text-align:center;padding:12px;font-size:11px;color:#9a9ba0;">
+      <input id="arc-evtemail-instr" type="text" placeholder="Adjust tone, focus, or add a note..." oninput="_evtEmailInstruction=this.value" style="width:100%;height:28px;padding:0 10px;border-radius:6px;border:0.5px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);color:var(--text-dim, #b0b2b6);font-size:11px;font-family:'Inter',sans-serif;outline:none;box-sizing:border-box;margin-bottom:8px;">
+      <div id="arc-evtemail-loading" style="display:none;text-align:center;padding:12px;font-size:11px;color:var(--text-muted);">
         <div style="display:inline-block;width:12px;height:12px;border:2px solid rgba(29,158,117,0.3);border-top-color:#5DCAA5;border-radius:50%;animation:spin 0.8s linear infinite;margin-right:6px;vertical-align:middle;"></div>
         Drafting and refining email...
       </div>
       <textarea id="arc-evtemail-text" readonly placeholder="Click Generate to draft a contextual email anchored to the events above." style="width:100%;min-height:160px;padding:10px 12px;font-size:12px;line-height:1.7;font-family:'Inter',sans-serif;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:7px;color:var(--text);resize:vertical;outline:none;box-sizing:border-box;margin-bottom:6px;"></textarea>
       <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px;">
-        <span id="arc-evtemail-timestamp" style="font-size:10px;color:#9a9ba0;"></span>
+        <span id="arc-evtemail-timestamp" style="font-size:10px;color:var(--text-muted);"></span>
         <button id="arc-evtemail-copy-btn" onclick="copyEvtEmail()" style="height:28px;padding:0 14px;border-radius:6px;border:1px solid rgba(139,143,168,0.3);background:rgba(139,143,168,0.08);color:#B8BBCC;font-size:11px;font-weight:600;cursor:pointer;">Copy All</button>
       </div>
     </div>
@@ -16018,19 +16018,19 @@
         <div style="display:flex;align-items:center;gap:14px;width:100%;position:relative;">
           <!-- Score block (left) -->
           <div id="rp-a2-score" style="display:none;flex-shrink:0;text-align:center;min-width:48px;">
-            <div id="rp-score-num" style="font-size:32px;font-weight:700;color:#fff;line-height:1;"></div>
-            <div id="rp-score-stars" style="font-size:11px;color:rgba(255,255,255,0.7);letter-spacing:0.5px;margin-top:2px;"></div>
+            <div id="rp-score-num" style="font-size:32px;font-weight:700;color:var(--text);line-height:1;"></div>
+            <div id="rp-score-stars" style="font-size:11px;color:var(--text-muted);letter-spacing:0.5px;margin-top:2px;"></div>
           </div>
           <!-- Divider -->
-          <div id="rp-a2-divider" style="display:none;width:1px;height:40px;background:rgba(255,255,255,0.15);flex-shrink:0;"></div>
+          <div id="rp-a2-divider" style="display:none;width:1px;height:40px;background:var(--border-hover);flex-shrink:0;"></div>
           <!-- Center: name + details -->
           <div style="flex:1;min-width:0;">
             <div style="display:flex;align-items:center;gap:6px;">
-              <p style="margin:0;font-size:15px;font-weight:600;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" id="rp-company-name">Company Research</p>
+              <p style="margin:0;font-size:15px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" id="rp-company-name">Company Research</p>
               <span id="rp-industry-tag" style="display:none;font-size:10px;padding:1px 8px;border-radius:999px;background:rgba(29,158,117,0.15);color:#5DCAA5;border:1px solid rgba(29,158,117,0.3);flex-shrink:0;"></span>
             </div>
             <div style="display:flex;align-items:center;gap:6px;margin-top:3px;flex-wrap:wrap;">
-              <span style="font-size:11px;color:rgba(255,255,255,0.6);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" id="rp-company-meta"></span>
+              <span style="font-size:11px;color:var(--text-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" id="rp-company-meta"></span>
               <span id="rp-search-cost" style="display:none;font-size:10px;padding:1px 7px;border-radius:999px;background:rgba(99,102,241,0.12);color:rgba(165,168,255,0.9);border:1px solid rgba(139,143,168,0.25);" title="AI cost for this search"></span>
               <span id="rp-search-duration" style="display:none;font-size:10px;padding:1px 7px;border-radius:999px;background:rgba(139,143,168,0.08);color:rgba(165,168,255,0.75);border:1px solid rgba(139,143,168,0.2);" title="Time taken for AI search"></span>
             </div>
@@ -16039,7 +16039,7 @@
           <div id="rp-a2-pills" style="display:none;gap:5px;flex-shrink:0;align-items:center;"></div>
           <!-- Tier block -->
           <div id="rp-a2-tier" style="display:none;flex-shrink:0;text-align:center;padding:5px 12px;border-radius:8px;margin-right:28px;">
-            <div id="rp-score-pill" style="font-size:16px;font-weight:700;color:#fff;letter-spacing:0.03em;"></div>
+            <div id="rp-score-pill" style="font-size:16px;font-weight:700;color:var(--text);letter-spacing:0.03em;"></div>
             <div id="rp-a2-priority" style="font-size:9px;font-weight:600;letter-spacing:0.04em;margin-top:1px;white-space:nowrap;"></div>
           </div>
           <!-- Legacy tally inline (hidden, kept for references) -->
@@ -16052,7 +16052,7 @@
         <!-- IV mismatch banner -->
         <div id="rp-iv-mismatch-banner" style="display:none;background:rgba(245,158,11,0.07);border:1px solid rgba(245,158,11,0.2);border-radius:5px;padding:6px 12px;align-items:center;justify-content:space-between;margin-top:8px;">
           <span style="font-size:10px;color:#d4a017;" id="rp-iv-mismatch-text"></span>
-          <span onclick="document.getElementById('rp-iv-mismatch-banner').style.display='none';" style="font-size:9px;color:#9a9ba0;cursor:pointer;margin-left:10px;white-space:nowrap;flex-shrink:0;">Dismiss</span>
+          <span onclick="document.getElementById('rp-iv-mismatch-banner').style.display='none';" style="font-size:9px;color:var(--text-muted);cursor:pointer;margin-left:10px;white-space:nowrap;flex-shrink:0;">Dismiss</span>
         </div>
       </div>
 
@@ -16185,14 +16185,14 @@
         <div id="rp-events-site"></div>
         <p class="research-section-label" id="rp-events-web-label" style="display:none;margin-top:10px;"></p>
         <div id="rp-events-web"></div>
-        <div id="rp-events-empty" style="font-size:12px;color:#9a9ba0;text-align:center;padding:20px 0;">No events found for this company.</div>
+        <div id="rp-events-empty" style="font-size:12px;color:var(--text-muted);text-align:center;padding:20px 0;">No events found for this company.</div>
       </div>
 
       <!-- Observances panel -->
       <div class="research-panel" id="rpanel-observances">
         <p class="research-section-label" id="rp-obs-label"></p>
         <div id="rp-observances-list"></div>
-        <div id="rp-obs-empty" style="font-size:12px;color:#9a9ba0;text-align:center;padding:20px 0;display:none;">No industry observances available.</div>
+        <div id="rp-obs-empty" style="font-size:12px;color:var(--text-muted);text-align:center;padding:20px 0;display:none;">No industry observances available.</div>
       </div>
 
       <!-- Email preview panel -->
@@ -16214,7 +16214,7 @@
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5DCAA5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
           </div>
           <div>
-            <p style="margin:0 0 4px;font-size:13px;font-weight:600;color:#e8eaed;">AI-powered sales hooks</p>
+            <p style="margin:0 0 4px;font-size:13px;font-weight:600;color:var(--text);">AI-powered sales hooks</p>
             <p style="margin:0;font-size:12px;color:#717378;max-width:300px;line-height:1.6;">Analyzes this customer's industry, events, news, and milestones to generate talking points for your promo pitch.</p>
           </div>
           <button id="rp-more-btn" onclick="loadMoreResearch()" style="margin-top:6px;height:34px;padding:0 20px;border-radius:8px;border:1px solid rgba(29,158,117,0.5);background:rgba(29,158,117,0.15);color:#5DCAA5;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:0.05em;display:inline-flex;align-items:center;gap:6px;"><span id="rp-more-txt">GET SALES HOOKS!</span><span id="rp-seg-divider" style="display:none;width:1px;height:11px;background:rgba(93,202,165,0.);margin:0 2px;flex-shrink:0;"></span><span id="rp-seg-digits" style="display:none;align-items:center;gap:2px;"></span><span id="rp-seg-s" style="display:none;font-size:9px;opacity:0.7;">s</span></button>
@@ -16227,7 +16227,7 @@
         </div>
         <div style="padding:0 20px 16px;">
           <div id="rp-people-list"></div>
-          <div id="rp-people-empty" style="font-size:12px;color:#9a9ba0;text-align:center;padding:20px 0;">No decision maker data found. Run AI research to populate.</div>
+          <div id="rp-people-empty" style="font-size:12px;color:var(--text-muted);text-align:center;padding:20px 0;">No decision maker data found. Run AI research to populate.</div>
         </div>
       </div>
 
@@ -16238,38 +16238,38 @@
           <div style="width:380px;padding:14px 16px;border-right:0.5px solid rgba(255,255,255,0.07);overflow-y:auto;max-height:380px;box-sizing:border-box;flex-shrink:0;">
             <div style="font-size:9px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:#717378;margin-bottom:8px;">Events &amp; Hooks</div>
             <div id="live-evtemail-events"></div>
-            <div id="live-evtemail-sel-summary" style="font-size:10px;color:#9a9ba0;margin-top:8px;min-height:14px;">None selected</div>
+            <div id="live-evtemail-sel-summary" style="font-size:10px;color:var(--text-muted);margin-top:8px;min-height:14px;">None selected</div>
           </div>
           <!-- RIGHT: Email composer -->
           <div style="flex:1;padding:14px 16px;display:flex;flex-direction:column;box-sizing:border-box;min-width:0;max-height:380px;overflow:hidden;">
             <div style="font-size:9px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:#717378;margin-bottom:10px;">Quick outreach</div>
             <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:10px;">
               <div id="live-pill-checkin" onclick="setLiveEmailIntent('checkin')" style="padding:5px 11px;font-size:10px;font-weight:600;border-radius:14px;cursor:pointer;background:#0F6E56;color:#9FE1CB;border:1px solid rgba(159,225,203,0.25);white-space:nowrap;flex-shrink:0;">Friendly check-in</div>
-              <div id="live-pill-headsup" onclick="setLiveEmailIntent('headsup')" style="padding:5px 11px;font-size:10px;font-weight:600;border-radius:14px;cursor:pointer;background:transparent;color:#9a9ba0;border:0.5px solid rgba(255,255,255,0.1);white-space:nowrap;flex-shrink:0;">Event heads-up</div>
-              <div id="live-pill-pitch" onclick="setLiveEmailIntent('pitch')" style="padding:5px 11px;font-size:10px;font-weight:600;border-radius:14px;cursor:pointer;background:transparent;color:#9a9ba0;border:0.5px solid rgba(255,255,255,0.1);white-space:nowrap;flex-shrink:0;">Referral</div>
-              <div id="live-pill-reengage" onclick="setLiveEmailIntent('reengage')" style="padding:5px 11px;font-size:10px;font-weight:600;border-radius:14px;cursor:pointer;background:transparent;color:#9a9ba0;border:0.5px solid rgba(255,255,255,0.1);white-space:nowrap;flex-shrink:0;">Re-engage</div>
+              <div id="live-pill-headsup" onclick="setLiveEmailIntent('headsup')" style="padding:5px 11px;font-size:10px;font-weight:600;border-radius:14px;cursor:pointer;background:transparent;color:var(--text-muted);border:0.5px solid rgba(255,255,255,0.1);white-space:nowrap;flex-shrink:0;">Event heads-up</div>
+              <div id="live-pill-pitch" onclick="setLiveEmailIntent('pitch')" style="padding:5px 11px;font-size:10px;font-weight:600;border-radius:14px;cursor:pointer;background:transparent;color:var(--text-muted);border:0.5px solid rgba(255,255,255,0.1);white-space:nowrap;flex-shrink:0;">Referral</div>
+              <div id="live-pill-reengage" onclick="setLiveEmailIntent('reengage')" style="padding:5px 11px;font-size:10px;font-weight:600;border-radius:14px;cursor:pointer;background:transparent;color:var(--text-muted);border:0.5px solid rgba(255,255,255,0.1);white-space:nowrap;flex-shrink:0;">Re-engage</div>
               <div style="width:1px;height:18px;background:rgba(255,255,255,0.15);margin:0 2px;flex-shrink:0;"></div>
               <button id="live-evtemail-gen-btn" onclick="generateLiveEmail()" style="height:26px;padding:0 14px;border-radius:14px;border:none;background:#0F6E56;color:#fff;font-size:10px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all 0.15s;" onmouseenter="if(!this._busy)this.style.background='#0d8a6a';" onmouseleave="if(!this._busy)this.style.background='#0F6E56';">Generate Email</button>
               <button id="live-evtemail-copy-btn" onclick="copyLiveEmail()" style="height:26px;padding:0 14px;border-radius:14px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.06);color:#999;font-size:10px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all 0.15s;" onmouseenter="this.style.background='rgba(255,255,255,0.14)';this.style.color='#e8eaed';this.style.borderColor='rgba(255,255,255,0.25)';" onmouseleave="if(!this._copied){this.style.background='rgba(255,255,255,0.06)';this.style.color='#999';this.style.borderColor='rgba(255,255,255,0.1)';}">Copy</button>
             </div>
             <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px;">
-              <input id="live-evtemail-instr" type="text" placeholder="Add a personal note or angle..." oninput="_liveEmailInstruction=this.value" style="flex:1;height:28px;padding:0 10px;border-radius:8px;border:0.5px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:#b0b2b6;font-size:11px;font-family:'Inter',sans-serif;outline:none;box-sizing:border-box;min-width:0;">
+              <input id="live-evtemail-instr" type="text" placeholder="Add a personal note or angle..." oninput="_liveEmailInstruction=this.value" style="flex:1;height:28px;padding:0 10px;border-radius:8px;border:0.5px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:var(--text-dim, #b0b2b6);font-size:11px;font-family:'Inter',sans-serif;outline:none;box-sizing:border-box;min-width:0;">
               <div style="position:relative;display:flex;align-items:center;flex-shrink:0;">
                 <span style="position:absolute;left:9px;font-size:11px;color:#666;pointer-events:none;z-index:1;">&#x1F3F7;</span>
                 <div id="live-evtemail-coupon-wrap" style="position:relative;">
                   <div id="live-evtemail-coupon" onclick="_toggleCouponDropdown()" style="width:140px;height:28px;padding:0 24px 0 26px;border-radius:8px;border:0.5px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:#EF9F27;font-size:11px;font-family:'Inter',sans-serif;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;user-select:none;">No coupon</div>
                   <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2.5" stroke-linecap="round" style="position:absolute;right:8px;top:9px;pointer-events:none;"><polyline points="6 9 12 15 18 9"/></svg>
-                  <div id="live-coupon-menu" style="display:none;position:absolute;top:32px;right:0;min-width:180px;max-height:200px;overflow-y:auto;background:#1c1d1f;border:1px solid rgba(255,255,255,0.12);border-radius:8px;z-index:100;box-shadow:0 8px 24px rgba(0,0,0,0.5);"></div>
+                  <div id="live-coupon-menu" style="display:none;position:absolute;top:32px;right:0;min-width:180px;max-height:200px;overflow-y:auto;background:var(--surface);border:1px solid rgba(255,255,255,0.12);border-radius:8px;z-index:100;box-shadow:0 8px 24px rgba(0,0,0,0.5);"></div>
                 </div>
                 <input id="live-evtemail-coupon-custom" type="text" placeholder="Enter code" oninput="_liveEmailCoupon=this.value.trim()" style="display:none;width:115px;height:28px;padding:0 10px;border-radius:8px;border:0.5px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:#EF9F27;font-size:11px;font-family:'Inter',sans-serif;outline:none;box-sizing:border-box;letter-spacing:0.3px;margin-left:6px;">
               </div>
             </div>
-            <div id="live-evtemail-loading" style="display:none;text-align:center;padding:12px;font-size:11px;color:#9a9ba0;">
+            <div id="live-evtemail-loading" style="display:none;text-align:center;padding:12px;font-size:11px;color:var(--text-muted);">
               <div style="display:inline-block;width:12px;height:12px;border:2px solid rgba(29,158,117,0.3);border-top-color:#5DCAA5;border-radius:50%;animation:spin 0.8s linear infinite;margin-right:6px;vertical-align:middle;"></div>
               Drafting...
             </div>
             <textarea id="live-evtemail-text" readonly placeholder="Select events, pick an intent, and hit Generate Email." style="width:100%;flex:1;min-height:100px;padding:10px 12px;font-size:12px;line-height:1.7;font-family:'Inter',sans-serif;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:7px;color:var(--text);resize:none;outline:none;box-sizing:border-box;margin-bottom:6px;overflow-y:auto;"></textarea>
-            <span id="live-evtemail-timestamp" style="font-size:10px;color:#9a9ba0;"></span>
+            <span id="live-evtemail-timestamp" style="font-size:10px;color:var(--text-muted);"></span>
           </div>
         </div>
       </div>
@@ -16294,6 +16294,6 @@
 <!-- ── END RESEARCH POPUP ──────────────────────────────────── -->
 
 <div id="dup-backdrop" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9998;" onclick="dismissDupBanner()"></div>
-<div id="dup-banner" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:9999;width:360px;max-width:calc(100vw - 32px);border-radius:10px;overflow:hidden;box-shadow:0 24px 48px rgba(0,0,0,0.6);background:#1a2235;"></div>
+<div id="dup-banner" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:9999;width:360px;max-width:calc(100vw - 32px);border-radius:10px;overflow:hidden;box-shadow:0 24px 48px rgba(0,0,0,0.6);background:var(--surface);"></div>
 </body>
 </html>
