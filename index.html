@@ -7266,7 +7266,7 @@
       companyName:'', domain:'', employees:'', industry:'', blurb:'',
       ivState:'none', ivYourTier:'', ivYourScore:0, ivAiTier:'', ivAiScore:0,
       eventsSite:[], eventsWeb:[], observances:[], emailResearchBlock:'',
-      companyLinkedIn:'', contactLinkedIn:'', revenue:'', foundedYear:'', recentNews:[], socialMedia:{}, searchCostUSD:0, searchDuration:null, salesHooks:[], keyPeople:[], tradeShows:[]
+      companyLinkedIn:'', contactLinkedIn:'', revenue:'', foundedYear:'', recentNews:[], socialMedia:{}, searchCostUSD:0, searchDuration:null, salesHooks:[], keyPeople:[], tradeShows:[], competitors:[]
     };
     _ivAccepted = false;
     var _ivBadge1 = document.getElementById('iv-ai-badge'); if (_ivBadge1) _ivBadge1.style.display = 'none';
@@ -8893,6 +8893,7 @@
       _researchData.salesHooks     = Array.isArray(rd.salesHooks) ? rd.salesHooks : [];
       _researchData.keyPeople      = Array.isArray(rd.keyPeople) ? rd.keyPeople : [];
       _researchData.tradeShows     = Array.isArray(rd.tradeShows) ? rd.tradeShows.filter(function(t){ return t && t.title; }) : [];
+      _researchData.competitors    = Array.isArray(rd.competitors) ? rd.competitors : [];
       _researchData.searchCostUSD  = parseFloat(rd.searchCostUSD) || 0;
       _researchData.searchDuration = rd.searchDuration || null;
       // Save live state for restore when popup closes
@@ -8968,6 +8969,7 @@
       _researchData.recentNews     = Array.isArray(rd.recentNews)  ? rd.recentNews  : [];
       _researchData.salesHooks     = Array.isArray(rd.salesHooks)  ? rd.salesHooks  : [];
       _researchData.tradeShows     = Array.isArray(rd.tradeShows)  ? rd.tradeShows.filter(function(t){ return t && t.title; })  : [];
+      _researchData.competitors    = Array.isArray(rd.competitors) ? rd.competitors : [];
       _researchData.companyLinkedIn= rd.companyLinkedIn || '';
       _researchData.decisionMakers = rd.decisionMakers  || null;
       var fWebsite = document.getElementById('f-website');
@@ -9017,6 +9019,7 @@
       _researchData.salesHooks     = Array.isArray(_rdRestore.salesHooks)   ? _rdRestore.salesHooks   : [];
       _researchData.keyPeople      = Array.isArray(_rdRestore.keyPeople)    ? _rdRestore.keyPeople    : [];
       _researchData.tradeShows     = Array.isArray(_rdRestore.tradeShows)   ? _rdRestore.tradeShows.filter(function(t){ return t && t.title; }) : [];
+      _researchData.competitors    = Array.isArray(_rdRestore.competitors)  ? _rdRestore.competitors  : [];
       _researchData.searchCostUSD  = parseFloat(_rdRestore.searchCostUSD) || 0;
       _researchData.searchDuration = _rdRestore.searchDuration || null;
     } else {
@@ -9024,7 +9027,7 @@
         companyName:'', domain:'', employees:'', industry:'', blurb:'',
         ivState:'none', ivYourTier:'', ivYourScore:0, ivAiTier:'', ivAiScore:0,
         eventsSite:[], eventsWeb:[], observances:[], emailResearchBlock:'',
-        companyLinkedIn:'', contactLinkedIn:'', revenue:'', foundedYear:'', recentNews:[], socialMedia:{}, searchCostUSD:0, searchDuration:null, salesHooks:[], keyPeople:[], tradeShows:[]
+        companyLinkedIn:'', contactLinkedIn:'', revenue:'', foundedYear:'', recentNews:[], socialMedia:{}, searchCostUSD:0, searchDuration:null, salesHooks:[], keyPeople:[], tradeShows:[], competitors:[]
       };
     }
     _ivAccepted = false;
@@ -10817,7 +10820,7 @@
       companyName:'', domain:'', employees:'', industry:'', blurb:'',
       ivState:'none', ivYourTier:'', ivYourScore:0, ivAiTier:'', ivAiScore:0,
       eventsSite:[], eventsWeb:[], observances:[], emailResearchBlock:'',
-      companyLinkedIn:'', contactLinkedIn:'', revenue:'', foundedYear:'', recentNews:[], socialMedia:{}, searchCostUSD:0, searchDuration:null, salesHooks:[], keyPeople:[], tradeShows:[]
+      companyLinkedIn:'', contactLinkedIn:'', revenue:'', foundedYear:'', recentNews:[], socialMedia:{}, searchCostUSD:0, searchDuration:null, salesHooks:[], keyPeople:[], tradeShows:[], competitors:[]
     };
     _liveEmailIntent = 'checkin'; _liveEmailInstruction = ''; _liveEmailCoupon = ''; _liveEmailSelected = []; _liveEmailItems = [];
     // Clear AI-filled green fields
@@ -12453,7 +12456,7 @@
     };
     if (hasAI) {
       rec.aiResearch = 'YES';
-      rec.researchData = (function(){ try { var rd = _researchData; return JSON.stringify({ companyName:rd.companyName, domain:rd.domain, employees:rd.employees, industry:rd.industry, blurb:rd.blurb, revenue:rd.revenue, foundedYear:rd.foundedYear, socialMedia:rd.socialMedia, recentNews:rd.recentNews, eventsSite:rd.eventsSite, eventsWeb:rd.eventsWeb, observances:rd.observances, companyLinkedIn:rd.companyLinkedIn, contactLinkedIn:rd.contactLinkedIn, contactPerson:rd.contactPerson, decisionMakers:rd.decisionMakers, salesHooks:rd.salesHooks, keyPeople:rd.keyPeople||[], searchCostUSD:rd.searchCostUSD, searchDuration:rd.searchDuration, tradeShows:rd.tradeShows||[] }); } catch(e){ return ''; } })();
+      rec.researchData = (function(){ try { var rd = _researchData; return JSON.stringify({ companyName:rd.companyName, domain:rd.domain, employees:rd.employees, industry:rd.industry, blurb:rd.blurb, revenue:rd.revenue, foundedYear:rd.foundedYear, socialMedia:rd.socialMedia, recentNews:rd.recentNews, eventsSite:rd.eventsSite, eventsWeb:rd.eventsWeb, observances:rd.observances, companyLinkedIn:rd.companyLinkedIn, contactLinkedIn:rd.contactLinkedIn, contactPerson:rd.contactPerson, decisionMakers:rd.decisionMakers, salesHooks:rd.salesHooks, keyPeople:rd.keyPeople||[], searchCostUSD:rd.searchCostUSD, searchDuration:rd.searchDuration, tradeShows:rd.tradeShows||[], competitors:rd.competitors||[] }); } catch(e){ return ''; } })();
       rec.researchEvents = (function(){ try { return JSON.stringify({ events:(_researchData.eventsSite||[]).concat(_researchData.eventsWeb||[]), observances:_researchData.observances||[], tradeShows:_researchData.tradeShows||[] }); } catch(e){ return ''; } })();
       rec.researchNotes = typeof buildResearchBlock === 'function' ? buildResearchBlock() : '';
       rec.aiEmailHtml = (function(){ try { var el = document.getElementById('rp-email-preview-html'); return el ? (el._fullEmailDoc || el.innerHTML) : ''; } catch(e){ return ''; } })();
@@ -14397,6 +14400,10 @@
     populateObservances();
     populateEmailPreview();
     populatePeoplePanel();
+    // Update competitors badge count
+    var _compBadge = document.getElementById('rtab-competitors-badge');
+    var _compCount = (_researchData.competitors || []).length;
+    if (_compBadge) { _compBadge.textContent = _compCount; _compBadge.style.display = _compCount ? 'inline' : 'none'; }
     switchResearchTab('events');
   }
 
@@ -15883,7 +15890,8 @@
     if (tab === 'people') populatePeoplePanel();
     if (tab === 'hooks') populateHooksPanel();
     if (tab === 'custemail') renderLiveEmailTab();
-    var panels = ['events','observances','people','hooks','email','custemail'];
+    if (tab === 'competitors') populateCompetitorsPanel();
+    var panels = ['events','observances','people','hooks','email','custemail','competitors'];
     // Fade out all inactive panels immediately
     panels.forEach(function(t) {
       var panel = document.getElementById('rpanel-' + t);
@@ -15902,6 +15910,156 @@
       var scrollEl = document.querySelector('.research-popup-scroll');
       if (scrollEl) scrollEl.scrollTop = 0;
     }, 80);
+  }
+
+  // ── Competitors Panel ────────────────────────────────────────────
+  function populateCompetitorsPanel() {
+    var list = document.getElementById('rp-competitors-list');
+    var empty = document.getElementById('rp-competitors-empty');
+    var header = document.getElementById('rp-competitors-header');
+    var badge = document.getElementById('rtab-competitors-badge');
+    var comps = _researchData.competitors || [];
+    if (!comps.length) {
+      if (list) list.innerHTML = '';
+      if (empty) empty.style.display = 'flex';
+      if (header) header.style.display = 'none';
+      if (badge) badge.style.display = 'none';
+      return;
+    }
+    if (empty) empty.style.display = 'none';
+    if (header) header.style.display = 'flex';
+    if (badge) { badge.textContent = comps.length; badge.style.display = 'inline'; }
+    if (!list) return;
+    list.innerHTML = comps.map(function(c, i) {
+      var domain = (c.website || '').replace(/^https?:\/\//, '').replace(/\/+$/, '');
+      return '<div style="padding:14px 0;' + (i > 0 ? 'border-top:1px solid rgba(255,255,255,0.06);' : '') + '">' +
+        '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;">' +
+          '<div style="flex:1;min-width:0;">' +
+            '<div style="font-size:13px;font-weight:600;color:var(--text);">' + (c.name || 'Unknown') + '</div>' +
+            (domain ? '<div style="font-size:11px;color:#60a5fa;margin-top:2px;">' + domain + '</div>' : '') +
+            (c.location ? '<div style="font-size:11px;color:var(--text-muted);margin-top:2px;">📍 ' + c.location + '</div>' : '') +
+          '</div>' +
+          (c.size ? '<span style="font-size:10px;font-weight:600;color:var(--text-muted);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:4px;padding:2px 8px;white-space:nowrap;flex-shrink:0;">' + c.size + '</span>' : '') +
+        '</div>' +
+        (c.overlap ? '<div style="font-size:12px;color:var(--text-muted);margin-top:6px;line-height:1.5;">' + c.overlap + '</div>' : '') +
+        (c.differentiator ? '<div style="font-size:11px;color:#FB7185;margin-top:4px;font-style:italic;">' + c.differentiator + '</div>' : '') +
+        (c.website ? '<button onclick="researchThisCompany(\'' + c.website.replace(/'/g, "\\'") + '\', \'' + (c.name || '').replace(/'/g, "\\'") + '\')" style="margin-top:8px;height:28px;padding:0 14px;border-radius:6px;border:1px solid rgba(29,158,117,0.4);background:rgba(29,158,117,0.08);color:#5DCAA5;font-size:10px;font-weight:600;cursor:pointer;letter-spacing:0.04em;display:inline-flex;align-items:center;gap:5px;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Research This Company</button>' : '') +
+      '</div>';
+    }).join('');
+  }
+
+  function findCompetitors() {
+    var btn = document.getElementById('rp-competitors-btn');
+    var list = document.getElementById('rp-competitors-list');
+    var empty = document.getElementById('rp-competitors-empty');
+    var header = document.getElementById('rp-competitors-header');
+    // Show loading state
+    if (btn) { btn.disabled = true; btn.innerHTML = 'Searching...'; }
+    if (empty) empty.style.display = 'none';
+    if (header) header.style.display = 'none';
+    if (list) list.innerHTML = '<div style="padding:32px;text-align:center;"><div style="font-size:12px;color:var(--text-muted);margin-top:8px;">Finding direct competitors...</div></div>';
+
+    var company = _researchData.companyName || document.getElementById('f-company').value.trim() || '';
+    var website = _researchData.domain || (document.getElementById('f-website') ? document.getElementById('f-website').value.trim() : '');
+    var industry = _researchData.industry || '';
+    var blurb = _researchData.blurb || '';
+    var employees = _researchData.employees || '';
+    var revenue = _researchData.revenue || '';
+    var location = '';
+    try {
+      var city = document.getElementById('f-city'); var state = document.getElementById('f-state');
+      if (city && state && (city.value || state.value)) location = (city.value.trim() + ', ' + state.value.trim()).replace(/^,\s*|,\s*$/g, '');
+    } catch(e) {}
+
+    var prompt = 'You are a competitive intelligence analyst for a promotional products company. ' +
+      'Find 3 to 5 DIRECT COMPETITORS for the following company. These competitors are potential new sales leads for us.\n\n' +
+      'Company: ' + company + '\n' +
+      (website ? 'Website: ' + website + '\n' : '') +
+      (industry ? 'Industry: ' + industry + '\n' : '') +
+      (blurb ? 'Description: ' + blurb + '\n' : '') +
+      (employees ? 'Employees: ' + employees + '\n' : '') +
+      (revenue ? 'Revenue: ' + revenue + '\n' : '') +
+      (location ? 'Location: ' + location + '\n' : '') +
+      '\nReturn ONLY valid JSON, no markdown, no backticks, no preamble:\n' +
+      '{\n' +
+      '  "competitors": [\n' +
+      '    {\n' +
+      '      "name": "Company Name",\n' +
+      '      "website": "https://example.com",\n' +
+      '      "location": "City, State",\n' +
+      '      "size": "Estimated size (e.g. ~500 employees, Small, Enterprise)",\n' +
+      '      "overlap": "One sentence: what they sell or do that competes directly",\n' +
+      '      "differentiator": "One sentence: key difference vs ' + company + '"\n' +
+      '    }\n' +
+      '  ],\n' +
+      '  "reason": "Only if no competitors found, explain why"\n' +
+      '}\n\n' +
+      'Focus on companies competing in the SAME MARKET and GEOGRAPHIC AREA when relevant. ' +
+      'Always include a website URL. Prefer real, verifiable companies.';
+
+    fetch(GS_URL, {
+      method: 'POST',
+      body: JSON.stringify({ action: 'runResearch', prompt: prompt, rep: window._currentRep || '', noSearch: false })
+    })
+    .then(function(r) { return r.text(); })
+    .then(function(raw) {
+      var data; try { data = JSON.parse(raw); } catch(e) { data = null; }
+      if (data) _updateCostBadge(data);
+      var result = null;
+      if (data && data.result) {
+        var rText = typeof data.result === 'string' ? data.result : JSON.stringify(data.result);
+        // Try to parse JSON from result
+        var jsonMatch = rText.match(/\{[\s\S]*\}/);
+        if (jsonMatch) { try { result = JSON.parse(jsonMatch[0]); } catch(e) {} }
+      }
+      if (result && result.competitors && result.competitors.length) {
+        _researchData.competitors = result.competitors;
+      } else {
+        _researchData.competitors = [];
+        if (result && result.reason) _researchData._competitorReason = result.reason;
+      }
+      populateCompetitorsPanel();
+      // Reset button
+      if (btn) { btn.disabled = false; btn.innerHTML = 'FIND COMPETITORS'; }
+      // Show empty state with reason if no results
+      if (!_researchData.competitors.length) {
+        var emptyEl = document.getElementById('rp-competitors-empty');
+        if (emptyEl) {
+          emptyEl.style.display = 'flex';
+          var reason = (_researchData._competitorReason) ? '<p style="margin:6px 0 0;font-size:11px;color:#717378;font-style:italic;">' + _researchData._competitorReason + '</p>' : '';
+          emptyEl.querySelector('div > p:first-child').textContent = 'No direct competitors identified';
+          emptyEl.querySelector('div > p:last-of-type').innerHTML = 'Try adding more detail to the company info or run research first.' + reason;
+        }
+      }
+      // Auto-save updated research data
+      try { if (_savedRecordId) {
+        var rec = _buildCurrentRecord(); rec.id = _savedRecordId;
+        gsPost({ action: 'updateRecord', record: rec });
+      }} catch(e) {}
+    })
+    .catch(function(err) {
+      console.warn('[VRC] Competitors fetch failed:', err);
+      if (btn) { btn.disabled = false; btn.innerHTML = 'FIND COMPETITORS'; }
+      if (list) list.innerHTML = '<div style="padding:20px;text-align:center;font-size:12px;color:#f87171;">Search failed. Try again.</div>';
+    });
+  }
+
+  function researchThisCompany(website, companyName) {
+    // Close research popup and records panel
+    _prevArchiveState = null;
+    window._viewingArchiveRecord = null;
+    try { closeResearchPopup(); } catch(e) {}
+    try { closeRecords(); } catch(e) {}
+    try { closeArchivePopout(); } catch(e) {}
+    // Reset form for new company
+    resetAll();
+    // Pre-fill website and company name
+    var wsEl = document.getElementById('f-website');
+    if (wsEl) { wsEl.value = website; wsEl.disabled = false; wsEl.style.opacity = ''; }
+    var compEl = document.getElementById('f-company');
+    if (compEl && companyName) compEl.value = companyName;
+    // Focus website field so user can hit Search
+    setTimeout(function() { if (wsEl) wsEl.focus(); }, 150);
   }
 
   function sendStandardScorecard() {
@@ -16505,6 +16663,9 @@
         <button class="research-tab" id="rtab-custemail" onclick="switchResearchTab('custemail')" style="white-space:nowrap;">
           ✉ Customer Email
         </button>
+        <button class="research-tab" id="rtab-competitors" onclick="switchResearchTab('competitors')" style="white-space:nowrap;">
+          Competitors <span class="research-tab-badge" id="rtab-competitors-badge" style="display:none;"></span>
+        </button>
       </div>
 
     </div><!-- end .research-popup-fixed -->
@@ -16606,6 +16767,27 @@
             <textarea id="live-evtemail-text" readonly placeholder="Select events, pick an intent, and hit Generate Email." style="width:100%;flex:1;min-height:100px;padding:10px 12px;font-size:12px;line-height:1.7;font-family:'Inter',sans-serif;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:7px;color:var(--text);resize:none;outline:none;box-sizing:border-box;margin-bottom:6px;overflow-y:auto;"></textarea>
             <span id="live-evtemail-timestamp" style="font-size:10px;color:var(--text-muted);"></span>
           </div>
+        </div>
+      </div>
+
+    </div>
+
+      <!-- Competitors panel -->
+      <div class="research-panel" id="rpanel-competitors" style="padding:0;">
+        <div id="rp-competitors-header" style="display:none;padding:14px 20px 10px;justify-content:space-between;align-items:center;">
+          <span style="font-size:10px;font-weight:600;color:#717378;text-transform:uppercase;letter-spacing:0.08em;">Direct Competitors</span>
+          <button onclick="findCompetitors()" style="height:24px;padding:0 10px;border-radius:6px;border:1px solid rgba(251,113,133,0.3);background:transparent;color:#FB7185;font-size:10px;font-weight:600;cursor:pointer;letter-spacing:0.04em;">Rerun</button>
+        </div>
+        <div id="rp-competitors-list" style="padding:0 20px 16px;"></div>
+        <div id="rp-competitors-empty" style="padding:48px 24px;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;">
+          <div style="width:40px;height:40px;border-radius:50%;background:rgba(251,113,133,0.12);border:1px solid rgba(251,113,133,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FB7185" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+          </div>
+          <div>
+            <p style="margin:0 0 4px;font-size:13px;font-weight:600;color:var(--text);">Find direct competitors</p>
+            <p style="margin:0;font-size:12px;color:#717378;max-width:300px;line-height:1.6;">Identify companies competing in the same market. Use competitors as new leads to research and target.</p>
+          </div>
+          <button id="rp-competitors-btn" onclick="findCompetitors()" style="margin-top:6px;height:34px;padding:0 20px;border-radius:8px;border:1px solid rgba(251,113,133,0.5);background:rgba(251,113,133,0.15);color:#FB7185;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:0.05em;display:inline-flex;align-items:center;gap:6px;">FIND COMPETITORS</button>
         </div>
       </div>
 
