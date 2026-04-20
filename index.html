@@ -6133,7 +6133,7 @@
     // Activate HOT + override as soon as IV is scored; full assignment only when all three scored
     var hotBtn = document.getElementById('hot-btn');
     var overrideEl = document.getElementById('assign-override');
-    var ivReady = scores.iv !== null;
+    var ivReady = scores.iv !== null && !_researchUILocked;
     if (hotBtn) { hotBtn.style.opacity = ivReady ? '' : '0.3'; hotBtn.style.pointerEvents = ivReady ? '' : 'none'; }
     if (overrideEl) { overrideEl.style.opacity = ivReady ? '' : '0.3'; overrideEl.style.pointerEvents = ivReady ? '' : 'none'; }
     if (allScored) {
@@ -6513,6 +6513,7 @@
 
   function checkCopyReady() {
     if (_formLocked) return;
+    if (_researchUILocked) return;
     var allScores = scores.iv !== null && scores.iv > 0 && scores.pv !== null && scores.pv > 0 && scores.av !== null && scores.av > 0;
     var budgetSet = !!window._budgetType;
     var customerSet = !!window._customerType;
