@@ -7272,6 +7272,7 @@
     var _ivBadge1 = document.getElementById('iv-ai-badge'); if (_ivBadge1) _ivBadge1.style.display = 'none';
     _lastResearchKey = '';
     _dupBannerDismissed = false; _dupSearchAnyway = false; hideDupBanner();
+    _liveEmailIntent = 'checkin'; _liveEmailInstruction = ''; _liveEmailCoupon = ''; _liveEmailSelected = []; _liveEmailItems = [];
     _savedRecordId = null;
     _submissionLock = false;
     _incompleteAttempts = 0;
@@ -8874,6 +8875,22 @@
       var rd = typeof r.researchData === 'string' ? JSON.parse(r.researchData) : r.researchData;
       if (!rd) { openArchivePopout(r.id); return; }
       // Restore with validation — same rules as live pipeline
+      // IV check state is transient (not persisted) — reset to prevent stale mismatch display
+      // Save live state BEFORE modifying _researchData so we capture the original data
+      _prevArchiveState = {
+        company: document.getElementById('f-company').value,
+        email:   document.getElementById('f-email').value,
+        name:    document.getElementById('f-name').value,
+        phone:   document.getElementById('f-phone').value,
+        ext:     (document.getElementById('f-ext') || {}).value || '',
+        cid:     document.getElementById('f-cid').value,
+        notes:   (document.getElementById('f-notes') || {}).value || '',
+        scores:  { iv: scores.iv, pv: scores.pv, av: scores.av },
+        labels:  { iv: labels.iv, pv: labels.pv, av: labels.av },
+        override: _assignOverride,
+        researchData: JSON.parse(JSON.stringify(_researchData))
+      };
+      // Now apply archived record's research data
       _researchData.companyName    = String(rd.companyName    || '');
       _researchData.domain         = String(rd.domain         || '');
       _researchData.employees      = String(rd.employees      || '').replace(/[^0-9]/g,'');
@@ -8896,21 +8913,11 @@
       _researchData.competitors    = Array.isArray(rd.competitors) ? rd.competitors : [];
       _researchData.searchCostUSD  = parseFloat(rd.searchCostUSD) || 0;
       _researchData.searchDuration = rd.searchDuration || null;
-      // IV check state is transient (not persisted) — reset to prevent stale mismatch display
       _researchData.ivState = 'none';
       _researchData.ivYourTier = '';
       _researchData.ivYourScore = 0;
       _researchData.ivAiTier = '';
       _researchData.ivAiScore = 0;
-      // Save live state for restore when popup closes
-      _prevArchiveState = {
-        company: document.getElementById('f-company').value,
-        email:   document.getElementById('f-email').value,
-        scores:  { iv: scores.iv, pv: scores.pv, av: scores.av },
-        labels:  { iv: labels.iv, pv: labels.pv, av: labels.av },
-        override: _assignOverride,
-        researchData: JSON.parse(JSON.stringify(_researchData))
-      };
       document.getElementById('f-company').value = r.company || '';
       document.getElementById('f-email').value   = r.email   || '';
       scores.iv = _validScore(r.iv);
@@ -9006,6 +9013,7 @@
     _submissionLock = false;
     _assignOverride = r.assignOverride || null;
     _dupBannerDismissed = false; _dupSearchAnyway = false; hideDupBanner();
+    _liveEmailIntent = 'checkin'; _liveEmailInstruction = ''; _liveEmailCoupon = ''; _liveEmailSelected = []; _liveEmailItems = [];
 
     // Restore research data from record if available, otherwise start fresh
     var _rdRestore = {};
@@ -14148,6 +14156,11 @@
     if (_prevArchiveState) {
       document.getElementById('f-company').value = _prevArchiveState.company;
       document.getElementById('f-email').value   = _prevArchiveState.email;
+      document.getElementById('f-name').value    = _prevArchiveState.name || '';
+      document.getElementById('f-phone').value   = _prevArchiveState.phone || '';
+      var fExtR = document.getElementById('f-ext'); if (fExtR) fExtR.value = _prevArchiveState.ext || '';
+      document.getElementById('f-cid').value     = _prevArchiveState.cid || '';
+      var fNotesR = document.getElementById('f-notes'); if (fNotesR) fNotesR.value = _prevArchiveState.notes || '';
       scores.iv = _prevArchiveState.scores.iv; scores.pv = _prevArchiveState.scores.pv; scores.av = _prevArchiveState.scores.av;
       labels.iv = _prevArchiveState.labels.iv; labels.pv = _prevArchiveState.labels.pv; labels.av = _prevArchiveState.labels.av;
       _assignOverride = _prevArchiveState.override;
