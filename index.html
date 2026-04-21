@@ -12822,6 +12822,175 @@
     });
   }
 
+  function _pdfDateHelpers() {
+    function parse(s) { if(!s) return null; var d = new Date(String(s).replace(/(\w+ \d+)[-\u2013]\d+/,'$1').replace(/varies/i,'')); return isNaN(d.getTime()) ? null : d; }
+    function daysAway(s) { var d = parse(s); if(!d) return null; var t = new Date(); t.setHours(0,0,0,0); return Math.round((d - t) / 86400000); }
+    function badge(s) { var diff=daysAway(s); if(diff===null)return ''; if(diff<0)return ' <span style="color:#94a3b8;font-size:9px;font-weight:700;">['+Math.abs(diff)+'d ago]</span>'; if(diff===0)return ' <span style="color:#059669;font-size:9px;font-weight:700;">[TODAY]</span>'; if(diff<=30)return ' <span style="color:#c2410c;font-size:9px;font-weight:700;">['+diff+'d away]</span>'; return ' <span style="color:#64748b;font-size:9px;">['+diff+'d away]</span>'; }
+    function sortByDate(arr) { var now=new Date();now.setHours(0,0,0,0);var nowT=now.getTime(); return (arr||[]).slice().sort(function(a,b){ var ta=parse(a.date),tb=parse(b.date); var taT=ta?ta.getTime():null,tbT=tb?tb.getTime():null; var aF=taT!==null&&taT>=nowT,bF=tbT!==null&&tbT>=nowT; if(aF&&bF)return taT-tbT; if(!aF&&!bF){if(taT===null&&tbT===null)return 0;if(taT===null)return 1;if(tbT===null)return -1;return tbT-taT;} return aF?-1:1; }); }
+    return { parse:parse, daysAway:daysAway, badge:badge, sortByDate:sortByDate };
+  }
+
+  function _pdfStyles() {
+    return '*{box-sizing:border-box;margin:0;padding:0;}' +
+      'html,body{font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#1e293b;background:#fff;orphans:2;widows:2;}' +
+      'body{padding:0;}table{width:100%;border-collapse:collapse;}' +
+      '@page{size:8.5in 11in;margin:0.6in 0.65in 0.8in 0.65in;}' +
+      '.section{margin-bottom:16px;page-break-inside:avoid;break-inside:avoid;}' +
+      '.section-title{font-size:8px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.12em;border-bottom:1px solid #e2e8f0;padding-bottom:4px;margin-bottom:8px;}' +
+      'td.lbl{padding:4px 14px 4px 0;font-size:11px;color:#64748b;white-space:nowrap;width:140px;vertical-align:top;}' +
+      'td.val{padding:4px 0;font-size:11px;color:#1e293b;font-weight:500;vertical-align:top;}' +
+      '.block-hdr{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:#94a3b8;border-bottom:2px solid #e2e8f0;padding:18px 0 5px;margin:20px 0 14px;}' +
+      '.intel-box{border-left:3px solid #60a5fa;padding-left:14px;font-size:11px;color:#334155;line-height:1.7;margin-bottom:16px;}' +
+      '.atk-box{border-left:3px solid #f59e0b;padding-left:14px;font-size:11px;color:#334155;line-height:1.6;}' +
+      '.hook-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:middle;}' +
+      '.footer{position:fixed;bottom:0;left:0;right:0;padding:5px 0.65in;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;font-size:8px;color:#94a3b8;background:#fff;}';
+  }
+
+  function _pdfA2Header(o) {
+    var pillHtml = '<td style="padding:4px 6px;border-radius:4px;background:rgba(255,255,255,0.12);text-align:center;"><div style="font-size:8px;color:rgba(255,255,255,0.5);text-transform:uppercase;">IV</div><div style="font-size:13px;font-weight:700;color:#fff;">'+(o.ivScore||0)+'/3</div></td>' +
+      '<td style="padding:4px 6px;border-radius:4px;background:rgba(255,255,255,0.12);text-align:center;"><div style="font-size:8px;color:rgba(255,255,255,0.5);text-transform:uppercase;">PV</div><div style="font-size:13px;font-weight:700;color:'+(o.isRO?'rgba(255,255,255,0.35)':'#fff')+';">'+(o.isRO?'--':(o.pvScore||0)+'/3')+'</div></td>' +
+      '<td style="padding:4px 6px;border-radius:4px;background:rgba(255,255,255,0.12);text-align:center;"><div style="font-size:8px;color:rgba(255,255,255,0.5);text-transform:uppercase;">AV</div><div style="font-size:13px;font-weight:700;color:'+(o.isRO?'rgba(255,255,255,0.35)':'#fff')+';">'+(o.isRO?'--':(o.avScore||0)+'/3')+'</div></td>';
+    var scoreNum = o.isRO ? (o.ivScore||0) : (o.totalScore||0);
+    var scoreMax = o.isRO ? '3' : '9';
+    var starsHtml = o.isRO ? '<div style="font-size:10px;color:rgba(255,255,255,0.5);margin-top:2px;">IV only</div>' : '<div style="font-size:11px;color:rgba(255,255,255,0.7);letter-spacing:0.5px;margin-top:2px;">'+(o.stars||'')+'</div>';
+    return '<div class="section" style="margin-bottom:6px;">' +
+      '<table style="width:100%;border-collapse:collapse;background:'+o.tierBg+';border-radius:8px;" cellpadding="0" cellspacing="0"><tr>' +
+        '<td style="padding:14px 18px;vertical-align:middle;width:60px;text-align:center;">' +
+          '<div style="font-size:36px;font-weight:700;color:#fff;line-height:1;">'+scoreNum+'<span style="font-size:15px;font-weight:400;color:rgba(255,255,255,0.5);">/'+scoreMax+'</span></div>' +
+          starsHtml +
+        '</td>' +
+        '<td style="width:1px;padding:10px 0;vertical-align:middle;"><div style="width:1px;height:40px;background:rgba(255,255,255,0.15);"></div></td>' +
+        '<td style="padding:14px 14px;vertical-align:middle;">' +
+          '<div style="font-size:16px;font-weight:700;color:#fff;margin-bottom:3px;">'+(o.isHot?'&#128293; ':'')+o.company+(o.industry?' <span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;background:rgba(255,255,255,0.18);vertical-align:middle;margin-left:6px;">'+o.industry+'</span>':'')+'</div>' +
+          '<div style="font-size:11px;color:rgba(255,255,255,0.6);">'+(o.website||'')+(o.employees?' &middot; '+o.employees+' employees':'')+(o.foundedYear?' &middot; Est. '+o.foundedYear:'')+(o.searchCost?' &middot; '+o.searchCost:'')+'</div>' +
+        '</td>' +
+        '<td style="padding:8px 10px;vertical-align:middle;"><table style="border-collapse:separate;border-spacing:3px;" cellpadding="0"><tr>'+pillHtml+'</tr></table></td>' +
+        '<td style="padding:14px 18px 14px 10px;vertical-align:middle;">' +
+          '<div style="text-align:center;padding:6px 14px;border-radius:8px;background:'+o.tierBlockBg+';border:1px solid '+o.tierBdr+';">' +
+            '<div style="font-size:18px;font-weight:700;color:#fff;letter-spacing:0.03em;">'+(o.isRO?'RO':o.tierName)+'</div>' +
+            '<div style="font-size:8px;color:'+o.tierClr+';font-weight:600;letter-spacing:0.04em;margin-top:1px;">'+(o.isRO?'RESEARCH ONLY':(o.priority||'SCORED'))+'</div>' +
+          '</div>' +
+        '</td>' +
+      '</tr></table>' +
+      '</div>' +
+      (o.blurb ? '<div style="font-size:11px;color:#475569;line-height:1.6;margin-bottom:6px;padding:0 2px;">'+o.blurb+'</div>' : '') +
+      '<div style="display:flex;justify-content:space-between;font-size:9px;color:#94a3b8;margin-bottom:18px;padding:0 2px;">' +
+        '<span>'+(o.ipaNum?o.ipaNum+' &middot; ':'')+'Entered by '+o.rep+' &middot; '+o.dateStr+(o.timeStr?' &middot; '+o.timeStr:'')+'</span>' +
+        '<span>'+o.name+(o.email?' &middot; '+o.email:'')+(o.phone?' &middot; '+o.phone:'')+'</span>' +
+      '</div>';
+  }
+
+  function _pdfContentBlocks(rd, o) {
+    var fRow = function(label,val){ if(!val||val==='\u2014'||val==='')return ''; return '<tr><td class="lbl">'+label+'</td><td class="val">'+val+'</td></tr>'; };
+    var fSec = function(title,inner){ if(!inner)return ''; return '<div class="section"><div class="section-title">'+title+'</div><table><tbody>'+inner+'</tbody></table></div>'; };
+    var dh = _pdfDateHelpers();
+    var html = '';
+    html += '<div class="block-hdr" style="color:#2563eb;">Block 1 &middot; Know the company</div>';
+    if (rd.companyIntel) html += '<div class="section"><div class="section-title">Company Intel</div><div class="intel-box">'+rd.companyIntel+'</div></div>';
+    var profInner = fRow('Industry', rd.industry||'') + fRow('Employees', rd.employees||'') + fRow('Est. Revenue', rd.revenue||'') + fRow('Founded', rd.foundedYear||'') + (o.website?fRow('Website','<a href="'+(o.website.match(/^https?:\/\//)?o.website:'https://'+o.website)+'" style="color:#1D9E75;">'+o.website.replace(/^https?:\/\//i,'')+'</a>'):'');
+    html += fSec('Company Profile', profInner);
+    var sm = rd.socialMedia || {};
+    var socialInner = '';
+    if (rd.companyLinkedIn) socialInner += fRow('LinkedIn', '<a href="'+rd.companyLinkedIn+'" style="color:#1D9E75;">'+rd.companyLinkedIn.replace('https://','')+'</a>');
+    ['facebook','instagram','twitter','tiktok','youtube','snapchat'].forEach(function(k){ if(sm[k]) socialInner += fRow(k.charAt(0).toUpperCase()+k.slice(1),'<a href="'+sm[k]+'" style="color:#1D9E75;">'+sm[k].replace('https://','')+'</a>'); });
+    if (socialInner) html += fSec('Social Media', socialInner);
+    html += '<div class="block-hdr" style="color:#d97706;">Block 2 &middot; Know your angles</div>';
+    if (rd.salesHooks && rd.salesHooks.length) {
+      var catColors = { milestone:'#dc2626', news:'#dc2626', expansion:'#d97706', hiring:'#d97706', brand:'#2563eb', sponsorship:'#2563eb', campaign:'#2563eb', award:'#7c3aed', industry:'#7c3aed' };
+      var hookRows = rd.salesHooks.map(function(h) {
+        var dotClr = catColors[h.type] || '#64748b';
+        return '<tr><td style="padding:6px 10px 6px 0;vertical-align:top;width:12px;"><div class="hook-dot" style="background:'+dotClr+';margin-top:3px;"></div></td>' +
+          '<td style="padding:6px 0;vertical-align:top;">' +
+            '<div style="font-size:11px;font-weight:600;color:#1e293b;">'+(h.finding||h.hook||'')+'</div>' +
+            (h.pitch?'<div style="font-size:10px;color:#059669;margin-top:2px;">'+h.pitch+'</div>':'') +
+          '</td></tr>';
+      }).join('');
+      html += fSec('Call Cheat Sheet ('+rd.salesHooks.length+')', hookRows);
+    }
+    var pdfTS = rd.tradeShows || [];
+    var allEvts = dh.sortByDate((rd.eventsSite||[]).concat(rd.eventsWeb||[]));
+    var obs = dh.sortByDate(rd.observances || []);
+    var eventsRows = '';
+    if (pdfTS.length) {
+      pdfTS.slice().sort(function(a,b){ var co={confirmed:0,likely:1,'industry-match':2}; var ca=co[a.confidence]!==undefined?co[a.confidence]:2,cb=co[b.confidence]!==undefined?co[b.confidence]:2; if(ca!==cb)return ca-cb; return (dh.parse(a.date)||Infinity)-(dh.parse(b.date)||Infinity); }).forEach(function(t) {
+        var confLabel = t.confidence==='confirmed'?' <span style="color:#059669;font-weight:700;">[CONFIRMED]</span>':t.confidence==='likely'?' <span style="color:#d97706;font-weight:700;">[LIKELY]</span>':' <span style="color:#94a3b8;font-weight:700;">[INDUSTRY]</span>';
+        eventsRows += fRow((t.date||''), '<strong>'+(t.title||'')+'</strong> <span style="font-size:9px;color:#7c3aed;font-weight:700;">[TRADESHOW]</span>'+confLabel+dh.badge(t.date)+(t.venue?' &middot; '+t.venue:''));
+      });
+    }
+    if (allEvts.length) { allEvts.forEach(function(e){ eventsRows += fRow((e.date||''), '<strong>'+(e.title||'')+'</strong>'+(e.recurring?' <span style="color:#c2410c;font-size:9px;">[RECURRING]</span>':'')+dh.badge(e.date)+(e.venue?' &middot; '+e.venue:'')); }); }
+    if (obs.length) { obs.forEach(function(oo){ eventsRows += fRow((oo.date||''), (oo.title||'')+' <span style="font-size:9px;color:#64748b;">[INDUSTRY DATE]</span>'+dh.badge(oo.date)); }); }
+    var totalEvts = pdfTS.length + allEvts.length + obs.length;
+    if (eventsRows) html += fSec('Events & Dates ('+totalEvts+')', eventsRows);
+    var comps = rd.competitors || [];
+    if (comps.length) {
+      var compRows = comps.map(function(c) {
+        return fRow((c.name||''), (c.overlap||'')+(c.differentiator?' <span style="color:#dc2626;font-style:italic;font-size:10px;">'+c.differentiator+'</span>':'')+(c.website?' <a href="'+c.website+'" style="color:#1D9E75;font-size:10px;">'+c.website.replace(/^https?:\/\/(www\.)?/,'').replace(/\/.*$/,'')+'</a>':''));
+      }).join('');
+      html += fSec('Competitors ('+comps.length+')', compRows);
+    }
+    html += '<div class="block-hdr" style="color:#7c3aed;">Block 3 &middot; Know the people</div>';
+    var dm = rd.decisionMakers || {};
+    var dmRows = '';
+    [{key:'ownerExec',label:'Owner / Exec'},{key:'marketing',label:'Marketing'},{key:'procurement',label:'Procurement'}].forEach(function(r){
+      var p = dm[r.key]; if(!p||!p.name) return;
+      dmRows += fRow(r.label, '<strong>'+p.name+'</strong>'+(p.title?' &mdash; '+p.title:'')+(p.linkedin?' <a href="'+p.linkedin+'" style="color:#1D9E75;">[LinkedIn]</a>':''));
+    });
+    var kp = rd.keyPeople || [];
+    kp.forEach(function(p){ if(p.name) dmRows += fRow((p.role||'Key Person'), '<strong>'+p.name+'</strong>'+(p.title?' &mdash; '+p.title:'')+(p.linkedin?' <a href="'+p.linkedin+'" style="color:#1D9E75;">[LinkedIn]</a>':'')); });
+    if (dmRows) html += fSec('Decision Makers & Key People', dmRows);
+    if (rd.recentNews && rd.recentNews.length) {
+      var newsRows = rd.recentNews.map(function(n){ return fRow((n.date||''), (n.sourceUrl?'<a href="'+n.sourceUrl+'" style="color:#1e293b;text-decoration:underline;text-underline-offset:2px;">'+(n.headline||'')+'</a>':(n.headline||''))); }).join('');
+      html += fSec('Recent News', newsRows);
+    }
+    if (rd.attackPlan) {
+      html += '<div class="section"><div class="section-title">Attack Plan</div><div class="atk-box">'+rd.attackPlan+'</div></div>';
+    }
+    if (!o.isRO) {
+      html += '<div class="section"><div class="section-title">Scoring Breakdown</div>' +
+        '<table style="border-collapse:separate;border-spacing:8px 0;"><tr>' +
+        '<td style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:8px 12px;text-align:center;width:33%;">' +
+          '<div style="font-size:9px;color:#64748b;text-transform:uppercase;">Implied Value</div>' +
+          '<div style="font-size:20px;font-weight:700;color:'+(o.ivScore>=3?'#059669':o.ivScore>=2?'#d97706':'#ef4444')+';margin:2px 0;">'+(o.ivScore||0)+'/3</div>' +
+          '<div style="font-size:9px;color:#94a3b8;">'+(o.ivLabel||'')+'</div>' +
+        '</td>' +
+        '<td style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:8px 12px;text-align:center;width:33%;">' +
+          '<div style="font-size:9px;color:#64748b;text-transform:uppercase;">Potential Value</div>' +
+          '<div style="font-size:20px;font-weight:700;color:'+(o.pvScore>=3?'#059669':o.pvScore>=2?'#d97706':'#ef4444')+';margin:2px 0;">'+(o.pvScore||0)+'/3</div>' +
+          '<div style="font-size:9px;color:#94a3b8;">'+(o.pvLabel||'')+'</div>' +
+        '</td>' +
+        '<td style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:8px 12px;text-align:center;width:33%;">' +
+          '<div style="font-size:9px;color:#64748b;text-transform:uppercase;">Actual Value</div>' +
+          '<div style="font-size:20px;font-weight:700;color:'+(o.avScore>=3?'#059669':o.avScore>=2?'#d97706':'#ef4444')+';margin:2px 0;">'+(o.avScore||0)+'/3</div>' +
+          '<div style="font-size:9px;color:#94a3b8;">'+(o.avLabel||'')+'</div>' +
+        '</td></tr></table></div>';
+    }
+    var contactInner = fRow('Customer Name', o.name) + fRow('Phone', o.phone?(o.phone!=='\u2014'?'<a href="tel:'+o.phone.replace(/\D/g,'')+'" style="color:#1e293b;text-decoration:none;">'+o.phone+'</a>':''):'') + fRow('Email', o.email?(o.email!=='\u2014'?'<a href="mailto:'+o.email+'" style="color:#1D9E75;text-decoration:none;">'+o.email+'</a>':''):'') + fRow('CID', o.cid) + fRow('Company', o.company) + fRow('Address', o.address);
+    if (!o.isRO) {
+      contactInner += fRow('Budget Type', o.budgetType) + (o.budgetAmount?fRow('Budget Amount','$'+Number(o.budgetAmount).toLocaleString()):'') + fRow('Customer Type', o.customerType) + (o.avAmount?fRow('Lifetime Spend','$'+Number(o.avAmount).toLocaleString()):'');
+    }
+    contactInner += fRow('Assigned To', o.owner+(o.overrideNote||'')) + fRow('Rep', o.rep);
+    html += fSec('Contact & Details', contactInner);
+    if (o.notes && o.notes !== '\u2014') { html += '<div class="section"><div class="section-title">Notes</div><div style="font-size:11px;white-space:pre-wrap;color:#1e293b;line-height:1.5;">'+o.notes+'</div></div>'; }
+    return html;
+  }
+
+  function _pdfWrap(title, headerHtml, contentHtml, footerLabel, ipaNum) {
+    return '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+title+'</title>' +
+      '<style>'+_pdfStyles()+'</style></head><body>' +
+      headerHtml + contentHtml +
+      '<div class="footer"><span>'+(ipaNum?ipaNum+' &middot; ':'')+'AG&apos;s IPA Report Card &middot; '+footerLabel+' &middot; Confidential</span><span>Page 1</span></div>' +
+      '</body></html>';
+  }
+
+  function _pdfTierCalc(pc) {
+    return {
+      bg: pc==='ag'?'#0F6E56':pc==='cp'?'#854F0B':'#3C3489',
+      blockBg: pc==='ag'?'#04342C':pc==='cp'?'#412402':'#26215C',
+      clr: pc==='ag'?'#9FE1CB':pc==='cp'?'#FAC775':'#AFA9EC',
+      bdr: pc==='ag'?'rgba(159,225,203,0.3)':pc==='cp'?'rgba(250,199,117,0.3)':'rgba(175,169,236,0.3)'
+    };
+  }
+
   function generateScorecardPDF() {
     var name        = (document.getElementById('f-name')      ||{}).value || 'Scorecard';
     var company     = (document.getElementById('f-company')   ||{}).value || '';
@@ -12832,11 +13001,9 @@
     var avAmt       = (document.getElementById('f-av-amount') ||{}).value || '';
     var cid         = (document.getElementById('f-cid')       ||{}).value || '';
     var addrParts   = [];
-    ['f-street','f-suite','f-city','f-state','f-zip'].forEach(function(id){
-      var v=(document.getElementById(id)||{}).value||''; if(v) addrParts.push(v);
-    });
+    ['f-street','f-suite','f-city','f-state','f-zip'].forEach(function(id){ var v=(document.getElementById(id)||{}).value||''; if(v) addrParts.push(v); });
     var address     = addrParts.join(', ');
-    var rep         = window._currentRep  || '—';
+    var rep         = window._currentRep  || '';
     var budgetType  = window._budgetType  || '';
     var custType    = window._customerType|| '';
     var sc          = scores || {};
@@ -12846,9 +13013,7 @@
     var now         = new Date();
     var dateStr     = now.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
     var timeStr     = now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',hour12:true});
-    var scoreColor  = total>=7?'#1D9E75':total>=4?'#d97706':'#dc2626';
-    var stars       = total>=7?'★★★★★':total>=4?'★★★':'★';
-    var tier        = _tierDisplay(total>=7?'ag':total>=4?'cp':'asst').priority;
+    var websiteVal  = (document.getElementById('f-website')||{}).value || '';
     var guideOwners = document.querySelectorAll('.guide-owner .editable-guide');
     var agName   = guideOwners[0] ? guideOwners[0].textContent.trim() : 'AG';
     var cpName   = guideOwners[1] ? guideOwners[1].textContent.trim() : 'CP';
@@ -12856,98 +13021,32 @@
     var calcPill = total >= 7 ? 'ag' : total >= 4 ? 'cp' : 'asst';
     var pillClass = _assignOverride || calcPill;
     var owner     = pillClass === 'ag' ? agName : pillClass === 'cp' ? cpName : asstName;
-    if (_assignOverride) {
-      tier = _tierDisplay(pillClass).priority;
-      scoreColor = pillClass === 'ag' ? '#1D9E75' : pillClass === 'cp' ? '#d97706' : '#dc2626';
-    }
-    var overrideNote = _assignOverride ? ' (Override)' : '';
-    var phoneLink   = phone ? '<a href="tel:'+phone.replace(/\D/g,'')+'" style="color:#1e293b;text-decoration:none;">'+phone+'</a>' : '';
-    var emailLink   = email ? '<a href="mailto:'+email+'" style="color:#1D9E75;text-decoration:none;">'+email+'</a>' : '';
-    var websiteVal  = (document.getElementById('f-website')||{}).value || '';
+    var tier      = _tierDisplay(pillClass);
+    var tc        = _pdfTierCalc(pillClass);
+    var stars     = total>=7?'&#9733;&#9733;&#9733;&#9733;&#9733;':total>=4?'&#9733;&#9733;&#9733;':'&#9733;';
+    var rd        = _researchData || {};
+    var isHot     = document.getElementById('hot-btn') && document.getElementById('hot-btn')._isHot;
 
-    function fRow(label,val){ if(!val||val==='—')return ''; return '<tr><td class="lbl">'+label+'</td><td class="val">'+val+'</td></tr>'; }
-    function fSec(title,inner){ if(!inner)return ''; return '<div class="section"><div class="section-title">'+title+'</div><table><tbody>'+inner+'</tbody></table></div>'; }
-
-    var headerHtml =
-      '<div class="section" style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #1D9E75;padding-bottom:14px;margin-bottom:20px;">' +
-        '<div>' +
-          '<div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);margin-bottom:3px;">AG&apos;s IPA Report Card &middot; QLP</div>' +
-          '<div style="font-size:20px;font-weight:700;color:#0f172a;">'+name+'</div>' +
-          (company?'<div style="font-size:13px;color:#475569;margin-top:2px;">'+company+'</div>':'') +
-        '</div>' +
-        '<div style="text-align:right;">' +
-          '<div style="font-size:34px;font-weight:700;color:'+scoreColor+';line-height:1;">'+total+'<span style="font-size:16px;color:var(--text-muted);">/9</span></div>' +
-          '<div style="font-size:13px;color:'+scoreColor+';">'+stars+'</div>' +
-          '<div style="font-size:10px;color:var(--text-muted);margin-top:2px;">'+tier+'</div>' +
-          '<div style="font-size:10px;color:'+scoreColor+';font-weight:600;margin-top:1px;">Assigned To: '+owner+overrideNote+'</div>' +
-          '<div style="font-size:9px;color:var(--text-muted);margin-top:1px;">'+dateStr+' &middot; '+timeStr+'</div>' +
-        '</div>' +
-      '</div>';
-
-    var contactInner = fRow('Phone',phoneLink)+fRow('Email',emailLink)+(websiteVal?fRow('Website','<a href="'+(websiteVal.match(/^https?:\/\//)?websiteVal:'https://'+websiteVal)+'" style="color:#1D9E75;text-decoration:none;">'+websiteVal.replace(/^https?:\/\//i,'')+'</a>'):'')+fRow('Company',company)+(cid?fRow('CID',cid):'')+(address?fRow('Address',address):'')+fRow('Rep',rep);
-    var scoreInner   = fRow('Implied Value',  (sc.iv||'—')+'/3'+(lb.iv?' &mdash; '+lb.iv:''))+
-                       fRow('Potential Value',(sc.pv||'—')+'/3'+(lb.pv?' &mdash; '+lb.pv:''))+
-                       fRow('Actual Value',   (sc.av||'—')+'/3'+(lb.av?' &mdash; '+lb.av:''));
-    var budgetInner  = fRow('Budget Type',budgetType)+
-                       (budgetAmt?fRow('Budget Amount','$'+Number(budgetAmt).toLocaleString()):'')+
-                       fRow('Customer Type',custType)+
-                       (avAmt?fRow('Lifetime / Actual Spend','$'+Number(avAmt).toLocaleString()):'');
-
-    var sectionsHtml = fSec('Contact',contactInner) + fSec('Scoring',scoreInner) + fSec('Budget & Customer',budgetInner);
-
-    if (notes) {
-      sectionsHtml += '<div class="section"><div class="section-title">Notes</div><div style="font-size:11px;white-space:pre-wrap;color:#1e293b;line-height:1.5;">'+notes+'</div></div>';
-    }
-
-    // AI research block if available
-    try {
-      var rd = _researchData || {};
-      var aiLines = '';
-      if (rd.industry)    aiLines += fRow('Industry', rd.industry);
-      if (rd.blurb)       aiLines += fRow('About', rd.blurb);
-      if (rd.revenue)     aiLines += fRow('Est. Revenue', rd.revenue);
-      if (rd.foundedYear) aiLines += fRow('Founded', rd.foundedYear);
-      if (rd.employees)   aiLines += fRow('Employees', rd.employees);
-      if (aiLines) sectionsHtml += fSec('AI Research Summary', aiLines);
-
-      if (rd.salesHooks && rd.salesHooks.length) {
-        var hooksHtml = rd.salesHooks.slice(0,5).map(function(h){
-          return '<tr><td class="lbl">'+(h.type||'Hook')+'</td><td class="val">'+(h.hook||h)+'</td></tr>';
-        }).join('');
-        if (hooksHtml) sectionsHtml += fSec('Sales Hooks', hooksHtml);
-      }
-    } catch(e){}
-
-    var ipaLabel = ipaNum || '';
-    var html =
-      '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>IPA Scorecard — '+name+'</title>' +
-      '<style>'+
-        '*{box-sizing:border-box;margin:0;padding:0;}'+
-        'html,body{font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#1e293b;background:#fff;orphans:2;widows:2;}'+
-        'body{padding:0;}'+
-        'table{width:100%;border-collapse:collapse;}'+
-        '@page{size:8.5in 11in;margin:0.6in 0.65in 0.8in 0.65in;}'+
-        '.section{margin-bottom:18px;page-break-inside:avoid;break-inside:avoid;}'+
-        '.section-title{font-size:8px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.12em;border-bottom:1px solid #e2e8f0;padding-bottom:4px;margin-bottom:8px;}'+
-        'td.lbl{padding:4px 14px 4px 0;font-size:11px;color:#64748b;white-space:nowrap;width:150px;vertical-align:top;}'+
-        'td.val{padding:4px 0;font-size:11px;color:#1e293b;font-weight:500;vertical-align:top;}'+
-        '.footer{position:fixed;bottom:0;left:0;right:0;padding:5px 0.65in;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;font-size:8px;color:var(--text-muted);background:#fff;}'+
-      '</style>' +
-      '<script>window.onload=function(){'+
-        'var spans=document.querySelectorAll(".pg-num");'+
-        'var total=document.querySelectorAll(".pg-total");'+
-        'var pages=Math.max(1,Math.ceil(document.body.scrollHeight/((11-1.4)*96)));'+
-        'total.forEach(function(el){el.textContent=pages;});'+
-        'spans.forEach(function(el,i){el.textContent=i+1;});'+
-      '};<\/script>' +
-      '</head><body>' +
-      headerHtml + sectionsHtml +
-      '<div class="footer">'+
-        '<span>'+(ipaLabel?ipaLabel+' &middot; ':'')+'AG&apos;s IPA Report Card &middot; Confidential</span>'+
-        '<span>Page <span class="pg-num"></span> of <span class="pg-total"></span></span>'+
-      '</div>' +
-      '</body></html>';
-
+    var headerHtml = _pdfA2Header({
+      company:company, name:name, email:email, phone:phone, rep:rep, ipaNum:ipaNum,
+      dateStr:dateStr, timeStr:timeStr, isRO:false, isHot:isHot,
+      ivScore:sc.iv, pvScore:sc.pv, avScore:sc.av, totalScore:total, stars:stars,
+      tierBg:tc.bg, tierBlockBg:tc.blockBg, tierClr:tc.clr, tierBdr:tc.bdr,
+      tierName:owner, priority:tier.priority,
+      industry:rd.industry, website:websiteVal, employees:rd.employees,
+      foundedYear:rd.foundedYear, blurb:rd.blurb,
+      searchCost:rd.searchCostUSD?'$'+rd.searchCostUSD:''
+    });
+    var contentHtml = _pdfContentBlocks(rd, {
+      isRO:false, name:name, email:email, phone:phone, cid:cid, company:company,
+      address:address, website:websiteVal, rep:rep, owner:owner,
+      overrideNote:_assignOverride?' (Override)':'',
+      ivScore:sc.iv, pvScore:sc.pv, avScore:sc.av,
+      ivLabel:lb.iv, pvLabel:lb.pv, avLabel:lb.av,
+      budgetType:budgetType, budgetAmount:budgetAmt, customerType:custType, avAmount:avAmt,
+      notes:notes
+    });
+    var html = _pdfWrap('IPA Scorecard \u2014 '+name, headerHtml, contentHtml, 'Scorecard', ipaNum);
     var safeName = name.replace(/[^a-z0-9]/gi,'-').replace(/-+/g,'-').slice(0,40);
     var blob = new Blob([html],{type:'text/html'});
     var url  = URL.createObjectURL(blob);
@@ -12960,10 +13059,10 @@
   // ── Research-only PDF download ──────────────────────────────────
   function generateResearchPDF(archiveRecord) {
     var pdfBtn = document.getElementById('rp-pdf-btn');
-    if (pdfBtn) { pdfBtn.disabled = true; pdfBtn.style.opacity = '0.6'; var _origPdf = pdfBtn.innerHTML; pdfBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> Generating...'; }
+    if (pdfBtn) { pdfBtn.disabled = true; pdfBtn.style.opacity = '0.6'; pdfBtn.innerHTML = '\u23f3 Generating...'; }
     setTimeout(function() {
-    var _resetPdfBtn = function() { if (pdfBtn) { pdfBtn.disabled = false; pdfBtn.style.opacity = ''; pdfBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> Generate PDF'; } };
-    var rd, company, name, email, phone, rep, ivScore, ivLabel, pvScore, pvLabel, avScore, avLabel, website, ipaNum, dateStr, timeStr, totalScore;
+    var _resetPdfBtn = function() { if (pdfBtn) { pdfBtn.disabled = false; pdfBtn.style.opacity = ''; pdfBtn.innerHTML = '\u2b07 Generate PDF'; } };
+    var rd, company, name, email, phone, rep, ivScore, ivLabel, website, ipaNum, dateStr, timeStr;
     if (archiveRecord) {
       try { rd = typeof archiveRecord.researchData === 'string' ? JSON.parse(archiveRecord.researchData) : (archiveRecord.researchData||{}); } catch(e){ rd = {}; }
       company  = archiveRecord.company || rd.companyName || '';
@@ -12972,13 +13071,10 @@
       phone    = archiveRecord.phone || '';
       rep      = archiveRecord.rep || '';
       ivScore  = archiveRecord.iv || 0; ivLabel = archiveRecord.ivLabel || '';
-      pvScore  = archiveRecord.pv || 0; pvLabel = archiveRecord.pvLabel || '';
-      avScore  = archiveRecord.av || 0; avLabel = archiveRecord.avLabel || '';
       website  = archiveRecord.website || rd.domain || '';
       ipaNum   = archiveRecord.recordNum || '';
       dateStr  = archiveRecord.date || '';
       timeStr  = archiveRecord.time || '';
-      totalScore = (ivScore||0)+(pvScore||0)+(avScore||0);
     } else {
       rd       = _researchData || {};
       company  = (document.getElementById('f-company')||{}).value || rd.companyName || '';
@@ -12987,173 +13083,31 @@
       phone    = (document.getElementById('f-phone')||{}).value || '';
       rep      = window._currentRep || '';
       ivScore  = scores.iv || 0; ivLabel = labels.iv || '';
-      pvScore  = scores.pv || 0; pvLabel = labels.pv || '';
-      avScore  = scores.av || 0; avLabel = labels.av || '';
       website  = (document.getElementById('f-website')||{}).value || rd.domain || '';
       ipaNum   = window._lastSavedRecordNum || '';
       var now  = new Date();
       dateStr  = now.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
       timeStr  = now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',hour12:true});
-      totalScore = (ivScore||0)+(pvScore||0)+(avScore||0);
     }
-    var isRO = !pvScore && !avScore;
-    var pc = isRO ? (ivScore>=3?'ag':ivScore>=2?'cp':'asst') : (totalScore >= 7 ? 'ag' : totalScore >= 4 ? 'cp' : 'asst');
-    var tierName  = pc==='ag'?'AG':pc==='cp'?'CP':'Assistants';
-    var tierBg    = pc==='ag'?'#0F6E56':pc==='cp'?'#854F0B':'#3C3489';
-    var _rTierBlockBg = pc==='ag'?'#04342C':pc==='cp'?'#412402':'#26215C';
-    var _rTierClr     = pc==='ag'?'#9FE1CB':pc==='cp'?'#FAC775':'#AFA9EC';
-    var _rTierBdr     = pc==='ag'?'rgba(159,225,203,0.3)':pc==='cp'?'rgba(250,199,117,0.3)':'rgba(175,169,236,0.3)';
-
-    function fRow(label,val){ if(!val||val==='—'||val==='')return ''; return '<tr><td class="lbl">'+label+'</td><td class="val">'+val+'</td></tr>'; }
-    function fSec(title,inner){ if(!inner)return ''; return '<div class="section"><div class="section-title">'+title+'</div><table><tbody>'+inner+'</tbody></table></div>'; }
-    function fBlock(title){ return '<div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:#94a3b8;border-bottom:2px solid #e2e8f0;padding:16px 0 5px;margin:24px 0 14px;">'+title+'</div>'; }
-
-    // ── A2 HEADER ──────────────────────────────────
-    var pillHtml = '<td style="padding:4px 6px;border-radius:4px;background:rgba(255,255,255,0.12);text-align:center;"><div style="font-size:8px;color:rgba(255,255,255,0.5);text-transform:uppercase;">IV</div><div style="font-size:13px;font-weight:700;color:#fff;">'+(ivScore||0)+'/3</div></td>' +
-      '<td style="padding:4px 6px;border-radius:4px;background:rgba(255,255,255,0.12);text-align:center;"><div style="font-size:8px;color:rgba(255,255,255,0.5);text-transform:uppercase;">PV</div><div style="font-size:13px;font-weight:700;color:'+(isRO?'rgba(255,255,255,0.35)':'#fff')+';">'+(isRO?'--':(pvScore||0)+'/3')+'</div></td>' +
-      '<td style="padding:4px 6px;border-radius:4px;background:rgba(255,255,255,0.12);text-align:center;"><div style="font-size:8px;color:rgba(255,255,255,0.5);text-transform:uppercase;">AV</div><div style="font-size:13px;font-weight:700;color:'+(isRO?'rgba(255,255,255,0.35)':'#fff')+';">'+(isRO?'--':(avScore||0)+'/3')+'</div></td>';
-
-    var headerHtml =
-      '<div class="section" style="margin-bottom:6px;">' +
-      '<table style="width:100%;border-collapse:collapse;background:'+tierBg+';border-radius:8px;" cellpadding="0" cellspacing="0"><tr>' +
-        '<td style="padding:14px 18px;vertical-align:middle;width:60px;text-align:center;">' +
-          '<div style="font-size:36px;font-weight:700;color:#fff;line-height:1;">'+(isRO?ivScore:totalScore)+'<span style="font-size:15px;font-weight:400;color:rgba(255,255,255,0.5);">/'+(isRO?'3':'9')+'</span></div>' +
-        '</td>' +
-        '<td style="width:1px;padding:10px 0;vertical-align:middle;"><div style="width:1px;height:40px;background:rgba(255,255,255,0.15);"></div></td>' +
-        '<td style="padding:14px 14px;vertical-align:middle;">' +
-          '<div style="font-size:16px;font-weight:700;color:#fff;margin-bottom:3px;">'+company+(rd.industry?' <span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;background:rgba(255,255,255,0.18);vertical-align:middle;margin-left:6px;">'+rd.industry+'</span>':'')+'</div>' +
-          '<div style="font-size:11px;color:rgba(255,255,255,0.6);">'+(website||'')+' &middot; '+(rd.employees?rd.employees+' employees':'')+(rd.foundedYear?' &middot; Est. '+rd.foundedYear:'')+'</div>' +
-        '</td>' +
-        '<td style="padding:8px 10px;vertical-align:middle;"><table style="border-collapse:separate;border-spacing:3px;" cellpadding="0"><tr>'+pillHtml+'</tr></table></td>' +
-        '<td style="padding:14px 18px 14px 10px;vertical-align:middle;">' +
-          '<div style="text-align:center;padding:6px 14px;border-radius:8px;background:'+_rTierBlockBg+';border:1px solid '+_rTierBdr+';">' +
-            '<div style="font-size:18px;font-weight:700;color:#fff;letter-spacing:0.03em;">'+tierName+'</div>' +
-            '<div style="font-size:8px;color:'+_rTierClr+';font-weight:600;letter-spacing:0.04em;margin-top:1px;">'+(isRO?'RESEARCH ONLY':'SCORED')+'</div>' +
-          '</div>' +
-        '</td>' +
-      '</tr></table>' +
-      '</div>' +
-      '<div style="display:flex;justify-content:space-between;font-size:9px;color:#94a3b8;margin-bottom:18px;padding:0 2px;">' +
-        '<span>'+(ipaNum?ipaNum+' &middot; ':'')+'Entered by '+rep+' &middot; '+dateStr+(timeStr?' &middot; '+timeStr:'')+'</span>' +
-        '<span>'+name+(email?' &middot; '+email:'')+(phone?' &middot; '+phone:'')+'</span>' +
-      '</div>';
-
-    // ── BLOCK 1: KNOW THE COMPANY ──────────────────
-    var block1 = fBlock('Know the company');
-    // Company Intel
-    if (rd.companyIntel) {
-      block1 += '<div class="section" style="border-left:3px solid #60a5fa;padding-left:14px;margin-bottom:16px;">' +
-        '<div class="section-title">Company Intel</div>' +
-        '<div style="font-size:11px;color:#334155;line-height:1.7;">'+rd.companyIntel+'</div></div>';
-    }
-    // Company Profile
-    var companyInner = fRow('About', rd.blurb||'') + fRow('Employees', rd.employees||'') + fRow('Est. Revenue', rd.revenue||'') + fRow('Founded', rd.foundedYear||'') +
-      (website?fRow('Website','<a href="'+(website.match(/^https?:\/\//)?website:'https://'+website)+'" style="color:#1D9E75;">'+website.replace(/^https?:\/\//i,'')+'</a>'):'');
-    block1 += fSec('Company Profile', companyInner);
-    // Social Media
-    var sm = rd.socialMedia || {};
-    var socialInner = '';
-    if (rd.companyLinkedIn) socialInner += fRow('LinkedIn', '<a href="'+rd.companyLinkedIn+'" style="color:#1D9E75;">'+rd.companyLinkedIn.replace('https://','')+'</a>');
-    ['facebook','instagram','twitter','tiktok','youtube'].forEach(function(k){ if(sm[k]) socialInner += fRow(k.charAt(0).toUpperCase()+k.slice(1),'<a href="'+sm[k]+'" style="color:#1D9E75;">'+sm[k].replace('https://','')+'</a>'); });
-    if (socialInner) block1 += fSec('Social Media', socialInner);
-
-    // ── BLOCK 2: KNOW YOUR ANGLES ──────────────────
-    var block2 = fBlock('Know your angles');
-    // Date helpers
-    function _pdfParseDate(s) { if(!s) return null; var d = new Date(String(s).replace(/(\w+ \d+)[-\u2013]\d+/,'$1').replace(/varies/i,'')); return isNaN(d.getTime()) ? null : d; }
-    function _pdfDaysAway(s) { var d = _pdfParseDate(s); if(!d) return null; var t = new Date(); t.setHours(0,0,0,0); return Math.round((d - t) / 86400000); }
-    function _pdfSortByDate(arr) { var nw = new Date(); nw.setHours(0,0,0,0); var nwT=nw.getTime(); return (arr||[]).slice().sort(function(a,b){ var ta=_pdfParseDate(a.date),tb=_pdfParseDate(b.date); var taT=ta?ta.getTime():null,tbT=tb?tb.getTime():null; var aF=taT!==null&&taT>=nwT,bF=tbT!==null&&tbT>=nwT; if(aF&&bF)return taT-tbT; if(!aF&&!bF){if(taT===null&&tbT===null)return 0;if(taT===null)return 1;if(tbT===null)return -1;return tbT-taT;} return aF?-1:1; }); }
-    function _pdfDateBadge(s) { var diff=_pdfDaysAway(s); if(diff===null)return ''; if(diff<0)return ' <span style="color:#94a3b8;font-size:9px;font-weight:700;">['+Math.abs(diff)+'d ago]</span>'; if(diff===0)return ' <span style="color:#059669;font-size:9px;font-weight:700;">[TODAY]</span>'; if(diff<=30)return ' <span style="color:#c2410c;font-size:9px;font-weight:700;">['+diff+'d away]</span>'; return ' <span style="color:#64748b;font-size:9px;">['+diff+'d away]</span>'; }
-
-    // Call Cheat Sheet (hooks)
-    if (rd.salesHooks && rd.salesHooks.length) {
-      var catColors = { milestone:'#dc2626', news:'#dc2626', expansion:'#d97706', hiring:'#d97706', brand:'#2563eb', sponsorship:'#2563eb', campaign:'#2563eb', award:'#7c3aed', industry:'#7c3aed' };
-      var hookRows = rd.salesHooks.map(function(h) {
-        var dotClr = catColors[h.type] || '#64748b';
-        return '<tr><td style="padding:6px 10px 6px 0;vertical-align:top;width:12px;"><div style="width:7px;height:7px;border-radius:50%;background:'+dotClr+';margin-top:3px;"></div></td>' +
-          '<td style="padding:6px 0;vertical-align:top;">' +
-            '<div style="font-size:11px;font-weight:600;color:#1e293b;">'+(h.finding||'')+'</div>' +
-            (h.pitch?'<div style="font-size:10px;color:#059669;margin-top:2px;">'+h.pitch+'</div>':'') +
-          '</td></tr>';
-      }).join('');
-      block2 += fSec('Call Cheat Sheet ('+rd.salesHooks.length+')', hookRows);
-    }
-    // Events (merged: trade shows, company events, industry dates)
-    var pdfTS = rd.tradeShows || [];
-    var allEvts = _pdfSortByDate((rd.eventsSite||[]).concat(rd.eventsWeb||[]));
-    var obs = _pdfSortByDate(rd.observances || []);
-    var eventsRows = '';
-    if (pdfTS.length) {
-      var confOrder = { confirmed:0, likely:1, 'industry-match':2 };
-      pdfTS.slice().sort(function(a,b){ var ca=confOrder[a.confidence]!==undefined?confOrder[a.confidence]:2,cb=confOrder[b.confidence]!==undefined?confOrder[b.confidence]:2; if(ca!==cb)return ca-cb; return (_pdfParseDate(a.date)||Infinity)-(_pdfParseDate(b.date)||Infinity); }).forEach(function(t) {
-        var confLabel = t.confidence==='confirmed'?' <span style="color:#059669;font-weight:700;">[CONFIRMED]</span>':t.confidence==='likely'?' <span style="color:#d97706;font-weight:700;">[LIKELY]</span>':' <span style="color:#94a3b8;font-weight:700;">[INDUSTRY]</span>';
-        eventsRows += fRow((t.date||''), '<strong>'+(t.title||'')+'</strong> <span style="font-size:9px;color:#7c3aed;font-weight:700;">[TRADESHOW]</span>'+confLabel+_pdfDateBadge(t.date)+(t.venue?' &middot; '+t.venue:''));
-      });
-    }
-    if (allEvts.length) {
-      allEvts.forEach(function(e){ eventsRows += fRow((e.date||''), '<strong>'+(e.title||'')+'</strong>'+(e.recurring?' <span style="color:#c2410c;font-size:9px;">[RECURRING]</span>':'')+_pdfDateBadge(e.date)+(e.venue?' &middot; '+e.venue:'')); });
-    }
-    if (obs.length) {
-      obs.forEach(function(o){ eventsRows += fRow((o.date||''), (o.title||'')+' <span style="font-size:9px;color:#64748b;">[INDUSTRY DATE]</span>'+_pdfDateBadge(o.date)); });
-    }
-    var totalEvts = pdfTS.length + allEvts.length + obs.length;
-    if (eventsRows) block2 += fSec('Events & Dates ('+totalEvts+')', eventsRows);
-    // Competitors
-    var comps = rd.competitors || [];
-    if (comps.length) {
-      var compRows = comps.map(function(c) {
-        return fRow((c.name||''), (c.overlap||'')+(c.differentiator?' <span style="color:#dc2626;font-style:italic;font-size:10px;">'+c.differentiator+'</span>':'')+(c.website?' <a href="'+c.website+'" style="color:#1D9E75;font-size:10px;">'+c.website.replace(/^https?:\/\/(www\.)?/,'').replace(/\/.*$/,'')+'</a>':''));
-      }).join('');
-      block2 += fSec('Competitors ('+comps.length+')', compRows);
-    }
-
-    // ── BLOCK 3: KNOW THE PEOPLE ──────────────────
-    var block3 = fBlock('Know the people');
-    // Decision Makers & Key People
-    var dm = rd.decisionMakers || {};
-    var dmRows = '';
-    [{key:'ownerExec',label:'Owner / Exec'},{key:'marketing',label:'Marketing'},{key:'procurement',label:'Procurement'}].forEach(function(r){
-      var p = dm[r.key]; if(!p||!p.name) return;
-      dmRows += fRow(r.label, '<strong>'+p.name+'</strong>'+(p.title?' &mdash; '+p.title:'')+(p.linkedin?' <a href="'+p.linkedin+'" style="color:#1D9E75;">[LinkedIn]</a>':''));
+    var pc = ivScore>=3?'ag':ivScore>=2?'cp':'asst';
+    var tc = _pdfTierCalc(pc);
+    var tierTd = _tierDisplay(pc);
+    var headerHtml = _pdfA2Header({
+      company:company, name:name, email:email, phone:phone, rep:rep, ipaNum:ipaNum,
+      dateStr:dateStr, timeStr:timeStr, isRO:true,
+      ivScore:ivScore, pvScore:0, avScore:0, totalScore:ivScore,
+      tierBg:tc.bg, tierBlockBg:tc.blockBg, tierClr:tc.clr, tierBdr:tc.bdr,
+      tierName:tierTd.name, priority:'RESEARCH ONLY',
+      industry:rd.industry, website:website, employees:rd.employees,
+      foundedYear:rd.foundedYear, blurb:rd.blurb,
+      searchCost:rd.searchCostUSD?'$'+rd.searchCostUSD:''
     });
-    var kp = rd.keyPeople || [];
-    kp.forEach(function(p){ if(p.name) dmRows += fRow((p.role||'Key Person'), '<strong>'+p.name+'</strong>'+(p.title?' &mdash; '+p.title:'')+(p.linkedin?' <a href="'+p.linkedin+'" style="color:#1D9E75;">[LinkedIn]</a>':'')); });
-    if (dmRows) block3 += fSec('Decision Makers & Key People', dmRows);
-    // Recent News
-    if (rd.recentNews && rd.recentNews.length) {
-      var newsRows = rd.recentNews.map(function(n){ return fRow((n.date||''), (n.headline||'')); }).join('');
-      block3 += fSec('Recent News', newsRows);
-    }
-    // Attack Plan
-    if (rd.attackPlan) {
-      block3 += '<div class="section" style="border-left:3px solid #f59e0b;padding-left:14px;">' +
-        '<div class="section-title">Attack Plan</div>' +
-        '<div style="font-size:11px;color:#334155;line-height:1.6;">'+rd.attackPlan+'</div></div>';
-    }
-
-    var sectionsHtml = block1 + block2 + block3;
-
-    var html =
-      '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Company Research — '+company+'</title>' +
-      '<style>'+
-        '*{box-sizing:border-box;margin:0;padding:0;}'+
-        'html,body{font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#1e293b;background:#fff;orphans:2;widows:2;}'+
-        'body{padding:0;}'+
-        'table{width:100%;border-collapse:collapse;}'+
-        '@page{size:8.5in 11in;margin:0.6in 0.65in 0.8in 0.65in;}'+
-        '.section{margin-bottom:18px;page-break-inside:avoid;break-inside:avoid;}'+
-        '.section-title{font-size:8px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.12em;border-bottom:1px solid #e2e8f0;padding-bottom:4px;margin-bottom:8px;}'+
-        'td.lbl{padding:4px 14px 4px 0;font-size:11px;color:#64748b;white-space:nowrap;width:150px;vertical-align:top;}'+
-        'td.val{padding:4px 0;font-size:11px;color:#1e293b;font-weight:500;vertical-align:top;}'+
-        '.footer{position:fixed;bottom:0;left:0;right:0;padding:5px 0.65in;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;font-size:8px;color:var(--text-muted);background:#fff;}'+
-      '</style></head><body>' +
-      headerHtml + sectionsHtml +
-      '<div class="footer">'+
-        '<span>'+(ipaNum?ipaNum+' &middot; ':'')+'AG&apos;s IPA Report Card &middot; Company Research &middot; Confidential</span>'+
-        '<span>Page 1</span>'+
-      '</div>' +
-      '</body></html>';
-
+    var contentHtml = _pdfContentBlocks(rd, {
+      isRO:true, name:name, email:email, phone:phone, company:company,
+      website:website, rep:rep, owner:tierTd.name,
+      ivScore:ivScore, ivLabel:ivLabel
+    });
+    var html = _pdfWrap('Company Research \u2014 '+company, headerHtml, contentHtml, 'Company Research', ipaNum);
     var safeName = company.replace(/[^a-z0-9]/gi,'-').replace(/-+/g,'-').slice(0,40);
     var blob = new Blob([html],{type:'text/html'});
     var url  = URL.createObjectURL(blob);
@@ -13170,198 +13124,45 @@
     var r = (_archiveCache||[]).find(function(x){return String(x.id)===String(id);})||
             (_recordsCache||[]).find(function(x){return String(x.id)===String(id);});
     if (!r) return;
-    var total      = (r.iv||0)+(r.pv||0)+(r.av||0);
-    var isROArc    = r.status === 'research' || (r.status === 'incomplete' && r.iv > 0 && !r.pv && !r.av);
-    var scoreColor = isROArc ? (r.iv>=3?'#1D9E75':r.iv>=2?'#d97706':'#dc2626') : (total>=7?'#1D9E75':total>=4?'#d97706':'#dc2626');
-    var stars      = isROArc ? '' : (total>=7?'★★★★★':total>=4?'★★★':'★');
-    var tier       = isROArc ? _tierDisplay(r.iv>=3?'ag':r.iv>=2?'cp':'asst').priority : _tierDisplay(total>=7?'ag':total>=4?'cp':'asst').priority;
+    var total = (r.iv||0)+(r.pv||0)+(r.av||0);
+    var isROArc = r.status === 'research' || (r.status === 'incomplete' && r.iv > 0 && !r.pv && !r.av);
+    var pc = isROArc ? (r.iv>=3?'ag':r.iv>=2?'cp':'asst') : (r.pillClass || (total>=7?'ag':total>=4?'cp':'asst'));
     var arcOverride = r.assignOverride || '';
-    if (arcOverride) {
-      tier = _tierDisplay(arcOverride).priority;
-      scoreColor = arcOverride === 'ag' ? '#1D9E75' : arcOverride === 'cp' ? '#d97706' : '#dc2626';
-    }
-    var arcOwner = r.owner || '';
-    var arcOverrideNote = arcOverride ? ' (Override)' : '';
-    var pc = r.pillClass || (isROArc ? (r.iv>=3?'ag':r.iv>=2?'cp':'asst') : (total>=7?'ag':total>=4?'cp':'asst'));
     if (arcOverride) pc = arcOverride;
-    var _hdrBg = pc==='ag'?'#0F6E56':pc==='cp'?'#854F0B':'#3C3489';
-    var _hdrTierBg = pc==='ag'?'#04342C':pc==='cp'?'#412402':'#26215C';
-    var _hdrTierClr = pc==='ag'?'#9FE1CB':pc==='cp'?'#FAC775':'#AFA9EC';
-    var _hdrTierBdr = pc==='ag'?'rgba(159,225,203,0.3)':pc==='cp'?'rgba(250,199,117,0.3)':'rgba(175,169,236,0.3)';
-    var _hdrTierName = arcOwner || _tierDisplay(pc).name;
-    var _hdrPriority = tier.toUpperCase() || _tierDisplay(pc).priority;
-    var _hdrDetails = (function(){ var parts=[]; if(r.website)parts.push(r.website); if(r.employees)parts.push(r.employees+' employees'); try{var rd2=r.researchData?JSON.parse(r.researchData):null; if(rd2&&rd2.industry)parts.push(rd2.industry);}catch(e){} return parts.join(' &middot; '); })();
-    var ipaNum     = r.recordNum || '';
-    var phoneLink  = r.phone ? '<a href="tel:'+r.phone.replace(/\D/g,'')+'" style="color:#1e293b;text-decoration:none;">'+r.phone+'</a>' : '';
-    var emailLink  = r.email ? '<a href="mailto:'+r.email+'" style="color:#1D9E75;text-decoration:none;">'+r.email+'</a>' : '';
-    var budget     = r.budgetAmount ? '$'+Number(r.budgetAmount).toLocaleString() : (r.budgetType||'');
-
-    function fRow(label,val){ if(!val||val==='—')return ''; return '<tr><td class="lbl">'+label+'</td><td class="val">'+val+'</td></tr>'; }
-    function fSec(title,inner){ if(!inner)return ''; return '<div class="section"><div class="section-title">'+title+'</div><table><tbody>'+inner+'</tbody></table></div>'; }
-
-    var headerHtml =
-      '<div class="section" style="margin-bottom:20px;">' +
-      '<table style="width:100%;border-collapse:collapse;background:'+_hdrBg+';border-radius:8px;" cellpadding="0" cellspacing="0"><tr>' +
-        '<td style="padding:14px 18px;vertical-align:middle;width:60px;text-align:center;">' +
-          '<div style="font-size:32px;font-weight:700;color:#fff;line-height:1;">'+(isROArc?(r.iv||0):total)+'<span style="font-size:15px;font-weight:400;color:rgba(255,255,255,0.5);">/'+(isROArc?'3':'9')+'</span></div>' +
-          (stars?'<div style="font-size:11px;color:rgba(255,255,255,0.7);letter-spacing:0.5px;margin-top:2px;">'+stars+'</div>':'<div style="font-size:10px;color:rgba(255,255,255,0.5);margin-top:2px;">IV only</div>') +
-        '</td>' +
-        '<td style="width:1px;padding:10px 0;vertical-align:middle;"><div style="width:1px;height:40px;background:rgba(255,255,255,0.15);"></div></td>' +
-        '<td style="padding:14px 14px;vertical-align:middle;">' +
-          '<div style="font-size:15px;font-weight:600;color:#fff;margin-bottom:3px;">'+(r.hot?'&#128293; ':'')+(r.name||'--')+'</div>' +
-          '<div style="font-size:11px;color:rgba(255,255,255,0.6);">'+(_hdrDetails||(r.company||'--'))+'</div>' +
-        '</td>' +
-        '<td style="padding:14px 4px;vertical-align:middle;white-space:nowrap;">' +
-          '<table style="border-collapse:collapse;"><tr>' +
-            '<td style="padding:4px 7px;background:rgba(255,255,255,0.12);border-radius:5px;text-align:center;"><div style="font-size:9px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.04em;">IV</div><div style="font-size:13px;font-weight:600;color:#fff;">'+(r.iv||0)+'/3</div></td>' +
-            '<td style="width:5px;"></td>' +
-            '<td style="padding:4px 7px;background:rgba(255,255,255,0.12);border-radius:5px;text-align:center;"><div style="font-size:9px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.04em;">PV</div><div style="font-size:13px;font-weight:600;color:'+(isROArc?'rgba(255,255,255,0.35)':'#fff')+';">'+(isROArc?'--':(r.pv||0)+'/3')+'</div></td>' +
-            '<td style="width:5px;"></td>' +
-            '<td style="padding:4px 7px;background:rgba(255,255,255,0.12);border-radius:5px;text-align:center;"><div style="font-size:9px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.04em;">AV</div><div style="font-size:13px;font-weight:600;color:'+(isROArc?'rgba(255,255,255,0.35)':'#fff')+';">'+(isROArc?'--':(r.av||0)+'/3')+'</div></td>' +
-          '</tr></table>' +
-        '</td>' +
-        '<td style="padding:14px 18px 14px 10px;vertical-align:middle;">' +
-          '<div style="text-align:center;padding:5px 12px;border-radius:8px;background:'+_hdrTierBg+';border:1px solid '+_hdrTierBdr+';">' +
-            '<div style="font-size:16px;font-weight:700;color:#fff;letter-spacing:0.03em;">'+_hdrTierName+'</div>' +
-            '<div style="font-size:9px;color:'+_hdrTierClr+';font-weight:600;letter-spacing:0.04em;margin-top:1px;">'+(isROArc?'RESEARCH ONLY':_hdrPriority)+'</div>' +
-          '</div>' +
-        '</td>' +
-      '</tr></table>' +
-      '</div>';
-
-    var contactInner = fRow('Phone',phoneLink)+fRow('Email',emailLink)+(r.website?fRow('Website','<a href="'+(r.website.match(/^https?:\/\//)?r.website:'https://'+r.website)+'" style="color:#1D9E75;text-decoration:none;">'+r.website.replace(/^https?:\/\//i,'')+'</a>'):'')+fRow('CID',r.cid)+fRow('Address',r.address);
-    var scoreInner   = fRow('Implied Value',  (r.iv||'—')+'/3'+(r.ivLabel?' &mdash; '+r.ivLabel:''))+
-                       fRow('Potential Value',(r.pv||'—')+'/3'+(r.pvLabel?' &mdash; '+r.pvLabel:''))+
-                       fRow('Actual Value',   (r.av||'—')+'/3'+(r.avLabel?' &mdash; '+r.avLabel:''));
-    var detailsInner = fRow('Assigned To',r.owner)+fRow('Entered By',r.rep)+fRow('Customer Type',r.customerType)+fRow('Budget',budget);
-
-    var sectionsHtml = fSec('Contact',contactInner)+fSec('Scoring',scoreInner)+fSec('Details',detailsInner);
-
-    if (r.notes && r.notes !== '—') {
-      sectionsHtml += '<div class="section"><div class="section-title">Notes</div><div style="font-size:11px;white-space:pre-wrap;color:#1e293b;line-height:1.5;">'+r.notes+'</div></div>';
-    }
-
-    // AI research if stored
-    try {
-      var rd = typeof r.researchData === 'string' ? JSON.parse(r.researchData) : (r.researchData||{});
-      var aiLines = '';
-      if (rd.industry)    aiLines += fRow('Industry',rd.industry);
-      if (rd.blurb)       aiLines += fRow('About',rd.blurb);
-      if (rd.revenue)     aiLines += fRow('Est. Revenue',rd.revenue);
-      if (rd.foundedYear) aiLines += fRow('Founded',rd.foundedYear);
-      if (rd.employees)   aiLines += fRow('Employees',rd.employees);
-      if (rd.companyLinkedIn) aiLines += fRow('LinkedIn','<a href="'+rd.companyLinkedIn+'" style="color:#1D9E75;">'+rd.companyLinkedIn+'</a>');
-      if (aiLines) sectionsHtml += fSec('AI Research Summary',aiLines);
-
-      // Social Media
-      var sm = rd.socialMedia || {};
-      var smLines = '';
-      Object.keys(sm).forEach(function(k){ if(sm[k]) smLines += fRow(k.charAt(0).toUpperCase()+k.slice(1), '<a href="'+sm[k]+'" style="color:#1D9E75;">'+sm[k]+'</a>'); });
-      if (smLines) sectionsHtml += fSec('Social Media',smLines);
-
-      // PDF date helpers (scoped)
-      function _apParseDate(s) { if(!s) return null; var d = new Date(String(s).replace(/(\w+ \d+)[-\u2013]\d+/,'$1').replace(/varies/i,'')); return isNaN(d.getTime()) ? null : d; }
-      function _apDateBadge(s) {
-        var d = _apParseDate(s); if(!d) return '';
-        var t = new Date(); t.setHours(0,0,0,0); var diff = Math.round((d - t) / 86400000);
-        if (diff < 0) return ' <span style="color:var(--text-muted);font-size:9px;font-weight:700;">[PAST]</span>';
-        if (diff === 0) return ' <span style="color:#059669;font-size:9px;font-weight:700;">[TODAY]</span>';
-        if (diff <= 30) return ' <span style="color:#c2410c;font-size:9px;font-weight:700;">['+diff+'d away]</span>';
-        return ' <span style="color:#64748b;font-size:9px;">['+diff+'d away]</span>';
-      }
-      function _apSortByDate(arr) {
-        var now = new Date(); now.setHours(0,0,0,0); var nowT = now.getTime();
-        return (arr||[]).slice().sort(function(a,b) {
-          var ta = _apParseDate(a.date), tb = _apParseDate(b.date);
-          var taT = ta ? ta.getTime() : null, tbT = tb ? tb.getTime() : null;
-          var aF = taT !== null && taT >= nowT, bF = tbT !== null && tbT >= nowT;
-          if (aF && bF) return taT - tbT;
-          if (!aF && !bF) { if (taT===null && tbT===null) return 0; if (taT===null) return 1; if (tbT===null) return -1; return tbT - taT; }
-          return aF ? -1 : 1;
-        });
-      }
-
-      // Trade Shows
-      var pdfTS = rd.tradeShows || [];
-      if (pdfTS.length) {
-        var tsRows = pdfTS.map(function(t) {
-          var confLabel = t.confidence==='confirmed'?' <span style="color:#059669;font-weight:700;">[CONFIRMED]</span>':t.confidence==='likely'?' <span style="color:#d97706;font-weight:700;">[LIKELY]</span>':' <span style="color:var(--text-muted);font-weight:700;">[INDUSTRY MATCH]</span>';
-          return fRow((t.date||'\u2014'), '<strong>'+(t.title||'')+'</strong>'+(t.venue?' &middot; '+t.venue:'')+confLabel+_apDateBadge(t.date));
-        }).join('');
-        sectionsHtml += fSec('Trade Shows ('+pdfTS.length+')', tsRows);
-      }
-
-      // Events
-      var allEvts = _apSortByDate((rd.eventsSite||[]).concat(rd.eventsWeb||[]));
-      if (allEvts.length) {
-        var evtRows = allEvts.map(function(e){ return fRow((e.date||'\u2014'), '<strong>'+(e.title||'')+'</strong>'+(e.venue?' &middot; '+e.venue:'')+(e.recurring?' <span style="color:#c2410c;">[RECURRING]</span>':'')+_apDateBadge(e.date)); }).join('');
-        sectionsHtml += fSec('Events ('+allEvts.length+')', evtRows);
-      }
-
-      // Observances
-      if (rd.observances && rd.observances.length) {
-        var obsRows = _apSortByDate(rd.observances).map(function(o){ return fRow((o.date||'\u2014'), (o.title||'')+_apDateBadge(o.date)); }).join('');
-        sectionsHtml += fSec('Industry Observances ('+rd.observances.length+')', obsRows);
-      }
-
-      // Recent News
-      if (rd.recentNews && rd.recentNews.length) {
-        var newsRows = rd.recentNews.map(function(n){ return fRow((n.date||'\u2014'), (n.headline||'')); }).join('');
-        sectionsHtml += fSec('Recent News', newsRows);
-      }
-
-      // Decision Makers
-      var dm = rd.decisionMakers || {};
-      var dmRows = '';
-      if (dm.ownerExec) dmRows += fRow('Owner / Exec', (dm.ownerExec.name||'')+' \u2014 '+(dm.ownerExec.title||''));
-      if (dm.marketing) dmRows += fRow('Marketing', (dm.marketing.name||'')+' \u2014 '+(dm.marketing.title||'')+(dm.marketing.linkedin?' <a href="'+dm.marketing.linkedin+'" style="color:#1D9E75;">[LinkedIn]</a>':''));
-      if (dm.procurement) dmRows += fRow('Procurement', (dm.procurement.name||'')+' \u2014 '+(dm.procurement.title||'')+(dm.procurement.linkedin?' <a href="'+dm.procurement.linkedin+'" style="color:#1D9E75;">[LinkedIn]</a>':''));
-      if (dmRows) sectionsHtml += fSec('Decision Makers', dmRows);
-
-      // Sales Hooks
-      if (rd.salesHooks && rd.salesHooks.length) {
-        var hooksHtml = rd.salesHooks.slice(0,5).map(function(h){
-          return '<tr><td class="lbl" style="text-transform:uppercase;font-size:9px;font-weight:700;letter-spacing:0.06em;">'+(h.type||'Hook')+'</td><td class="val"><strong>'+(h.hook||h)+'</strong>'+(h.swagAngle?'<br><span style="color:#059669;font-size:10px;">'+h.swagAngle+'</span>':'')+'</td></tr>';
-        }).join('');
-        if (hooksHtml) sectionsHtml += fSec('Sales Hooks ('+rd.salesHooks.length+')',hooksHtml);
-      }
-    } catch(e){}
-
-    var ipaLabel = ipaNum || '';
-    var html =
-      '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>IPA Scorecard — '+(r.name||'Record')+'</title>' +
-      '<style>'+
-        '*{box-sizing:border-box;margin:0;padding:0;}'+
-        'html,body{font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#1e293b;background:#fff;orphans:2;widows:2;}'+
-        'body{padding:0;}'+
-        'table{width:100%;border-collapse:collapse;}'+
-        '@page{size:8.5in 11in;margin:0.6in 0.65in 0.8in 0.65in;}'+
-        '.section{margin-bottom:18px;page-break-inside:avoid;break-inside:avoid;}'+
-        '.section-title{font-size:8px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.12em;border-bottom:1px solid #e2e8f0;padding-bottom:4px;margin-bottom:8px;}'+
-        'td.lbl{padding:4px 14px 4px 0;font-size:11px;color:#64748b;white-space:nowrap;width:150px;vertical-align:top;}'+
-        'td.val{padding:4px 0;font-size:11px;color:#1e293b;font-weight:500;vertical-align:top;}'+
-        '.footer{position:fixed;bottom:0;left:0;right:0;padding:5px 0.65in;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;font-size:8px;color:var(--text-muted);background:#fff;}'+
-      '</style>' +
-      '<script>window.onload=function(){'+
-        'var spans=document.querySelectorAll(".pg-num");'+
-        'var totals=document.querySelectorAll(".pg-total");'+
-        'var pages=Math.max(1,Math.ceil(document.body.scrollHeight/((11-1.4)*96)));'+
-        'totals.forEach(function(el){el.textContent=pages;});'+
-        'spans.forEach(function(el,i){el.textContent=i+1;});'+
-      '};<\/script>' +
-      '</head><body>' +
-      headerHtml + sectionsHtml +
-      '<div class="footer">'+
-        '<span>'+(ipaLabel?ipaLabel+' &middot; ':'')+'AG&apos;s IPA Report Card &middot; Confidential</span>'+
-        '<span>Page <span class="pg-num"></span> of <span class="pg-total"></span></span>'+
-      '</div>' +
-      '</body></html>';
-
+    var tc = _pdfTierCalc(pc);
+    var tierTd = _tierDisplay(pc);
+    var stars = isROArc ? '' : (total>=7?'\u2605\u2605\u2605\u2605\u2605':total>=4?'\u2605\u2605\u2605':'\u2605');
+    var rd;
+    try { rd = typeof r.researchData === 'string' ? JSON.parse(r.researchData) : (r.researchData||{}); } catch(e){ rd = {}; }
+    var headerHtml = _pdfA2Header({
+      company:r.company||rd.companyName||'', name:r.name||'', email:r.email||'', phone:r.phone||'',
+      rep:r.rep||'', ipaNum:r.recordNum||'', dateStr:r.date||'', timeStr:r.time||'',
+      isRO:isROArc, isHot:r.hot,
+      ivScore:r.iv||0, pvScore:r.pv||0, avScore:r.av||0, totalScore:isROArc?(r.iv||0):total, stars:stars,
+      tierBg:tc.bg, tierBlockBg:tc.blockBg, tierClr:tc.clr, tierBdr:tc.bdr,
+      tierName:isROArc?'RO':(r.owner||tierTd.name), priority:isROArc?'RESEARCH ONLY':(r.priority||tierTd.priority),
+      industry:rd.industry, website:r.website||rd.domain||'', employees:rd.employees||r.employees,
+      foundedYear:rd.foundedYear, blurb:rd.blurb,
+      searchCost:rd.searchCostUSD?'$'+rd.searchCostUSD:''
+    });
+    var contentHtml = _pdfContentBlocks(rd, {
+      isRO:isROArc, name:r.name||'', email:r.email||'', phone:r.phone||'',
+      cid:r.cid||'', company:r.company||'', address:r.address||'',
+      website:r.website||rd.domain||'', rep:r.rep||'',
+      owner:(r.owner||tierTd.name)+(arcOverride?' (Override)':''),
+      ivScore:r.iv||0, pvScore:r.pv||0, avScore:r.av||0,
+      ivLabel:r.ivLabel||'', pvLabel:r.pvLabel||'', avLabel:r.avLabel||'',
+      budgetType:r.budgetType||'', budgetAmount:r.budgetAmount||'',
+      customerType:r.customerType||'', avAmount:r.avAmount||'',
+      notes:r.notes||''
+    });
+    var footerLabel = isROArc ? 'Company Research' : 'Scorecard';
+    var html = _pdfWrap('IPA \u2014 '+(r.name||'Record'), headerHtml, contentHtml, footerLabel, r.recordNum||'');
     var safeName = (r.name||'record').replace(/[^a-z0-9]/gi,'-').replace(/-+/g,'-').slice(0,40);
     var blob = new Blob([html],{type:'text/html'});
     var url  = URL.createObjectURL(blob);
     var a    = document.createElement('a');
-    a.href=url; a.download='IPA-Scorecard-'+safeName+'.html';
+    a.href=url; a.download='IPA-'+(isROArc?'Research':'Scorecard')+'-'+safeName+'.html';
     document.body.appendChild(a); a.click();
     setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(url);},1000);
   }
@@ -15585,7 +15386,6 @@
   function populateEmailPreviewHTML() {
     var el = document.getElementById('rp-email-preview-html');
     if (!el) return;
-    // When viewing an archive record, use ITS scores and fields (globals were restored)
     var _ar = window._viewingArchiveRecord || null;
     var _scIv = _ar ? _validScore(_ar.iv) : scores.iv;
     var _scPv = _ar ? _validScore(_ar.pv) : scores.pv;
@@ -15594,373 +15394,226 @@
     var _lbPv = _ar ? (_ar.pvLabel || '') : labels.pv;
     var _lbAv = _ar ? (_ar.avLabel || '') : labels.av;
     var _arOverride = _ar ? (_ar.assignOverride || null) : _assignOverride;
-    // Check form completeness before rendering full preview
     var _allSig3 = _scIv !== null && _scPv !== null && _scAv !== null;
     var _emailV3 = (_ar ? (_ar.email || '') : document.getElementById('f-email').value).trim();
     var _emailOk3 = _emailV3 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(_emailV3);
     var _contact3 = !!((_ar ? (_ar.phone || '') : document.getElementById('f-phone').value).trim() || _emailOk3);
-    var _formComplete3 = _allSig3 && !!(_ar ? (_ar.name || '') : document.getElementById('f-name').value).trim() && _contact3 && !!(_ar ? (_ar.budgetType || window._budgetType) : window._budgetType) && !!(_ar ? (_ar.customerType || window._customerType) : window._customerType);
-    // formComplete controls score display only -- email still renders fully
-    var name    = (_ar ? (_ar.name || '') : document.getElementById('f-name').value).trim() || '—';
-    var company = (_ar ? (_ar.company || '') : document.getElementById('f-company').value).trim() || '—';
-    var phone   = (_ar ? (_ar.phone || '') : document.getElementById('f-phone').value).trim() || '—';
-    var emailVal= _emailV3 || '—';
-    var cid     = (_ar ? (_ar.cid || '') : document.getElementById('f-cid').value).trim() || '—';
+    var name    = (_ar ? (_ar.name || '') : document.getElementById('f-name').value).trim() || '\u2014';
+    var company = (_ar ? (_ar.company || '') : document.getElementById('f-company').value).trim() || '\u2014';
+    var phone   = (_ar ? (_ar.phone || '') : document.getElementById('f-phone').value).trim() || '\u2014';
+    var emailVal= _emailV3 || '\u2014';
+    var cid     = (_ar ? (_ar.cid || '') : document.getElementById('f-cid').value).trim() || '\u2014';
     var budgetAmt = _ar ? (_ar.budget || '') : document.getElementById('f-budget').value.trim();
     var budgetFmt = budgetAmt ? '$' + Number(budgetAmt).toLocaleString() : '';
-    var notes   = (_ar ? ((_ar.notes && _ar.notes !== '—') ? _ar.notes : '') : document.getElementById('f-notes').value).trim();
+    var notes   = (_ar ? ((_ar.notes && _ar.notes !== '\u2014') ? _ar.notes : '') : document.getElementById('f-notes').value).trim();
     var allScored = _scIv !== null && _scIv > 0 && _scPv !== null && _scPv > 0 && _scAv !== null && _scAv > 0;
-    // Email preview requires all required fields to be complete
-    var emailVal2 = _emailV3;
-    var emailValid2 = emailVal2 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal2);
+    var emailValid2 = _emailV3 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(_emailV3);
     var contactReady = !!((_ar ? (_ar.phone || '') : document.getElementById('f-phone').value).trim() || emailValid2);
     var formComplete = allScored && !!(_ar ? (_ar.name || '') : document.getElementById('f-name').value).trim() && contactReady && !!(_ar ? (_ar.budgetType || window._budgetType) : window._budgetType) && !!(_ar ? (_ar.customerType || window._customerType) : window._customerType);
     var total   = formComplete ? (_scIv||0) + (_scPv||0) + (_scAv||0) : 0;
     var isHot   = _ar ? !!_ar.isHot : (document.getElementById('hot-btn') && document.getElementById('hot-btn')._isHot);
     var _formPc = formComplete ? (total >= 7 ? 'ag' : total >= 4 ? 'cp' : 'asst') : '';
-    var _formTd = _formPc ? _tierDisplay(_arOverride || _formPc) : { name:'—', priority:'—' };
-    var owner   = formComplete ? _formTd.name : '—';
-    var priority= formComplete ? _formTd.priority : '—';
-    var scoreColor = formComplete ? (total >= 7 ? '#10b981' : total >= 4 ? '#f59e0b' : '#ef4444') : '#94a3b8';
-    var stars   = formComplete ? (total >= 7 ? '★★★★★' : total >= 4 ? '★★★' : '★') : '';
+    var _formTd = _formPc ? _tierDisplay(_arOverride || _formPc) : { name:'\u2014', priority:'\u2014' };
+    var owner   = formComplete ? _formTd.name : '\u2014';
+    var priority= formComplete ? _formTd.priority : '\u2014';
     var pillClass = formComplete ? (_arOverride ? _arOverride : (total >= 7 ? 'ag' : total >= 4 ? 'cp' : 'asst')) : '';
-    var dm = _researchData.decisionMakers || {};
-    var sm = _researchData.socialMedia || {};
-    var addrSrc = getAddressSource ? getAddressSource() : 'user';
+    var stars   = formComplete ? (total >= 7 ? '\u2605\u2605\u2605\u2605\u2605' : total >= 4 ? '\u2605\u2605\u2605' : '\u2605') : '';
+    var rd = _researchData || {};
+    var dm = rd.decisionMakers || {};
+    var sm = rd.socialMedia || {};
+    var website = (_ar ? (_ar.website || '') : (document.getElementById('f-website')||{}).value || '').trim() || rd.domain || '';
+
+    // Detect research-only
+    var _rdJsonCheck = (function(){ try { return (rd.industry||rd.blurb||(rd.eventsSite&&rd.eventsSite.length)||(rd.salesHooks&&rd.salesHooks.length)) ? JSON.stringify(rd) : ''; } catch(e){ return ''; } })();
+    var isResearch = _classifyStatus(_rdJsonCheck, _scIv, _scPv, _scAv) === 'research';
 
     function prow(label, value) {
-      if (!value || value === '—') return '';
-      return '<tr><td style="padding:4px 14px 4px 0;font-size:13px;color:#64748b;white-space:nowrap;vertical-align:top;width:120px;">' + label + '</td>' +
-             '<td style="padding:4px 0;font-size:13px;color:#1e293b;font-weight:500;">' + value + '</td></tr>';
+      if (!value || value === '\u2014') return '';
+      return '<tr><td style="padding:4px 14px 4px 0;font-size:12px;color:#64748b;white-space:nowrap;vertical-align:top;width:120px;">' + label + '</td>' +
+             '<td style="padding:4px 0;font-size:12px;color:#1e293b;font-weight:500;">' + value + '</td></tr>';
     }
-    function psec(title) {
-      return '<tr><td colspan="2" style="padding:16px 0 6px;"><p style="margin:0;font-size:10px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.1em;border-bottom:1px solid #e2e8f0;padding-bottom:6px;">' + title + '</p></td></tr>';
+    function esec(title, color) {
+      return '<tr><td colspan="2" style="padding:16px 0 6px;"><p style="margin:0;font-size:9px;font-weight:700;color:'+(color||'#94a3b8')+';text-transform:uppercase;letter-spacing:0.12em;border-bottom:2px solid #e2e8f0;padding-bottom:5px;">' + title + '</p></td></tr>';
+    }
+    function ssec(title) {
+      return '<tr><td colspan="2" style="padding:12px 0 6px;"><p style="margin:0;font-size:9px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.1em;border-bottom:1px solid #e2e8f0;padding-bottom:4px;">' + title + '</p></td></tr>';
     }
 
-    // Build DM rows
-    var dmHtml = '';
-    var dmRoles = [
-      {key:'ownerExec', label:'Owner / Exec', color:'#92400e', bg:'#fffbeb', border:'#fcd34d'},
-      {key:'marketing', label:'Marketing', color:'#3E4460', bg:'#eff6ff', border:'#bfdbfe'},
-      {key:'procurement', label:'Procurement', color:'#15803d', bg:'#f0fdf4', border:'#86efac'}
-    ];
-    var hasDM = false;
-    dmRoles.forEach(function(r) {
-      var p = dm[r.key];
-      if (!p || !p.name) return;
-      hasDM = true;
-      var initials = p.name.split(' ').map(function(w){return w[0]||'';}).slice(0,2).join('').toUpperCase();
-      dmHtml += '<tr><td colspan="2" style="padding:5px 0;border-bottom:1px solid #f8fafc;">' +
-        '<table style="width:100%;border-collapse:collapse;"><tr>' +
-        '<td style="width:36px;vertical-align:middle;"><div style="width:28px;height:28px;border-radius:50%;background:' + r.bg + ';border:1px solid ' + r.border + ';display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:' + r.color + ';">' + initials + '</div></td>' +
-        '<td style="padding:0 6px;vertical-align:middle;"><div style="font-size:13px;font-weight:500;color:#1e293b;">' + p.name + '</div><div style="font-size:11px;color:#64748b;">' + (p.title || r.label) + '</div></td>' +
-        '<td style="text-align:right;vertical-align:middle;">' + (p.linkedin && p.linkedin.match(/^https?:\/\//) ? '<a href="' + p.linkedin + '" style="font-size:10px;color:#8B8FA8;background:#eff6ff;border:1px solid #bfdbfe;border-radius:4px;padding:3px 7px;text-decoration:none;margin-left:4px;">LinkedIn</a>' : '') + (p.email ? '<a href="mailto:' + p.email + '" style="font-size:10px;color:#059669;background:#ecfdf5;border:1px solid #6ee7b7;border-radius:4px;padding:3px 7px;text-decoration:none;margin-left:4px;">Email</a>' : '') + '</td>' +
-        '</tr></table></td></tr>';
-    });
+    // Tier colors
+    var pc, tc, tierTd, bannerBg, scoreNum, scoreMax;
+    if (isResearch) {
+      var rIv = _scIv || 0;
+      pc = rIv>=3?'ag':rIv>=2?'cp':'asst';
+      scoreNum = rIv; scoreMax = '3';
+    } else if (formComplete) {
+      pc = _arOverride || _formPc;
+      scoreNum = total; scoreMax = '9';
+    } else {
+      pc = ''; scoreNum = 0; scoreMax = '9';
+    }
+    tc = pc ? _pdfTierCalc(pc) : { bg:'#0f172a', blockBg:'#1e293b', clr:'#94a3b8', bdr:'rgba(148,163,184,0.3)' };
+    tierTd = pc ? _tierDisplay(pc) : { name:'\u2014', priority:'\u2014' };
 
-    // Build research block HTML
-    var rHtml = '';
-    if (_researchData.industry || _researchData.revenue || _researchData.companyLinkedIn || sm.facebook || sm.instagram || sm.twitter) {
-      rHtml += psec('AI Company Research');
-      if (_researchData.industry) rHtml += prow('Industry', _researchData.industry);
-      if (_researchData.revenue)  rHtml += prow('Revenue',  _researchData.revenue);
-      if (_researchData.companyLinkedIn && _researchData.companyLinkedIn.match(/^https?:\/\//)) rHtml += '<tr><td style="padding:4px 14px 4px 0;font-size:13px;color:#64748b;width:120px;">Company LinkedIn</td><td style="padding:4px 0;font-size:13px;"><a href="' + _researchData.companyLinkedIn + '" style="color:#8B8FA8;">' + _researchData.companyLinkedIn.replace('https://','') + '</a></td></tr>';
-      ['facebook','instagram','twitter','tiktok','youtube','snapchat'].forEach(function(k) {
-        if (sm[k]) rHtml += '<tr><td style="padding:4px 14px 4px 0;font-size:13px;color:#64748b;width:120px;text-transform:capitalize;">' + k + '</td><td style="padding:4px 0;font-size:13px;"><a href="' + sm[k] + '" style="color:#8B8FA8;">' + sm[k].replace('https://','') + '</a></td></tr>';
-      });
-      if (_researchData.blurb) rHtml += '<tr><td colspan="2" style="padding:6px 0;font-size:12px;color:#475569;font-style:italic;">' + _researchData.blurb + '</td></tr>';
+    // ── BUILD A2 HEADER ──
+    var pillHtml = '<td style="padding:3px 6px;border-radius:4px;background:rgba(255,255,255,0.12);text-align:center;"><div style="font-size:8px;color:rgba(255,255,255,0.5);text-transform:uppercase;">IV</div><div style="font-size:12px;font-weight:700;color:#fff;">'+(_scIv||0)+'/3</div></td>' +
+      '<td style="padding:3px 6px;border-radius:4px;background:rgba(255,255,255,0.12);text-align:center;"><div style="font-size:8px;color:rgba(255,255,255,0.5);text-transform:uppercase;">PV</div><div style="font-size:12px;font-weight:700;color:'+(isResearch?'rgba(255,255,255,0.35)':'#fff')+';">'+(isResearch?'--':(_scPv||0)+'/3')+'</div></td>' +
+      '<td style="padding:3px 6px;border-radius:4px;background:rgba(255,255,255,0.12);text-align:center;"><div style="font-size:8px;color:rgba(255,255,255,0.5);text-transform:uppercase;">AV</div><div style="font-size:12px;font-weight:700;color:'+(isResearch?'rgba(255,255,255,0.35)':'#fff')+';">'+(isResearch?'--':(_scAv||0)+'/3')+'</div></td>';
+
+    var headerHtml =
+      (isHot ? '<div style="background:#dc2626;padding:6px 20px;text-align:center;"><span style="font-size:11px;font-weight:700;color:#fff;letter-spacing:0.08em;text-transform:uppercase;">HOT \u2014 Needs Immediate Attention</span></div>' : '') +
+      '<table style="width:100%;border-collapse:collapse;background:'+tc.bg+';" cellpadding="0" cellspacing="0"><tr>' +
+        '<td style="padding:14px 16px;vertical-align:middle;width:55px;text-align:center;">' +
+          '<div style="font-size:30px;font-weight:700;color:#fff;line-height:1;">'+scoreNum+'<span style="font-size:14px;font-weight:400;color:rgba(255,255,255,0.5);">/'+scoreMax+'</span></div>' +
+          (isResearch ? '<div style="font-size:10px;color:rgba(255,255,255,0.5);margin-top:2px;">IV only</div>' : (stars ? '<div style="font-size:10px;color:rgba(255,255,255,0.7);margin-top:2px;">'+stars+'</div>' : '')) +
+        '</td>' +
+        '<td style="width:1px;padding:8px 0;vertical-align:middle;"><div style="width:1px;height:36px;background:rgba(255,255,255,0.15);"></div></td>' +
+        '<td style="padding:14px 12px;vertical-align:middle;">' +
+          '<div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:2px;">'+company+(rd.industry?' <span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;background:rgba(255,255,255,0.18);">'+rd.industry+'</span>':'')+'</div>' +
+          '<div style="font-size:11px;color:rgba(255,255,255,0.55);">'+(website||'')+(rd.employees?' &middot; '+rd.employees+' employees':'')+(rd.foundedYear?' &middot; Est. '+rd.foundedYear:'')+'</div>' +
+        '</td>' +
+        '<td style="padding:8px 8px;vertical-align:middle;"><table style="border-collapse:separate;border-spacing:2px;" cellpadding="0"><tr>'+pillHtml+'</tr></table></td>' +
+        '<td style="padding:14px 16px 14px 8px;vertical-align:middle;">' +
+          '<div style="text-align:center;padding:5px 12px;border-radius:8px;background:'+tc.blockBg+';border:1px solid '+tc.bdr+';">' +
+            '<div style="font-size:15px;font-weight:700;color:#fff;letter-spacing:0.03em;">'+(isResearch?'RO':(formComplete?owner:'\u2014'))+'</div>' +
+            '<div style="font-size:8px;color:'+tc.clr+';font-weight:600;letter-spacing:0.04em;margin-top:1px;">'+(isResearch?'RESEARCH ONLY':(formComplete?priority:'INCOMPLETE'))+'</div>' +
+          '</div>' +
+        '</td>' +
+      '</tr></table>';
+
+    // Blurb + info bar
+    var blurbHtml = rd.blurb ? '<div style="padding:8px 18px;font-size:11px;color:#475569;line-height:1.6;border-bottom:1px solid #e2e8f0;background:#f8fafc;">'+rd.blurb+'</div>' : '';
+    var rep = window._currentRep || '\u2014';
+    var ipaNum = window._lastSavedRecordNum || '';
+    var dateNow = new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+    var infoBar = '<div style="display:flex;justify-content:space-between;padding:6px 18px;font-size:10px;color:#94a3b8;border-bottom:1px solid #e2e8f0;">' +
+      '<span>'+(ipaNum?ipaNum+' &middot; ':'')+'Entered by '+rep+' &middot; '+dateNow+'</span>' +
+      '<span>'+name+(emailVal!=='\u2014'?' &middot; '+emailVal:'')+(phone!=='\u2014'?' &middot; '+phone:'')+'</span></div>';
+
+    // ── THREE CONTENT BLOCKS ──
+    var dh = _pdfDateHelpers();
+    var bodyHtml = '<div style="padding:14px 18px;"><table style="width:100%;border-collapse:collapse;">';
+
+    // TO DO banner (SC only)
+    if (!isResearch && formComplete) {
+      if (pillClass === 'asst') bodyHtml += '<tr><td colspan="2" style="padding:8px 12px;background:#fef2f2;border-left:4px solid #ef4444;border-radius:0 4px 4px 0;margin-bottom:8px;"><p style="margin:0;font-size:12px;font-weight:700;color:#dc2626;">TO DO: Kill future tasks in Insights.</p></td></tr>';
+      else if (total >= 6 && (window._customerType||'') === 'Existing Customer') bodyHtml += '<tr><td colspan="2" style="padding:8px 12px;background:#f0fdf4;border-left:4px solid #16a34a;border-radius:0 4px 4px 0;margin-bottom:8px;"><p style="margin:0;font-size:12px;font-weight:700;color:#16a34a;">TO DO: Enable tasks in Insights for this customer.</p></td></tr>';
     }
-    if (_researchData.recentNews && _researchData.recentNews.length) {
-      rHtml += '<tr><td colspan="2" style="padding:12px 0 4px;"><p style="margin:0;font-size:10px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.1em;">Recent News</p></td></tr>';
-      _researchData.recentNews.forEach(function(n) {
-        var headlineHtml = (n.sourceUrl && n.sourceUrl.match(/^https?:/))
-          ? '<a href="' + n.sourceUrl + '" target="_blank" style="font-size:13px;color:#1e293b;text-decoration:underline;text-underline-offset:2px;">' + (n.headline||'') + '</a>'
-          : '<span style="font-size:13px;color:#1e293b;">' + (n.headline||'') + '</span>';
-        rHtml += '<tr><td colspan="2" style="padding:4px 0 4px 8px;border-left:2px solid #cbd5e1;">' +
-          (n.date ? '<span style="font-size:10px;color:#64748b;margin-right:6px;">' + n.date + '</span>' : '') +
-          headlineHtml + '</td></tr>';
-      });
-    }
-    // Trade shows in email preview
-    var _emailTS = _researchData.tradeShows || [];
-    if (_emailTS.length) {
-      var _confOrd = { confirmed: 0, likely: 1, 'industry-match': 2 };
-      var _sortedEmailTS = _emailTS.slice().sort(function(a,b) {
-        var ca = _confOrd[a.confidence]!==undefined?_confOrd[a.confidence]:2, cb = _confOrd[b.confidence]!==undefined?_confOrd[b.confidence]:2;
-        if (ca!==cb) return ca-cb;
-        var da = new Date((a.date||'').replace(/(\w+ \d+)[-\u2013]\d+/,'$1')), db = new Date((b.date||'').replace(/(\w+ \d+)[-\u2013]\d+/,'$1'));
-        return (isNaN(da)?Infinity:da)-(isNaN(db)?Infinity:db);
-      });
-      rHtml += '<tr><td colspan="2" style="padding:12px 0 4px;"><p style="margin:0;font-size:10px;font-weight:600;color:#818cf8;text-transform:uppercase;letter-spacing:0.1em;">Trade Shows</p></td></tr>';
-      _sortedEmailTS.forEach(function(t) {
-        var tsBadge = '<span style="font-size:9px;font-weight:700;padding:1px 5px;border-radius:999px;background:rgba(99,102,241,0.15);color:#818cf8;border:1px solid rgba(99,102,241,0.3);">TRADESHOW</span> ';
-        var confBadge = t.confidence==='confirmed'?'<span style="font-size:9px;font-weight:700;padding:1px 5px;border-radius:999px;background:rgba(93,202,165,0.12);color:#5DCAA5;border:1px solid rgba(93,202,165,0.3);">&#10003; CONFIRMED</span> ':'';
-        if (t.confidence==='likely') confBadge = '<span style="font-size:9px;font-weight:700;padding:1px 5px;border-radius:999px;background:rgba(245,158,11,0.12);color:#f59e0b;border:1px solid rgba(245,158,11,0.3);">LIKELY</span> ';
-        if (t.confidence==='industry-match') confBadge = '<span style="font-size:9px;font-weight:700;padding:1px 5px;border-radius:999px;background:rgba(148,163,184,0.12);color:var(--text-muted);border:1px solid rgba(148,163,184,0.3);">INDUSTRY MATCH</span> ';
-        var _tsD = new Date((t.date||'').replace(/(\w+ \d+)[-\u2013]\d+/,'$1').replace(/varies/i,'')); var _tsToday = new Date(); _tsToday.setHours(0,0,0,0); var _tsDiff = isNaN(_tsD)?null:Math.round((_tsD-_tsToday)/86400000);
-        var _tsDaysBadge = '';
-        if (_tsDiff!==null && _tsDiff<0) _tsDaysBadge = ' <span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;background:#f1f5f9;color:var(--text-muted);border:1px solid #e2e8f0;">PAST</span>';
-        else if (_tsDiff===0) _tsDaysBadge = ' <span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;background:rgba(93,202,165,0.12);color:#5DCAA5;border:1px solid rgba(93,202,165,0.3);">Today</span>';
-        else if (_tsDiff!==null && _tsDiff<=30) _tsDaysBadge = ' <span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;background:#fff7ed;color:#c2410c;border:1px solid #fed7aa;">'+_tsDiff+' days away</span>';
-        else if (_tsDiff!==null) _tsDaysBadge = ' <span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;background:rgba(139,143,168,0.1);color:var(--text-muted);border:1px solid rgba(139,143,168,0.25);">'+_tsDiff+' days away</span>';
-        rHtml += '<tr><td colspan="2" style="padding:6px 0;">' +
-          '<table style="width:100%;border-collapse:collapse;"><tr>' +
-          '<td style="font-size:13px;color:#1e293b;vertical-align:middle;">' +
-            tsBadge + confBadge + _tsDaysBadge +
-            '<br><strong style="color:#1e293b;">' + (t.title||'') + '</strong>' +
-            '<br><span style="font-size:11px;color:#64748b;">' + (t.date||'') + (t.venue?' · '+t.venue:'') + (t.attendees?' · ~'+t.attendees+' attendees':'') + '</span>' +
-          '</td>' +
-          '</tr></table></td></tr>';
-      });
-    }
-    var allEvts = _sortByDate((_researchData.eventsSite||[]).concat(_researchData.eventsWeb||[]));
-    if (allEvts.length) {
-      rHtml += '<tr><td colspan="2" style="padding:12px 0 4px;"><p style="margin:0;font-size:10px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.1em;">Events</p></td></tr>';
-      allEvts.forEach(function(evt) {
-        var recurBadge = evt.recurring ? ' <span style="font-size:9px;font-weight:600;padding:1px 5px;border-radius:999px;background:rgba(251,146,60,0.15);color:#fb923c;border:1px solid rgba(251,146,60,0.3);">RECURRING</span>' : '';
-        var _evtD = new Date((evt.date||'').replace(/(\w+ \d+)[-\u2013]\d+/,'$1').replace(/varies/i,'')); var _evtToday = new Date(); _evtToday.setHours(0,0,0,0); var _evtDiff = isNaN(_evtD) ? null : Math.round((_evtD - _evtToday)/86400000);
-        var pastBadge = (_evtDiff !== null && _evtDiff < 0) ? ' <span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;background:#f1f5f9;color:var(--text-muted);border:1px solid #e2e8f0;">PAST</span>' : '';
-        var evtTitle   = (document.getElementById('f-company').value.trim() || 'Company') + ' — ' + (evt.title||'Event') + ' (QLP)';
-        var evtBody    = 'QLP OPPORTUNITY\nCustomer: ' + (document.getElementById('f-name').value.trim()||'—') + '\nCompany: ' + (document.getElementById('f-company').value.trim()||'—') + '\n\nNotes: ' + (evt.notes||'');
-        var outlookUrl = 'https://outlook.office.com/calendar/action/compose?subject=' + encodeURIComponent(evtTitle) + '&body=' + encodeURIComponent(evtBody) + '&location=' + encodeURIComponent(evt.venue||'');
-        rHtml += '<tr><td colspan="2" style="padding:6px 0;' + (_evtDiff !== null && _evtDiff < 0 ? 'opacity:0.5;' : '') + '">' +
-          '<table style="width:100%;border-collapse:collapse;"><tr>' +
-          '<td style="font-size:13px;color:#1e293b;vertical-align:middle;">' +
-            '<span style="color:var(--text);">★ </span>' + (evt.source && evt.source.match && evt.source.match(/^https?:/) ? '<a href="' + evt.source + '" target="_blank" style="color:#1e293b;font-weight:600;text-decoration:underline;text-underline-offset:2px;">' + (evt.title||'') + '</a>' : '<strong style="color:#1e293b;">' + (evt.title||'') + '</strong>') + recurBadge + pastBadge +
-            '<br><span style="font-size:11px;color:#64748b;">' + (evt.date||'') + (evt.venue ? ' · ' + evt.venue : '') + '</span>' +
-          '</td>' +
-          '<td style="text-align:right;vertical-align:middle;white-space:nowrap;padding-left:8px;">' +
-            '<a href="' + outlookUrl + '" target="_blank" style="font-size:10px;font-weight:600;color:#60a5fa;background:rgba(139,143,168,0.1);border:1px solid rgba(139,143,168,0.25);border-radius:5px;padding:4px 10px;text-decoration:none;">+ Outlook</a>' +
-          '</td></tr></table></td></tr>';
-      });
-    }
-    if (_researchData.observances && _researchData.observances.length) {
-      rHtml += '<tr><td colspan="2" style="padding:12px 0 4px;"><p style="margin:0;font-size:10px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.1em;">Industry Observances</p></td></tr>';
-      var sortedObs = (_researchData.observances).slice().sort(function(a,b){
-        var da=new Date((a.date||'').replace(/(\w+ \d+)[-\u2013]\d+/,'$1')), db=new Date((b.date||'').replace(/(\w+ \d+)[-\u2013]\d+/,'$1'));
-        return (isNaN(da)?Infinity:da)-(isNaN(db)?Infinity:db);
-      });
-      sortedObs.forEach(function(o) {
-        var d = new Date((o.date||'').replace(/(\w+ \d+)[-\u2013]\d+/,'$1'));
-        var today = new Date(); today.setHours(0,0,0,0);
-        var diff = isNaN(d) ? null : Math.round((d-today)/86400000);
-        var daysBadge = '';
-        if (diff !== null) {
-          if (diff < 0) daysBadge = ' <span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;background:#f1f5f9;color:var(--text-muted);border:1px solid #e2e8f0;">PAST</span>';
-          else if (diff === 0) daysBadge = ' <span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;background:#fff7ed;color:#c2410c;border:1px solid #fed7aa;">Today</span>';
-          else daysBadge = ' <span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;background:' + (diff<=30?'#fff7ed':'#f5f3ff') + ';color:' + (diff<=30?'#c2410c':'#6d28d9') + ';border:1px solid ' + (diff<=30?'#fed7aa':'#ddd6fe') + ';">' + diff + ' days away</span>';
-        }
-        rHtml += '<tr><td colspan="2" style="padding:5px 0;font-size:13px;color:#1e293b;' + (diff !== null && diff < 0 ? 'opacity:0.5;' : '') + '"><span style="color:#64748b;">★ </span><strong>' + (o.title||'') + '</strong>' + daysBadge + '<br><span style="font-size:11px;color:var(--text-muted);">' + (o.date||'') + '</span></td></tr>';
-      });
-    }
-    if (_researchData.salesHooks && _researchData.salesHooks.length) {
-      var _typeOrder = {event:0,milestone:1,industry:2,news:3};
-      var _hookColors = { event:'#059669', milestone:'#7c3aed', industry:'#b45309', news:'#475569' };
-      var _parseDateH = function(s){ if(!s)return null; var d=new Date(s+(s.split(' ').length<3?' 1':'')); return isNaN(d)?null:d; };
-      var _daysFromH = function(s){ var d=_parseDateH(s); if(!d)return null; var t=new Date();t.setHours(0,0,0,0); return Math.round((d-t)/86400000); };
-      var sortedHooks = (_researchData.salesHooks).slice().sort(function(a,b){
-        var ao=_typeOrder[a.type]!==undefined?_typeOrder[a.type]:9, bo=_typeOrder[b.type]!==undefined?_typeOrder[b.type]:9;
-        if(ao!==bo)return ao-bo;
-        if(a.type==='event'||a.type==='milestone'){var da=_daysFromH(a.date),db=_daysFromH(b.date);if(da===null&&db===null)return 0;if(da===null)return 1;if(db===null)return -1;return da-db;}
-        if(a.type==='news'){var da=_daysFromH(a.date),db=_daysFromH(b.date);return (db||0)-(da||0);}
-        return 0;
-      });
-      // Filter: exclude old news (>2 years ago)
-      var filteredHooks = sortedHooks.filter(function(h){
-        if(h.type!=='news')return true;
-        var diff=_daysFromH(h.date);
-        return diff===null||Math.abs(diff)<=730;
-      });
-      if(filteredHooks.length){
-        rHtml += '<tr><td colspan="2" style="padding:14px 0 6px;"><p style="margin:0;font-size:10px;font-weight:600;color:#1d9e75;text-transform:uppercase;letter-spacing:0.1em;border-bottom:1px solid #d1fae5;padding-bottom:5px;">Sales Hooks &amp; Swag Talking Points</p></td></tr>';
-        filteredHooks.forEach(function(h) {
-          var tc = _hookColors[(h.type||'').toLowerCase()] || '#64748b';
-          var diff = _daysFromH(h.date);
-          // Time label
-          var timeLabel = '';
-          if(diff===null){ timeLabel='<span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;background:#fefce8;color:#a16207;border:1px solid #fde68a;">Ongoing</span>'; }
-          else if(diff<0){ var ago=Math.abs(diff),isOld=ago>730; var agoLabel=ago>=365?Math.round(ago/365)+'yr ago':ago+' days ago'; timeLabel='<span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;background:#f8fafc;color:var(--text-muted);border:1px solid #e2e8f0;">'+agoLabel+'</span>'; }
-          else{ var ul=diff===0?'Today':diff+' days away'; var ubg=diff<=30?'#fff7ed':'#f0fdf4'; var uc=diff<=30?'#c2410c':'#166534'; var ub=diff<=30?'#fed7aa':'#86efac'; timeLabel='<span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;background:'+ubg+';color:'+uc+';border:1px solid '+ub+';">'+ul+'</span>'; }
-          // Product links for this hook
-          var prodHtml = '';
-          var prods = (_researchData.qlpProducts||[]).filter(function(p){ return p.hookType===h.type; });
-          if(h.type==='event') prods = (_researchData.qlpProducts||[]).filter(function(p){ return p.hookType==='event'; });
-          if(prods.length){
-            prodHtml = '<p style="margin:4px 0 0;font-size:10px;color:#64748b;">QLP: ' +
-              prods.map(function(p){
-                return '<a href="'+p.url+'" style="color:#5C6280;text-decoration:underline;">'+p.name+'</a> <span style="color:#059669;font-weight:600;">'+p.price+'</span>';
-              }).join(' &nbsp;·&nbsp; ') + '</p>';
-          }
-          rHtml += '<tr><td colspan="2" style="padding:7px 0;border-bottom:1px solid #f1f5f9;">' +
-            '<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">' +
-              '<span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:999px;background:'+tc+'1a;color:'+tc+';border:1px solid '+tc+'33;letter-spacing:0.06em;">'+(h.type||'').toUpperCase()+'</span>'+
-              timeLabel +
-            '</div>' +
-            '<p style="margin:0 0 3px;font-size:13px;color:#1e293b;font-weight:500;">' + (h.finding||'') + '</p>' +
-            '<p style="margin:0;font-size:11px;color:#059669;">Swag angle: ' + (h.pitch||'') + '</p>' +
-            prodHtml +
+
+    // BLOCK 1: Know the company
+    bodyHtml += esec('Block 1 &middot; Know the company', '#2563eb');
+    if (rd.companyIntel) bodyHtml += '<tr><td colspan="2" style="padding:6px 0;"><div style="border-left:3px solid #60a5fa;padding-left:12px;font-size:11px;color:#334155;line-height:1.7;">'+rd.companyIntel+'</div></td></tr>';
+    bodyHtml += ssec('Company Profile');
+    bodyHtml += prow('Industry', rd.industry||'') + prow('Employees', rd.employees||'') + prow('Est. Revenue', rd.revenue||'') + prow('Founded', rd.foundedYear||'');
+    if (website) bodyHtml += prow('Website', '<a href="'+(website.match(/^https?:\/\//)?website:'https://'+website)+'" style="color:#1D9E75;">'+website.replace(/^https?:\/\//i,'')+'</a>');
+    // Social Media
+    var socialLinks = [];
+    if (rd.companyLinkedIn) socialLinks.push('<a href="'+rd.companyLinkedIn+'" style="color:#60a5fa;text-decoration:none;">LinkedIn</a>');
+    ['facebook','instagram','twitter','tiktok','youtube','snapchat'].forEach(function(k){ if(sm[k]) socialLinks.push('<a href="'+sm[k]+'" style="color:#60a5fa;text-decoration:none;">'+k.charAt(0).toUpperCase()+k.slice(1)+'</a>'); });
+    if (socialLinks.length) bodyHtml += prow('Social Media', socialLinks.join(' &middot; '));
+
+    // BLOCK 2: Know your angles
+    bodyHtml += esec('Block 2 &middot; Know your angles', '#d97706');
+    if (rd.salesHooks && rd.salesHooks.length) {
+      bodyHtml += ssec('Call Cheat Sheet ('+rd.salesHooks.length+')');
+      var catColors = { milestone:'#dc2626', news:'#dc2626', expansion:'#d97706', hiring:'#d97706', brand:'#2563eb', award:'#7c3aed', industry:'#7c3aed' };
+      rd.salesHooks.forEach(function(h) {
+        var dotClr = catColors[h.type] || '#64748b';
+        bodyHtml += '<tr><td style="padding:5px 8px 5px 0;vertical-align:top;width:12px;"><div style="width:7px;height:7px;border-radius:50%;background:'+dotClr+';margin-top:4px;"></div></td>' +
+          '<td style="padding:5px 0;vertical-align:top;border-bottom:1px solid #f1f5f9;">' +
+            '<div style="font-size:12px;font-weight:600;color:#1e293b;">'+(h.finding||h.hook||'')+'</div>' +
+            (h.pitch?'<div style="font-size:11px;color:#059669;margin-top:2px;">'+h.pitch+'</div>':'') +
           '</td></tr>';
+      });
+    }
+    // Events & Dates
+    var pdfTS = rd.tradeShows || [];
+    var allEvts = dh.sortByDate((rd.eventsSite||[]).concat(rd.eventsWeb||[]));
+    var obs = dh.sortByDate(rd.observances || []);
+    var totalEvts = pdfTS.length + allEvts.length + obs.length;
+    if (totalEvts) {
+      bodyHtml += ssec('Events & Dates ('+totalEvts+')');
+      if (pdfTS.length) {
+        pdfTS.forEach(function(t) {
+          var confLabel = t.confidence==='confirmed'?' [CONFIRMED]':t.confidence==='likely'?' [LIKELY]':' [INDUSTRY]';
+          bodyHtml += prow((t.date||''), '<strong>'+(t.title||'')+'</strong> <span style="color:#7c3aed;font-size:9px;font-weight:700;">[TRADESHOW]</span><span style="font-size:9px;font-weight:700;color:#059669;">'+confLabel+'</span>'+dh.badge(t.date)+(t.venue?' &middot; '+t.venue:''));
         });
       }
+      allEvts.forEach(function(e){ bodyHtml += prow((e.date||''), '<strong>'+(e.title||'')+'</strong>'+(e.recurring?' <span style="color:#c2410c;font-size:9px;">[RECURRING]</span>':'')+dh.badge(e.date)+(e.venue?' &middot; '+e.venue:'')); });
+      obs.forEach(function(o){ bodyHtml += prow((o.date||''), (o.title||'')+' <span style="color:#64748b;font-size:9px;">[INDUSTRY DATE]</span>'+dh.badge(o.date)); });
+    }
+    // Competitors
+    var comps = rd.competitors || [];
+    if (comps.length) {
+      bodyHtml += ssec('Competitors ('+comps.length+')');
+      comps.forEach(function(c) { bodyHtml += prow((c.name||''), (c.overlap||'')+(c.differentiator?' <span style="color:#dc2626;font-style:italic;font-size:10px;">'+c.differentiator+'</span>':'')+(c.website?' <a href="'+c.website+'" style="color:#1D9E75;font-size:10px;">'+c.website.replace(/^https?:\/\/(www\.)?/,'').replace(/\/.*$/,'')+'</a>':'')); });
     }
 
-    // Detect research-only state
-    var _rdJsonCheck = (function(){ try { var rd = _researchData; return (rd.industry||rd.blurb||(rd.eventsSite&&rd.eventsSite.length)||(rd.eventsWeb&&rd.eventsWeb.length)||(rd.observances&&rd.observances.length)||rd.companyLinkedIn||rd.revenue||(rd.recentNews&&rd.recentNews.length)||(rd.decisionMakers&&(rd.decisionMakers.ownerExec||rd.decisionMakers.marketing||rd.decisionMakers.procurement))||(rd.salesHooks&&rd.salesHooks.length)||(rd.tradeShows&&rd.tradeShows.length)) ? JSON.stringify(rd) : ''; } catch(e){ return ''; } })();
-    var _previewIsResearch = _classifyStatus(_rdJsonCheck, _scIv, _scPv, _scAv) === 'research';
+    // BLOCK 3: Know the people
+    bodyHtml += esec('Block 3 &middot; Know the people', '#7c3aed');
+    var dmRows = '';
+    [{key:'ownerExec',label:'Owner / Exec'},{key:'marketing',label:'Marketing'},{key:'procurement',label:'Procurement'}].forEach(function(r){
+      var p = dm[r.key]; if(!p||!p.name) return;
+      dmRows += prow(r.label, '<strong>'+p.name+'</strong>'+(p.title?' \u2014 '+p.title:'')+(p.linkedin?' <a href="'+p.linkedin+'" style="color:#60a5fa;font-size:10px;">[LinkedIn]</a>':''));
+    });
+    var kp = rd.keyPeople || [];
+    kp.forEach(function(p){ if(p.name) dmRows += prow((p.role||'Key Person'), '<strong>'+p.name+'</strong>'+(p.title?' \u2014 '+p.title:'')+(p.linkedin?' <a href="'+p.linkedin+'" style="color:#60a5fa;font-size:10px;">[LinkedIn]</a>':'')); });
+    if (dmRows) { bodyHtml += ssec('Decision Makers & Key People'); bodyHtml += dmRows; }
+    if (rd.recentNews && rd.recentNews.length) {
+      bodyHtml += ssec('Recent News');
+      rd.recentNews.forEach(function(n){ bodyHtml += prow((n.date||''), (n.sourceUrl?'<a href="'+n.sourceUrl+'" style="color:#1e293b;text-decoration:underline;text-underline-offset:2px;">'+(n.headline||'')+'</a>':(n.headline||''))); });
+    }
+    if (rd.attackPlan) {
+      bodyHtml += ssec('Attack Plan');
+      bodyHtml += '<tr><td colspan="2" style="padding:6px 0;"><div style="border-left:3px solid #f59e0b;padding-left:12px;font-size:11px;color:#334155;line-height:1.6;">'+rd.attackPlan+'</div></td></tr>';
+    }
 
-    var emailInner;
-    if (_previewIsResearch) {
-      var _rIv = _scIv || 0;
-      var _resTierBg   = (_rIv>=3)?'#04342C':(_rIv>=2)?'#412402':'#26215C';
-      var _resTierClr  = (_rIv>=3)?'#5DCAA5':(_rIv>=2)?'#EF9F27':'#AFA9EC';
-      var _resTierName = _tierDisplay((_rIv>=3)?'ag':(_rIv>=2)?'cp':'asst').name;
-      var _resBannerBg = (_rIv>=3)?'#0F6E56':(_rIv>=2)?'#854F0B':'#3C3489';
-      emailInner =
-        '<div style="font-family:Arial,sans-serif;width:100%;background:#fff;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;">' +
-        // Tier status bar
-        '<div style="display:flex;align-items:center;justify-content:center;gap:8px;padding:7px 20px;background:'+_resTierBg+';color:'+_resTierClr+';">' +
-          '<span style="width:6px;height:6px;border-radius:50%;background:currentColor;display:inline-block;"></span>' +
-          '<span style="font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;">Company Research Only</span>' +
-          '<span style="width:6px;height:6px;border-radius:50%;background:currentColor;display:inline-block;"></span>' +
-        '</div>' +
-        // Banner
-        '<div style="background:'+_resBannerBg+';padding:20px 24px;display:flex;justify-content:space-between;align-items:flex-start;">' +
-          '<div>' +
-            '<p style="margin:0 0 2px;font-size:10px;font-weight:600;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:0.12em;">AG\'s IPA Report Card</p>' +
-            '<p style="margin:0;font-size:22px;font-weight:700;line-height:1;color:#fff;">Company Research</p>' +
-            '<p style="margin:6px 0 0;font-size:12px;color:rgba(255,255,255,0.55);">'+new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})+'</p>' +
-          '</div>' +
-          '<div style="text-align:right;">' +
-            '<p style="margin:0 0 2px;font-size:10px;color:rgba(255,255,255,0.55);">Recommended for</p>' +
-            '<p style="margin:0;font-size:22px;font-weight:700;color:#fff;">'+_resTierName+'</p>' +
-            '<p style="margin:4px 0 0;font-size:11px;color:rgba(255,255,255,0.45);">IV '+_rIv+' / 3 — Based on IV only</p>' +
-          '</div>' +
-        '</div>' +
-        // Body
-        '<div style="padding:16px 20px;">' +
-          '<table style="width:100%;border-collapse:collapse;">' +
-          psec('Signals') +
-          '<tr><td colspan="2" style="padding:5px 0;"><span style="display:inline-block;padding:2px 10px;border-radius:999px;background:#eff6ff;color:#3E4460;font-size:11px;font-weight:700;margin-right:8px;">IV (Size) '+(_scIv||0)+'/3</span><span style="font-size:13px;color:#1e293b;">'+(_lbIv||'—')+'</span></td></tr>' +
-          '<tr><td colspan="2" style="padding:5px 0;"><span style="display:inline-block;padding:2px 10px;border-radius:999px;background:#fefce8;color:#854d0e;font-size:11px;font-weight:700;margin-right:8px;">PV (Budget) —/3</span><span style="font-size:13px;color:var(--text-muted);">—</span></td></tr>' +
-          '<tr><td colspan="2" style="padding:5px 0;"><span style="display:inline-block;padding:2px 10px;border-radius:999px;background:#f0fdf4;color:#15803d;font-size:11px;font-weight:700;margin-right:8px;">AV (Spend) —/3</span><span style="font-size:13px;color:var(--text-muted);">—</span></td></tr>' +
-          psec('Customer Details') +
-          prow('Entered By', window._currentRep || '—') +
-          prow('Name', name) +
-          prow('Company', company) +
-          (cid !== '—' ? prow('Existing CID', cid) : '') +
-          prow('Phone', phone !== '—' ? phone : '') +
-          prow('Email', emailVal !== '—' ? emailVal : '') +
-          (notes ? prow('Notes', notes) : '') +
-          (hasDM ? psec('Decision Makers') + dmHtml : '') +
-          rHtml +
-          '</table>' +
-        '</div>' +
-        '<div style="background:#f8fafc;border-top:1px solid #e2e8f0;padding:10px 20px;text-align:center;">' +
-          '<p style="margin:0;font-size:11px;color:#64748b;">AG\'s IPA Report Card · Entered by '+(window._currentRep||'—')+'</p>' +
-        '</div>' +
-        '</div>';
-    } else {
-    emailInner =
-      '<div style="font-family:Arial,sans-serif;width:100%;background:#fff;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;">' +
+    // Scoring breakdown (SC only)
+    if (!isResearch && formComplete) {
+      bodyHtml += ssec('Scoring Breakdown');
+      bodyHtml += '<tr><td colspan="2" style="padding:6px 0;"><table style="width:100%;border-collapse:separate;border-spacing:6px 0;"><tr>' +
+        '<td style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:8px 10px;text-align:center;width:33%;"><div style="font-size:9px;color:#64748b;text-transform:uppercase;">IV</div><div style="font-size:18px;font-weight:700;color:'+(_scIv>=3?'#059669':_scIv>=2?'#d97706':'#ef4444')+';">'+(_scIv||0)+'/3</div><div style="font-size:9px;color:#94a3b8;">'+(_lbIv||'')+'</div></td>' +
+        '<td style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:8px 10px;text-align:center;width:33%;"><div style="font-size:9px;color:#64748b;text-transform:uppercase;">PV</div><div style="font-size:18px;font-weight:700;color:'+(_scPv>=3?'#059669':_scPv>=2?'#d97706':'#ef4444')+';">'+(_scPv||0)+'/3</div><div style="font-size:9px;color:#94a3b8;">'+(_lbPv||'')+((budgetFmt)?' &middot; '+budgetFmt:'')+'</div></td>' +
+        '<td style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:8px 10px;text-align:center;width:33%;"><div style="font-size:9px;color:#64748b;text-transform:uppercase;">AV</div><div style="font-size:18px;font-weight:700;color:'+(_scAv>=3?'#059669':_scAv>=2?'#d97706':'#ef4444')+';">'+(_scAv||0)+'/3</div><div style="font-size:9px;color:#94a3b8;">'+(_lbAv||'')+'</div></td>' +
+        '</tr></table></td></tr>';
+    }
 
-      // HOT
-      (isHot ? '<div style="background:#dc2626;padding:6px 20px;display:flex;align-items:center;gap:8px;"><span style="font-size:13px;">🔥</span><span style="font-size:11px;font-weight:700;color:#fff;letter-spacing:0.08em;text-transform:uppercase;">Hot — Needs Immediate Attention</span></div>' : '') +
+    // Contact & Details
+    bodyHtml += ssec('Contact & Details');
+    bodyHtml += prow('Customer Name', name) + prow('Phone', phone!=='\u2014'?phone:'') + prow('Email', emailVal!=='\u2014'?emailVal:'') + prow('CID', cid!=='\u2014'?cid:'') + prow('Company', company!=='\u2014'?company:'');
+    // Address with provenance
+    var _snap = _aiAddressSnapshot || {};
+    var _addrParts = [
+      (_ar ? '' : document.getElementById('f-street').value.trim()) || _snap.street || '',
+      (_ar ? '' : document.getElementById('f-suite').value.trim())  || _snap.suite  || '',
+      (_ar ? '' : document.getElementById('f-city').value.trim())   || _snap.city   || '',
+      (_ar ? '' : document.getElementById('f-state').value.trim())  || _snap.state  || '',
+      (_ar ? '' : document.getElementById('f-zip').value.trim())    || _snap.zip    || ''
+    ].filter(Boolean);
+    if (_addrParts.length) {
+      var _addrStr = _addrParts.join(', ');
+      var _src = _aiAddressSource || 'user';
+      var _badge = '';
+      if (_src === 'ai' || _src === 'ai-modified') _badge = ' <span style="font-size:9px;font-weight:700;color:#92400e;background:#fef3c7;padding:2px 6px;border-radius:4px;border:1px solid #fcd34d;">AI Generated</span>';
+      else if (_src === 'rejected') _badge = ' <span style="font-size:9px;font-weight:700;color:#b91c1c;background:#fef2f2;padding:2px 6px;border-radius:4px;border:1px solid #fca5a5;">AI Rejected</span>';
+      else if (_src === 'ai-edited') _badge = ' <span style="font-size:9px;font-weight:700;color:#166534;background:#f0fdf4;padding:2px 6px;border-radius:4px;border:1px solid #86efac;">AI Edited</span>';
+      bodyHtml += prow('Address', _addrStr + _badge);
+    }
+    if (!isResearch && formComplete) {
+      bodyHtml += prow('Budget', (window._budgetType||'')+(budgetFmt?' &middot; '+budgetFmt:''));
+      bodyHtml += prow('Customer Type', window._customerType||'');
+      bodyHtml += prow('Assigned To', owner);
+    }
+    bodyHtml += prow('Rep', rep);
+    if (notes) bodyHtml += prow('Notes', notes);
 
-      // Header — color-coded banner by score tier
-      (function() {
-        var bannerBg = formComplete
-          ? (total >= 7 ? '#059669' : total >= 4 ? '#d97706' : '#3E4460')
-          : '#0f172a';
-        var muted = 'rgba(255,255,255,0.65)';
-        return '<div style="background:' + bannerBg + ';padding:18px 20px;display:flex;justify-content:space-between;align-items:flex-start;">' +
-          '<div>' +
-            '<p style="margin:0 0 4px;font-size:9px;font-weight:600;color:' + (formComplete ? muted : '#64748b') + ';text-transform:uppercase;letter-spacing:0.12em;">AG\'s IPA Report Card</p>' +
-            (formComplete
-              ? '<p style="margin:0;font-size:26px;font-weight:700;color:#fff;line-height:1;">' + total + '/9 <span style="font-size:16px;opacity:0.85;">' + stars + '</span></p>'
-              : '<p style="margin:0;font-size:16px;font-weight:700;color:#64748b;line-height:1.3;">Incomplete Scorecard</p><p style="margin:4px 0 0;font-size:10px;color:#475569;">Fill in all required fields</p>'
-            ) +
-            '<p style="margin:4px 0 0;font-size:11px;color:' + (formComplete ? muted : '#64748b') + ';">' + new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}) + '</p>' +
-          '</div>' +
-          '<div style="text-align:right;">' +
-            '<p style="margin:0 0 2px;font-size:9px;color:' + (formComplete ? muted : '#64748b') + ';">Assigned To</p>' +
-            '<p style="margin:0;font-size:22px;font-weight:700;color:' + (formComplete ? '#fff' : '#334155') + ';">' + (formComplete ? owner : '—') + '</p>' +
-            '<p style="margin:2px 0 0;font-size:11px;color:' + (formComplete ? muted : '#64748b') + ';">' + (formComplete ? priority : '') + '</p>' +
-          '</div>' +
-        '</div>';
-      })() +
+    bodyHtml += '</table></div>';
 
-      '<div style="padding:16px 20px;">' +
-        '<table style="width:100%;border-collapse:collapse;">' +
-
-        // TO DO
-        (pillClass === 'asst' ? '<tr><td colspan="2" style="padding:8px 12px;background:#fef2f2;border-left:4px solid #ef4444;border-radius:0 4px 4px 0;"><p style="margin:0;font-size:12px;font-weight:700;color:#dc2626;">⊘ TO DO: Kill future tasks in Insights.</p></td></tr><tr><td colspan="2" style="height:10px;"></td></tr>' : '') +
-        (pillClass !== 'asst' && total >= 6 && window._customerType === 'Existing Customer' ? '<tr><td colspan="2" style="padding:8px 12px;background:#f0fdf4;border-left:4px solid #16a34a;border-radius:0 4px 4px 0;"><p style="margin:0;font-size:12px;font-weight:700;color:#16a34a;">✓ TO DO: Enable tasks in Insights for this customer.</p></td></tr><tr><td colspan="2" style="height:10px;"></td></tr>' : '') +
-
-        // Signals
-        psec('Signals') +
-        '<tr><td colspan="2" style="padding:5px 0;"><span style="display:inline-block;padding:2px 10px;border-radius:999px;background:#eff6ff;color:#3E4460;font-size:11px;font-weight:700;margin-right:8px;">IV (Size) ' + (_scIv||0) + '/3</span><span style="font-size:13px;color:#1e293b;">' + (_lbIv||'—') + '</span></td></tr>' +
-        '<tr><td colspan="2" style="padding:5px 0;"><span style="display:inline-block;padding:2px 10px;border-radius:999px;background:#fefce8;color:#854d0e;font-size:11px;font-weight:700;margin-right:8px;">PV (Budget) ' + (_scPv||0) + '/3</span><span style="font-size:13px;color:#1e293b;">' + (_lbPv||'—') + (budgetFmt ? ' · ' + budgetFmt : '') + '</span></td></tr>' +
-        '<tr><td colspan="2" style="padding:5px 0;"><span style="display:inline-block;padding:2px 10px;border-radius:999px;background:#f0fdf4;color:#15803d;font-size:11px;font-weight:700;margin-right:8px;">AV (Spend) ' + (_scAv||0) + '/3</span><span style="font-size:13px;color:#1e293b;">' + (_lbAv||'—') + '</span></td></tr>' +
-
-        // Budget
-        (budgetFmt ? '<tr><td colspan="2" style="padding:10px 0 0;"><div style="background:#fffbeb;border-left:3px solid #f59e0b;padding:8px 12px;border-radius:0 4px 4px 0;"><p style="margin:0;font-size:13px;font-weight:600;color:#92400e;">💰 ' + (window._budgetType || '') + ' Budget: ' + budgetFmt + (window._budgetType ? ' (' + window._budgetType + ')' : '') + '</p></div></td></tr>' : '') +
-
-        // Customer Details
-        psec('Customer Details') +
-        prow('Entered By', window._currentRep || '—') +
-        prow('Name', name) +
-        prow('Company', company) +
-        (cid !== '—' ? prow('Existing CID', cid) : '') +
-        prow('Phone', phone !== '—' ? phone : '') +
-        prow('Email', emailVal !== '—' ? emailVal : '') +
-        (notes ? prow('Notes', notes) : '') +
-
-        // Address with provenance badge
-        (function() {
-          var _snap = _aiAddressSnapshot || {};
-          var _s = document.getElementById('f-street').value.trim() || _snap.street || '';
-          var _u = document.getElementById('f-suite').value.trim()  || _snap.suite  || '';
-          var _c = document.getElementById('f-city').value.trim()   || _snap.city   || '';
-          var _t = document.getElementById('f-state').value.trim()  || _snap.state  || '';
-          var _z = document.getElementById('f-zip').value.trim()    || _snap.zip    || '';
-          var _parts = [_s,_u,_c,_t,_z].filter(Boolean);
-          if (!_parts.length) return '';
-          var _addrStr = _parts.join(', ');
-          var _src = _aiAddressSource || 'user';
-          var _badge = '';
-          if (_src === 'ai' || _src === 'ai-modified') {
-            _badge = '<div style="margin-top:4px;display:inline-flex;align-items:center;gap:5px;padding:3px 8px;background:#fef3c7;border:1px solid #fcd34d;border-radius:4px;">' +
-              '<span style="font-size:11px;">⚠</span>' +
-              '<span style="font-size:10px;font-weight:700;color:#92400e;letter-spacing:0.03em;">AI Generated — Not User Verified</span>' +
-            '</div>';
-          } else if (_src === 'rejected') {
-            _badge = '<div style="margin-top:4px;display:inline-flex;align-items:center;gap:5px;padding:3px 8px;background:#fef2f2;border:1px solid #fca5a5;border-radius:4px;">' +
-              '<span style="font-size:11px;">⚠</span>' +
-              '<span style="font-size:10px;font-weight:700;color:#b91c1c;letter-spacing:0.03em;">AI Generated — Rejected by Rep — Not User Verified</span>' +
-            '</div>';
-          } else if (_src === 'ai-edited') {
-            _badge = '<div style="margin-top:4px;display:inline-flex;align-items:center;gap:5px;padding:3px 8px;background:#f0fdf4;border:1px solid #86efac;border-radius:4px;">' +
-              '<span style="font-size:10px;font-weight:700;color:#166534;letter-spacing:0.03em;">AI Generated — User Edited</span>' +
-            '</div>';
-          }
-          return '<tr><td style="padding:4px 14px 4px 0;font-size:13px;color:#64748b;white-space:nowrap;vertical-align:top;width:120px;">Address</td>' +
-            '<td style="padding:4px 0;font-size:13px;color:#1e293b;font-weight:500;">' + _addrStr + _badge + '</td></tr>';
-        })() +
-
-        // Decision Makers
-        (hasDM ? psec('Decision Makers') + dmHtml : '') +
-
-        // AI Research
-        rHtml +
-
-        '</table>' +
-      '</div>' +
-
-      '<div style="background:#f8fafc;border-top:1px solid #e2e8f0;padding:10px 20px;text-align:center;">' +
-        '<p style="margin:0;font-size:11px;color:#64748b;">AG\'s IPA Report Card · Entered by ' + (window._currentRep || '—') + '</p>' +
-      '</div>' +
-      '</div>';
-    } // end else (non-research)
+    // ── ASSEMBLE ──
+    var emailInner = '<div style="font-family:Arial,sans-serif;width:100%;background:#fff;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;">' +
+      headerHtml + blurbHtml + infoBar + bodyHtml +
+      '<div style="background:#f8fafc;border-top:1px solid #e2e8f0;padding:10px 18px;text-align:center;">' +
+        '<p style="margin:0;font-size:11px;color:#64748b;">AG\'s IPA Report Card &middot; '+(isResearch?'Company Research':'Scorecard')+' &middot; Entered by '+rep+'</p>' +
+      '</div></div>';
 
     var emailDoc = '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;padding:16px;background:#f1f5f9;font-family:Arial,sans-serif;}a{color:inherit;}</style></head><body>' + emailInner + '</body></html>';
 
