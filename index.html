@@ -9250,6 +9250,17 @@
     calculate();
     checkCopyReady();
     _renderActivityCard();
+
+    // If loading a previously saved record, enter edit mode (show Update/Resubmit instead of Email)
+    if (_savedRecordId && r.status === 'complete') {
+      var emailBtnR = document.getElementById('email-btn');
+      if (emailBtnR) { emailBtnR.style.display = 'none'; emailBtnR.disabled = true; emailBtnR.style.pointerEvents = 'none'; }
+      var editBtnR = document.getElementById('edit-record-btn');
+      if (editBtnR) editBtnR.style.display = 'none';
+      var resubBtnR = document.getElementById('resubmit-btn');
+      if (resubBtnR) resubBtnR.style.display = 'inline-flex';
+    }
+
     setTimeout(function(){ var ws = document.getElementById('f-website'); if (ws && ws.value) ws.focus(); else { var el = document.getElementById('f-name'); if (el) el.focus(); } }, 100);
   }
 
@@ -12619,6 +12630,20 @@
           resubBtn.style.borderColor = '';
           resubBtn.style.background = '';
           lockForm();
+          // After update, show Re-send Email option
+          var emailBtnPost = document.getElementById('email-btn');
+          var emailLblPost = document.getElementById('email-btn-label');
+          if (emailBtnPost) {
+            emailBtnPost.style.display = '';
+            emailBtnPost.disabled = false;
+            emailBtnPost.style.pointerEvents = '';
+            emailBtnPost.style.opacity = '';
+            emailBtnPost.classList.remove('disabled');
+            emailBtnPost.style.background = 'rgba(29,158,117,0.12)';
+            emailBtnPost.style.borderColor = 'rgba(29,158,117,0.45)';
+            emailBtnPost.style.color = '#5DCAA5';
+            if (emailLblPost) emailLblPost.textContent = 'Re-send Email';
+          }
         }, 1500);
       })
       .catch(function() {
