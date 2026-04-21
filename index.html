@@ -7266,7 +7266,7 @@
       companyName:'', domain:'', employees:'', industry:'', blurb:'',
       ivState:'none', ivYourTier:'', ivYourScore:0, ivAiTier:'', ivAiScore:0,
       eventsSite:[], eventsWeb:[], observances:[], emailResearchBlock:'',
-      companyLinkedIn:'', contactLinkedIn:'', revenue:'', foundedYear:'', recentNews:[], socialMedia:{}, searchCostUSD:0, searchDuration:null, salesHooks:[], keyPeople:[], tradeShows:[], competitors:[]
+      companyLinkedIn:'', contactLinkedIn:'', revenue:'', foundedYear:'', recentNews:[], socialMedia:{}, searchCostUSD:0, searchDuration:null, salesHooks:[], keyPeople:[], tradeShows:[], competitors:[], attackPlan:''
     };
     _ivAccepted = false;
     var _ivBadge1 = document.getElementById('iv-ai-badge'); if (_ivBadge1) _ivBadge1.style.display = 'none';
@@ -8947,6 +8947,7 @@
       _researchData.keyPeople      = Array.isArray(rd.keyPeople) ? rd.keyPeople : [];
       _researchData.tradeShows     = Array.isArray(rd.tradeShows) ? rd.tradeShows.filter(function(t){ return t && t.title; }) : [];
       _researchData.competitors    = Array.isArray(rd.competitors) ? rd.competitors : [];
+      _researchData.attackPlan     = rd.attackPlan || '';
       _researchData.searchCostUSD  = parseFloat(rd.searchCostUSD) || 0;
       _researchData.searchDuration = rd.searchDuration || null;
       _researchData.ivState = 'none';
@@ -9019,6 +9020,7 @@
       _researchData.salesHooks     = Array.isArray(rd.salesHooks)  ? rd.salesHooks  : [];
       _researchData.tradeShows     = Array.isArray(rd.tradeShows)  ? rd.tradeShows.filter(function(t){ return t && t.title; })  : [];
       _researchData.competitors    = Array.isArray(rd.competitors) ? rd.competitors : [];
+      _researchData.attackPlan     = rd.attackPlan || '';
       _researchData.companyLinkedIn= rd.companyLinkedIn || '';
       _researchData.decisionMakers = rd.decisionMakers  || null;
       // IV check state is transient — reset
@@ -9076,6 +9078,7 @@
       _researchData.keyPeople      = Array.isArray(_rdRestore.keyPeople)    ? _rdRestore.keyPeople    : [];
       _researchData.tradeShows     = Array.isArray(_rdRestore.tradeShows)   ? _rdRestore.tradeShows.filter(function(t){ return t && t.title; }) : [];
       _researchData.competitors    = Array.isArray(_rdRestore.competitors)  ? _rdRestore.competitors  : [];
+      _researchData.attackPlan     = _rdRestore.attackPlan || '';
       _researchData.searchCostUSD  = parseFloat(_rdRestore.searchCostUSD) || 0;
       _researchData.searchDuration = _rdRestore.searchDuration || null;
       // IV check state is transient (not persisted) — reset to prevent stale mismatch display
@@ -9089,7 +9092,7 @@
         companyName:'', domain:'', employees:'', industry:'', blurb:'',
         ivState:'none', ivYourTier:'', ivYourScore:0, ivAiTier:'', ivAiScore:0,
         eventsSite:[], eventsWeb:[], observances:[], emailResearchBlock:'',
-        companyLinkedIn:'', contactLinkedIn:'', revenue:'', foundedYear:'', recentNews:[], socialMedia:{}, searchCostUSD:0, searchDuration:null, salesHooks:[], keyPeople:[], tradeShows:[], competitors:[]
+        companyLinkedIn:'', contactLinkedIn:'', revenue:'', foundedYear:'', recentNews:[], socialMedia:{}, searchCostUSD:0, searchDuration:null, salesHooks:[], keyPeople:[], tradeShows:[], competitors:[], attackPlan:''
       };
     }
     _ivAccepted = false;
@@ -11000,7 +11003,7 @@
       companyName:'', domain:'', employees:'', industry:'', blurb:'',
       ivState:'none', ivYourTier:'', ivYourScore:0, ivAiTier:'', ivAiScore:0,
       eventsSite:[], eventsWeb:[], observances:[], emailResearchBlock:'',
-      companyLinkedIn:'', contactLinkedIn:'', revenue:'', foundedYear:'', recentNews:[], socialMedia:{}, searchCostUSD:0, searchDuration:null, salesHooks:[], keyPeople:[], tradeShows:[], competitors:[]
+      companyLinkedIn:'', contactLinkedIn:'', revenue:'', foundedYear:'', recentNews:[], socialMedia:{}, searchCostUSD:0, searchDuration:null, salesHooks:[], keyPeople:[], tradeShows:[], competitors:[], attackPlan:''
     };
     _liveEmailIntent = 'checkin'; _liveEmailInstruction = ''; _liveEmailCoupon = ''; _liveEmailSelected = []; _liveEmailItems = [];
     // Clear AI-filled green fields
@@ -12644,7 +12647,7 @@
     };
     if (hasAI) {
       rec.aiResearch = 'YES';
-      rec.researchData = (function(){ try { var rd = _researchData; return JSON.stringify({ companyName:rd.companyName, domain:rd.domain, employees:rd.employees, industry:rd.industry, blurb:rd.blurb, revenue:rd.revenue, foundedYear:rd.foundedYear, socialMedia:rd.socialMedia, recentNews:rd.recentNews, eventsSite:rd.eventsSite, eventsWeb:rd.eventsWeb, observances:rd.observances, companyLinkedIn:rd.companyLinkedIn, contactLinkedIn:rd.contactLinkedIn, contactPerson:rd.contactPerson, decisionMakers:rd.decisionMakers, salesHooks:rd.salesHooks, keyPeople:rd.keyPeople||[], searchCostUSD:rd.searchCostUSD, searchDuration:rd.searchDuration, tradeShows:rd.tradeShows||[], competitors:rd.competitors||[] }); } catch(e){ return ''; } })();
+      rec.researchData = (function(){ try { var rd = _researchData; return JSON.stringify({ companyName:rd.companyName, domain:rd.domain, employees:rd.employees, industry:rd.industry, blurb:rd.blurb, revenue:rd.revenue, foundedYear:rd.foundedYear, socialMedia:rd.socialMedia, recentNews:rd.recentNews, eventsSite:rd.eventsSite, eventsWeb:rd.eventsWeb, observances:rd.observances, companyLinkedIn:rd.companyLinkedIn, contactLinkedIn:rd.contactLinkedIn, contactPerson:rd.contactPerson, decisionMakers:rd.decisionMakers, salesHooks:rd.salesHooks, keyPeople:rd.keyPeople||[], searchCostUSD:rd.searchCostUSD, searchDuration:rd.searchDuration, tradeShows:rd.tradeShows||[], competitors:rd.competitors||[], attackPlan:rd.attackPlan||'' }); } catch(e){ return ''; } })();
       rec.researchEvents = (function(){ try { return JSON.stringify({ events:(_researchData.eventsSite||[]).concat(_researchData.eventsWeb||[]), observances:_researchData.observances||[], tradeShows:_researchData.tradeShows||[] }); } catch(e){ return ''; } })();
       rec.researchNotes = typeof buildResearchBlock === 'function' ? buildResearchBlock() : '';
       rec.aiEmailHtml = (function(){ try { var el = document.getElementById('rp-email-preview-html'); return el ? (el._fullEmailDoc || el.innerHTML) : ''; } catch(e){ return ''; } })();
@@ -14608,7 +14611,6 @@
 
     populateIVCheck();
     populateEvents();
-    populateObservances();
     populateEmailPreview();
     populatePeoplePanel();
     // Update competitors badge count
@@ -14950,13 +14952,34 @@
     var tsLbl   = document.getElementById('rp-events-ts-label');
     var siteEl  = document.getElementById('rp-events-site');
     var webEl   = document.getElementById('rp-events-web');
+    var obsEl   = document.getElementById('rp-events-obs');
     var emptyEl = document.getElementById('rp-events-empty');
     var siteLbl = document.getElementById('rp-events-site-label');
     var webLbl  = document.getElementById('rp-events-web-label');
+    var obsLbl  = document.getElementById('rp-events-obs-label');
     var domain  = document.getElementById('f-email').value.trim();
     domain = domain.indexOf('@') !== -1 ? domain.split('@')[1] : 'company site';
     var ts = _researchData.tradeShows || [];
-    var totalEvents = (_researchData.eventsSite||[]).length + (_researchData.eventsWeb||[]).length + ts.length;
+    var obs = _researchData.observances || [];
+
+    // Dedup company events: merge site + web, remove duplicates by normalized title + date proximity
+    var allCompanyEvents = (_researchData.eventsSite||[]).concat(_researchData.eventsWeb||[]);
+    var seen = {};
+    var dedupedEvents = [];
+    allCompanyEvents.forEach(function(e) {
+      var normTitle = (e.title||'').toLowerCase().replace(/[^a-z0-9]/g, '');
+      var normDate = '';
+      try { var dp = new Date(e.date); if (!isNaN(dp)) normDate = dp.toISOString().slice(0,10); } catch(x) {}
+      var key = normTitle + '|' + normDate;
+      // Also check without date for fuzzy title match
+      if (!seen[key] && !seen[normTitle]) {
+        seen[key] = true;
+        seen[normTitle] = true;
+        dedupedEvents.push(e);
+      }
+    });
+
+    var totalEvents = dedupedEvents.length + ts.length + obs.length;
 
     // Trade shows section
     if (ts.length && tsEl && tsLbl) {
@@ -14974,13 +14997,10 @@
         if (t.confidence === 'confirmed') confBadge = '<span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:999px;background:rgba(93,202,165,0.12);border:1px solid rgba(93,202,165,0.3);color:#5DCAA5;vertical-align:middle;letter-spacing:0.04em;">&#10003; CONFIRMED</span> ';
         else if (t.confidence === 'likely') confBadge = '<span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:999px;background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.3);color:#f59e0b;vertical-align:middle;letter-spacing:0.04em;">LIKELY</span> ';
         else confBadge = '<span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:999px;background:rgba(148,163,184,0.12);border:1px solid rgba(148,163,184,0.3);color:var(--text-muted);vertical-align:middle;letter-spacing:0.04em;">INDUSTRY MATCH</span> ';
-        // Inject badges into the event object for buildEventCard
         var evtCopy = { title: t.title, date: t.date, venue: t.venue, source: t.source, recurring: t.recurring, notes: t.notes, summary: t.summary };
         var card = buildEventCard(evtCopy);
-        // Inject TRADESHOW + confidence badges after the title text
         var tsBadge = '<span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:999px;background:rgba(99,102,241,0.12);border:1px solid rgba(99,102,241,0.3);color:#818cf8;vertical-align:middle;letter-spacing:0.04em;margin-right:4px;">TRADESHOW</span>';
         card = card.replace('</p>\n', '</p>').replace('class="research-event-title">', 'class="research-event-title">' + tsBadge + confBadge);
-        // Add attendees line if present
         if (t.attendees) {
           card = card.replace('class="research-event-sub">', 'class="research-event-sub">') ;
           var subEnd = card.indexOf('</p>', card.indexOf('research-event-sub'));
@@ -14993,22 +15013,35 @@
       if (tsLbl) tsLbl.style.display = 'none';
     }
 
-    var evtCount = (_researchData.eventsSite||[]).length + (_researchData.eventsWeb||[]).length;
-    if (evtCount === 0 && ts.length === 0) {
-      siteEl.innerHTML = ''; webEl.innerHTML = '';
-      siteLbl.style.display = 'none'; webLbl.style.display = 'none';
-      emptyEl.style.display = 'block';
+    // Company events section (deduped)
+    if (dedupedEvents.length) {
+      if (siteLbl) { siteLbl.textContent = 'Company Events'; siteLbl.style.display = 'block'; }
+      if (siteEl) siteEl.innerHTML = _sortByDate(dedupedEvents).map(buildEventCard).join('');
+      if (webLbl) webLbl.style.display = 'none';
+      if (webEl) webEl.innerHTML = '';
     } else {
-      emptyEl.style.display = 'none';
-      if ((_researchData.eventsSite||[]).length) {
-        siteLbl.textContent = 'Found on ' + (_researchData.domain || domain); siteLbl.style.display = 'block';
-        siteEl.innerHTML = _sortByDate(_researchData.eventsSite).map(buildEventCard).join('');
-      } else { siteLbl.style.display = 'none'; siteEl.innerHTML = ''; }
-      if ((_researchData.eventsWeb||[]).length) {
-        webLbl.textContent = 'General web results'; webLbl.style.display = 'block';
-        webEl.innerHTML = _sortByDate(_researchData.eventsWeb).map(buildEventCard).join('');
-      } else { webLbl.style.display = 'none'; webEl.innerHTML = ''; }
+      if (siteLbl) siteLbl.style.display = 'none';
+      if (siteEl) siteEl.innerHTML = '';
+      if (webLbl) webLbl.style.display = 'none';
+      if (webEl) webEl.innerHTML = '';
     }
+
+    // Industry dates section (observances)
+    if (obs.length) {
+      if (obsLbl) { obsLbl.textContent = 'Industry Dates' + (_researchData.industry ? ' — ' + _researchData.industry : ''); obsLbl.style.display = 'block'; }
+      if (obsEl) obsEl.innerHTML = _sortByDate(obs).map(buildEventCard).join('');
+    } else {
+      if (obsLbl) obsLbl.style.display = 'none';
+      if (obsEl) obsEl.innerHTML = '';
+    }
+
+    // Empty state
+    if (totalEvents === 0) {
+      if (emptyEl) emptyEl.style.display = 'block';
+    } else {
+      if (emptyEl) emptyEl.style.display = 'none';
+    }
+
     document.getElementById('rtab-events-badge').textContent = totalEvents;
   }
 
@@ -15092,19 +15125,7 @@
     if (btn) { btn.textContent = 'Added ✓'; btn.classList.add('added'); }
   }
 
-  function populateObservances() {
-    var listEl  = document.getElementById('rp-observances-list');
-    var emptyEl = document.getElementById('rp-obs-empty');
-    var labelEl = document.getElementById('rp-obs-label');
-    var obs     = _researchData.observances || [];
-    document.getElementById('rtab-observances-badge').textContent = obs.length;
-    if (!obs.length) {
-      listEl.innerHTML = ''; emptyEl.style.display = 'block'; labelEl.textContent = ''; return;
-    }
-    emptyEl.style.display = 'none';
-    labelEl.textContent = (_researchData.industry || 'Industry') + ' — Recurring Annually';
-    listEl.innerHTML = _sortByDate(obs).map(buildEventCard).join('');
-  }
+  function populateObservances() { /* merged into populateEvents */ }
 
   function buildResearchBlock() {
     var company  = document.getElementById('f-company').value.trim() || '—';
@@ -16102,7 +16123,8 @@
     if (tab === 'hooks') populateHooksPanel();
     if (tab === 'custemail') renderLiveEmailTab();
     if (tab === 'competitors') populateCompetitorsPanel();
-    var panels = ['events','observances','people','hooks','email','custemail','competitors'];
+    if (tab === 'attackplan') populateAttackPlanPanel();
+    var panels = ['events','people','hooks','email','custemail','competitors','attackplan'];
     // Fade out all inactive panels immediately
     panels.forEach(function(t) {
       var panel = document.getElementById('rpanel-' + t);
@@ -16277,6 +16299,210 @@
       if (btn) { btn.disabled = false; btn.innerHTML = 'FIND COMPETITORS'; }
       if (list) list.innerHTML = '<div style="padding:20px;text-align:center;font-size:12px;color:#f87171;">Search failed. Try again.</div>';
     });
+  }
+
+  // ── Attack Plan ─────────────────────────────────────────────────
+  function populateAttackPlanPanel() {
+    var content = document.getElementById('rp-attackplan-content');
+    var empty = document.getElementById('rp-attackplan-empty');
+    var plan = _researchData.attackPlan || '';
+    if (plan) {
+      if (content) { content.innerHTML = plan; content.style.display = 'block'; }
+      if (empty) empty.style.display = 'none';
+    } else {
+      if (content) { content.innerHTML = ''; content.style.display = 'none'; }
+      if (empty) empty.style.display = 'flex';
+    }
+  }
+
+  function generateAttackPlan() {
+    var btn = document.getElementById('rp-attackplan-btn');
+    var content = document.getElementById('rp-attackplan-content');
+    var empty = document.getElementById('rp-attackplan-empty');
+    if (btn) { btn.disabled = true; btn.innerHTML = 'Analyzing...'; }
+    if (empty) empty.style.display = 'none';
+    if (content) { content.style.display = 'block'; content.innerHTML = '<div style="padding:32px;text-align:center;"><div style="display:inline-block;width:16px;height:16px;border:2px solid rgba(245,158,11,0.3);border-top-color:#f59e0b;border-radius:50%;animation:spin 0.8s linear infinite;margin-right:8px;vertical-align:middle;"></div><span style="font-size:12px;color:var(--text-muted);">Building your attack plan...</span></div>'; }
+
+    var rd = _researchData || {};
+    var company = rd.companyName || document.getElementById('f-company').value.trim() || '';
+    var industry = rd.industry || '';
+    var blurb = rd.blurb || '';
+    var employees = rd.employees || '';
+    var revenue = rd.revenue || '';
+
+    // Gather all intel
+    var events = (rd.eventsSite||[]).concat(rd.eventsWeb||[]).filter(function(e){
+      var d = _daysUntilEvt(e.date); return d !== null && d >= 0;
+    }).map(function(e){ var d = _daysUntilEvt(e.date); return (e.title||'') + ' (' + (e.date||'') + ', ' + d + ' days away)'; });
+    var observances = (rd.observances||[]).map(function(o){ var d = _daysUntilEvt(o.date); return (o.title||'') + (d !== null && d >= 0 ? ' (' + d + ' days away)' : ''); });
+    var hooks = (rd.salesHooks||[]).map(function(h){ return '[' + (h.type||'hook').toUpperCase() + '] ' + (h.finding||'') + (h.pitch ? ' | Swag angle: ' + h.pitch : ''); });
+    var people = (rd.keyPeople||[]).map(function(p){ return (p.name||'') + (p.title ? ' (' + p.title + ')' : '') + (p.linkedin ? ' [LinkedIn]' : ''); });
+    var competitors = (rd.competitors||[]).map(function(c){ return (c.name||'') + (c.overlap ? ' — ' + c.overlap : ''); });
+    var news = (rd.recentNews||[]).map(function(n){ return (n.date||'') + ': ' + (n.headline||''); });
+    var tradeShows = (rd.tradeShows||[]).map(function(t){ return (t.title||'') + (t.date ? ' (' + t.date + ')' : ''); });
+    var socialMedia = rd.socialMedia || {};
+    var socialList = Object.keys(socialMedia).filter(function(k){ return socialMedia[k]; }).join(', ');
+    var dm = rd.decisionMakers || {};
+    var dmList = ['ownerExec','marketing','procurement'].filter(function(k){ return dm[k] && dm[k].name; }).map(function(k){ return dm[k].name + ' (' + k.replace('ownerExec','Owner/Exec') + ')'; });
+
+    var prompt = [
+      'You are a senior sales strategist for a promotional products company (Quality Logo Products). Analyze ALL of the following intelligence about a prospect and produce a structured ATTACK PLAN.',
+      '',
+      '=== COMPANY ===',
+      'Name: ' + company,
+      industry ? 'Industry: ' + industry : '',
+      blurb ? 'About: ' + blurb : '',
+      employees ? 'Employees: ' + employees : '',
+      revenue ? 'Revenue: ' + revenue : '',
+      socialList ? 'Social presence: ' + socialList : '',
+      '',
+      events.length ? '=== UPCOMING EVENTS (' + events.length + ') ===\n' + events.join('\n') : '=== EVENTS === None found',
+      observances.length ? '=== OBSERVANCES ===\n' + observances.join('\n') : '',
+      tradeShows.length ? '=== TRADE SHOWS ===\n' + tradeShows.join('\n') : '',
+      hooks.length ? '=== SALES HOOKS (' + hooks.length + ') ===\n' + hooks.join('\n') : '',
+      people.length ? '=== KEY PEOPLE ===\n' + people.join('\n') : '',
+      dmList.length ? '=== DECISION MAKERS ===\n' + dmList.join('\n') : '',
+      competitors.length ? '=== COMPETITORS ===\n' + competitors.join('\n') : '',
+      news.length ? '=== RECENT NEWS ===\n' + news.join('\n') : '',
+      '',
+      'Return ONLY valid JSON with this structure (no markdown, no backticks):',
+      '{',
+      '  "opener": "1-2 sentence opening line for the call. Reference something specific and timely.",',
+      '  "timing_angles": ["Array of 2-3 time-sensitive opportunities with urgency level and days until action needed"],',
+      '  "talking_points": ["Array of 3-5 specific conversation starters tied to real findings. Each should feel like insider knowledge."],',
+      '  "product_recs": [{"product":"Product name","reason":"Why this fits their specific situation","tie_in":"Which event/hook/news this connects to"}],',
+      '  "avoid": ["1-2 things NOT to say or lead with, based on their profile"],',
+      '  "best_contact": "Name and title of the person most likely to be the promo buyer, with reasoning",',
+      '  "competitive_edge": "One sentence on how to position against their likely current vendor"',
+      '}',
+      '',
+      'Rules:',
+      '- Every point must reference SPECIFIC data from above, not generic advice',
+      '- Product recommendations must be real promotional product categories (water bottles, pens, tote bags, apparel, tech accessories, drinkware, signage, etc.)',
+      '- Timing angles must include actual dates or "X days away" urgency',
+      '- If key people are available, identify the most likely promo buyer by title',
+      '- If competitors are listed, suggest how to use that knowledge',
+      '- Be direct and actionable, no filler'
+    ].filter(Boolean).join('\n');
+
+    fetch(GS_URL, { method:'POST', body: JSON.stringify({ action:'runResearch', prompt:prompt, rep:window._currentRep||'', noSearch:false }) })
+    .then(function(r){ return r.text(); })
+    .then(function(raw) {
+      var data; try { data = JSON.parse(raw); } catch(e) { data = null; }
+      if (data) _updateCostBadge(data);
+      var result = null;
+      if (data && data.result) {
+        var rText = typeof data.result === 'string' ? data.result : JSON.stringify(data.result);
+        var jsonMatch = rText.match(/\{[\s\S]*\}/);
+        if (jsonMatch) { try { result = JSON.parse(jsonMatch[0]); } catch(e) {} }
+      }
+      if (result) {
+        var html = _renderAttackPlan(result);
+        _researchData.attackPlan = html;
+        if (content) { content.innerHTML = html; content.style.display = 'block'; }
+        if (empty) empty.style.display = 'none';
+      } else {
+        if (content) content.innerHTML = '<div style="padding:20px;text-align:center;font-size:12px;color:#f87171;">Could not generate attack plan. Try running AI research first.</div>';
+      }
+      if (btn) { btn.disabled = false; btn.innerHTML = 'GENERATE ATTACK PLAN'; }
+      // Auto-save
+      try { if (_savedRecordId) {
+        var rec = _buildCurrentRecord(); rec.id = _savedRecordId;
+        gsPost({ action: 'updateRecord', record: rec });
+      }} catch(e) {}
+    })
+    .catch(function(err) {
+      console.warn('[VRC] Attack plan failed:', err);
+      if (btn) { btn.disabled = false; btn.innerHTML = 'GENERATE ATTACK PLAN'; }
+      if (content) content.innerHTML = '<div style="padding:20px;text-align:center;font-size:12px;color:#f87171;">Generation failed. Try again.</div>';
+    });
+  }
+
+  function _renderAttackPlan(plan) {
+    var secStyle = 'margin-bottom:16px;';
+    var secHead = 'font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#f59e0b;margin-bottom:8px;display:flex;align-items:center;gap:6px;';
+    var cardStyle = 'background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:10px 14px;margin-bottom:6px;';
+
+    var html = '';
+
+    // Opener
+    if (plan.opener) {
+      html += '<div style="' + secStyle + '">' +
+        '<div style="' + secHead + '"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Open with</div>' +
+        '<div style="' + cardStyle + 'border-color:rgba(245,158,11,0.25);background:rgba(245,158,11,0.05);font-size:13px;color:var(--text);line-height:1.6;font-style:italic;">"' + plan.opener + '"</div>' +
+      '</div>';
+    }
+
+    // Timing angles
+    if (plan.timing_angles && plan.timing_angles.length) {
+      html += '<div style="' + secStyle + '">' +
+        '<div style="' + secHead + '"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Timing angles</div>';
+      plan.timing_angles.forEach(function(t) {
+        html += '<div style="' + cardStyle + 'font-size:12px;color:var(--text);line-height:1.5;">' + t + '</div>';
+      });
+      html += '</div>';
+    }
+
+    // Talking points
+    if (plan.talking_points && plan.talking_points.length) {
+      html += '<div style="' + secStyle + '">' +
+        '<div style="' + secHead + '"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Talking points</div>';
+      plan.talking_points.forEach(function(tp, idx) {
+        html += '<div style="' + cardStyle + 'display:flex;gap:10px;align-items:flex-start;">' +
+          '<span style="font-size:11px;font-weight:700;color:#f59e0b;flex-shrink:0;min-width:16px;">' + (idx+1) + '</span>' +
+          '<span style="font-size:12px;color:var(--text);line-height:1.5;">' + tp + '</span>' +
+        '</div>';
+      });
+      html += '</div>';
+    }
+
+    // Product recommendations
+    if (plan.product_recs && plan.product_recs.length) {
+      html += '<div style="' + secStyle + '">' +
+        '<div style="' + secHead + '"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg> Product recommendations</div>';
+      plan.product_recs.forEach(function(pr) {
+        var p = typeof pr === 'string' ? { product: pr, reason: '', tie_in: '' } : pr;
+        html += '<div style="' + cardStyle + '">' +
+          '<div style="font-size:12px;font-weight:600;color:#5DCAA5;">' + (p.product||'') + '</div>' +
+          (p.reason ? '<div style="font-size:11px;color:var(--text-muted);margin-top:3px;line-height:1.5;">' + p.reason + '</div>' : '') +
+          (p.tie_in ? '<div style="font-size:10px;color:#f59e0b;margin-top:4px;font-style:italic;">Ties to: ' + p.tie_in + '</div>' : '') +
+        '</div>';
+      });
+      html += '</div>';
+    }
+
+    // Best contact
+    if (plan.best_contact) {
+      html += '<div style="' + secStyle + '">' +
+        '<div style="' + secHead + '"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Best contact</div>' +
+        '<div style="' + cardStyle + 'font-size:12px;color:var(--text);line-height:1.5;">' + plan.best_contact + '</div>' +
+      '</div>';
+    }
+
+    // Competitive edge
+    if (plan.competitive_edge) {
+      html += '<div style="' + secStyle + '">' +
+        '<div style="' + secHead + 'color:#5DCAA5;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg> Competitive edge</div>' +
+        '<div style="' + cardStyle + 'border-color:rgba(29,158,117,0.25);background:rgba(29,158,117,0.05);font-size:12px;color:var(--text);line-height:1.5;">' + plan.competitive_edge + '</div>' +
+      '</div>';
+    }
+
+    // Avoid
+    if (plan.avoid && plan.avoid.length) {
+      html += '<div style="' + secStyle + '">' +
+        '<div style="' + secHead + 'color:#f87171;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> Avoid</div>';
+      plan.avoid.forEach(function(a) {
+        html += '<div style="' + cardStyle + 'border-color:rgba(248,113,113,0.2);font-size:12px;color:var(--text-muted);line-height:1.5;">' + a + '</div>';
+      });
+      html += '</div>';
+    }
+
+    // Rerun button at bottom
+    html += '<div style="text-align:center;padding:8px 0 4px;">' +
+      '<button onclick="generateAttackPlan()" style="height:28px;padding:0 14px;border-radius:6px;border:1px solid rgba(245,158,11,0.3);background:transparent;color:#f59e0b;font-size:10px;font-weight:600;cursor:pointer;letter-spacing:0.04em;">Regenerate</button>' +
+    '</div>';
+
+    return html;
   }
 
   function researchThisCompany(website, companyName) {
@@ -16879,9 +17105,6 @@
         <button class="research-tab active" id="rtab-events" onclick="switchResearchTab('events')">
           Events <span class="research-tab-badge" id="rtab-events-badge">0</span>
         </button>
-        <button class="research-tab" id="rtab-observances" onclick="switchResearchTab('observances')">
-          Observances <span class="research-tab-badge" id="rtab-observances-badge">0</span>
-        </button>
         <button class="research-tab" id="rtab-hooks" onclick="switchResearchTab('hooks')">
           Sales Hooks <span class="research-tab-badge" id="rtab-hooks-badge" style="display:none;"></span>
         </button>
@@ -16901,6 +17124,9 @@
         <button class="research-tab" id="rtab-custemail" onclick="switchResearchTab('custemail')" style="white-space:nowrap;">
           ✉ Customer Email
         </button>
+        <button class="research-tab" id="rtab-attackplan" onclick="switchResearchTab('attackplan')" style="white-space:nowrap;">
+          ⚡ Attack Plan
+        </button>
       </div>
 
     </div><!-- end .research-popup-fixed -->
@@ -16908,7 +17134,7 @@
     <!-- SCROLLABLE CONTENT: only the panel body scrolls -->
     <div class="research-popup-scroll">
 
-      <!-- Events panel -->
+      <!-- Events panel (merged: trade shows, company events, industry dates) -->
       <div class="research-panel active" id="rpanel-events">
         <p class="research-section-label" id="rp-events-ts-label" style="display:none;margin-bottom:4px;">Trade Shows</p>
         <div id="rp-events-tradeshows"></div>
@@ -16916,14 +17142,9 @@
         <div id="rp-events-site"></div>
         <p class="research-section-label" id="rp-events-web-label" style="display:none;margin-top:10px;"></p>
         <div id="rp-events-web"></div>
+        <p class="research-section-label" id="rp-events-obs-label" style="display:none;margin-top:10px;"></p>
+        <div id="rp-events-obs"></div>
         <div id="rp-events-empty" style="font-size:12px;color:var(--text-muted);text-align:center;padding:20px 0;">No events found for this company.</div>
-      </div>
-
-      <!-- Observances panel -->
-      <div class="research-panel" id="rpanel-observances">
-        <p class="research-section-label" id="rp-obs-label"></p>
-        <div id="rp-observances-list"></div>
-        <div id="rp-obs-empty" style="font-size:12px;color:var(--text-muted);text-align:center;padding:20px 0;display:none;">No industry observances available.</div>
       </div>
 
       <!-- Email preview panel -->
@@ -17021,6 +17242,21 @@
             <p style="margin:0;font-size:12px;color:#717378;max-width:300px;line-height:1.6;">Identify companies competing in the same market. Use competitors as new leads to research and target.</p>
           </div>
           <button id="rp-competitors-btn" onclick="findCompetitors()" style="margin-top:6px;height:34px;padding:0 20px;border-radius:8px;border:1px solid rgba(251,113,133,0.5);background:rgba(251,113,133,0.15);color:#FB7185;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:0.05em;display:inline-flex;align-items:center;gap:6px;">FIND COMPETITORS</button>
+        </div>
+      </div>
+
+      <!-- Attack Plan panel -->
+      <div class="research-panel" id="rpanel-attackplan" style="padding:0;">
+        <div id="rp-attackplan-content" style="display:none;padding:14px 20px 16px;"></div>
+        <div id="rp-attackplan-empty" style="padding:48px 24px;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;">
+          <div style="width:40px;height:40px;border-radius:50%;background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          </div>
+          <div>
+            <p style="margin:0 0 4px;font-size:13px;font-weight:600;color:var(--text);">Generate attack plan</p>
+            <p style="margin:0;font-size:12px;color:#717378;max-width:300px;line-height:1.6;">Synthesize all research into a ready to use call strategy with talking points, product recommendations, and timing angles.</p>
+          </div>
+          <button id="rp-attackplan-btn" onclick="generateAttackPlan()" style="margin-top:6px;height:34px;padding:0 20px;border-radius:8px;border:1px solid rgba(245,158,11,0.5);background:rgba(245,158,11,0.15);color:#f59e0b;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:0.05em;display:inline-flex;align-items:center;gap:6px;">GENERATE ATTACK PLAN</button>
         </div>
       </div>
 
