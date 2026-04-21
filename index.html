@@ -2126,14 +2126,15 @@
     border: 1px solid var(--border);
     border-radius: 14px;
     width: 100%;
-    max-width: 1100px;
+    max-width: 1400px;
+    height: 96vh;
     max-height: 96vh;
     overflow: hidden;
     display: flex;
     flex-direction: column;
   }
   .research-popup-fixed { flex-shrink: 0; }
-  .research-popup-scroll { flex: 1; overflow-y: auto; min-height: 400px; max-height: 400px; position: relative; scrollbar-width: thin; scrollbar-color: var(--green, rgba(29,158,117,0.4)) transparent; }
+  .research-popup-scroll { flex: 1 1 0; min-height: 0; position: relative; overflow: hidden; }
   .research-popup-scroll::-webkit-scrollbar { width: 4px; }
   .research-popup-scroll::-webkit-scrollbar-track { background: transparent; }
   .research-popup-scroll::-webkit-scrollbar-thumb { background: var(--green, rgba(29,158,117,0.4)); border-radius: 2px; }
@@ -2275,15 +2276,17 @@
     transform: translateY(6px);
     pointer-events: none;
     position: absolute;
-    width: 100%;
+    top: 0; left: 0; right: 0; bottom: 0;
     box-sizing: border-box;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--green, rgba(29,158,117,0.4)) transparent;
     transition: opacity 0.2s ease, transform 0.2s ease;
   }
   .research-panel.active {
     opacity: 1;
     transform: translateY(0);
     pointer-events: auto;
-    position: relative;
   }
   .research-section-label {
     font-size: 11px;
@@ -7266,7 +7269,7 @@
       companyName:'', domain:'', employees:'', industry:'', blurb:'',
       ivState:'none', ivYourTier:'', ivYourScore:0, ivAiTier:'', ivAiScore:0,
       eventsSite:[], eventsWeb:[], observances:[], emailResearchBlock:'',
-      companyLinkedIn:'', contactLinkedIn:'', revenue:'', foundedYear:'', recentNews:[], socialMedia:{}, searchCostUSD:0, searchDuration:null, salesHooks:[], keyPeople:[], tradeShows:[], competitors:[], attackPlan:''
+      companyLinkedIn:'', contactLinkedIn:'', revenue:'', foundedYear:'', recentNews:[], socialMedia:{}, searchCostUSD:0, searchDuration:null, salesHooks:[], keyPeople:[], tradeShows:[], competitors:[], attackPlan:'', companyIntel:''
     };
     _ivAccepted = false;
     var _ivBadge1 = document.getElementById('iv-ai-badge'); if (_ivBadge1) _ivBadge1.style.display = 'none';
@@ -7900,8 +7903,8 @@
       '5. ADD up to 3 new hooks based on freshly found information.',
       '6. Observances are calendar-based — keep all that have not passed yet this year. If an observance recurs annually, update its date to the next upcoming occurrence.',
       'Return ONLY valid JSON — no markdown:',
-      '{"eventsSite":[{"title":"","date":"Mon D YYYY","venue":"","source":"","recurring":false,"notes":""}],"eventsWeb":[{"title":"","date":"Mon D YYYY","venue":"","source":"","recurring":false,"notes":""}],"observances":[{"title":"","date":"Mon D-D YYYY","notes":"","summary":["Type:Industry observance","Purpose:","QLP Opportunity:"]}],"recentNews":[{"headline":"","date":"Mon YYYY","sourceUrl":""}],"salesHooks":[{"type":"event|observance|milestone|news|industry","finding":"","pitch":"","source":""}],"removedEvents":["event titles removed because they passed"],"refreshSummary":"1-2 sentence plain English summary of what changed"}',
-      'Rules: Never return events or observances with dates in the past. If already fully current, return unchanged with empty removedEvents. Prefer specific upcoming dates. refreshSummary must be human-readable for the rep.'
+      '{"eventsSite":[{"title":"","date":"Mon D YYYY","venue":"","source":"","recurring":false,"notes":""}],"eventsWeb":[{"title":"","date":"Mon D YYYY","venue":"","source":"","recurring":false,"notes":""}],"observances":[{"title":"","date":"Mon D-D YYYY","notes":"","summary":["Type:Industry observance","Purpose:","QLP Opportunity:"]}],"recentNews":[{"headline":"","date":"Mon YYYY","sourceUrl":""}],"salesHooks":[{"type":"milestone|expansion|hiring|news|brand|award|industry","finding":"","pitch":"","date":"Mon D YYYY if time-sensitive or empty","source":""}],"removedEvents":["event titles removed because they passed"],"refreshSummary":"1-2 sentence plain English summary of what changed"}',
+      'Rules: Never return events or observances with dates in the past. If already fully current, return unchanged with empty removedEvents. Prefer specific upcoming dates. refreshSummary must be human-readable for the rep. salesHooks should NOT duplicate individual events or observances — focus on milestones, expansions, news, brand angles, industry trends.'
     ].join('\n');
 
     fetch(GS_URL, { method: 'POST', body: JSON.stringify({ action: 'runResearch', prompt: prompt, rep: window._currentRep || '' }) })
@@ -8815,9 +8818,9 @@
       'You are a sales research refresh assistant for QLP. Today is ' + todayStr + '.',
       'COMPANY: ' + (r.company||'') + ' | DOMAIN: ' + domain + ' | INDUSTRY: ' + (rd.industry||'') + ' | ORIGINAL RECORD DATE: ' + (r.date||''),
       'EXISTING DATA: EVENTS: ' + existingEvents + ' | OBSERVANCES: ' + existingObs + ' | HOOKS: ' + existingHooks,
-      'Instructions: 1. Run 1-2 searches to find current upcoming events. 2. REMOVE any events whose date has passed. 3. ADD newly found upcoming events. 4. Remove hooks tied to expired events, keep/update the rest. 5. Add up to 3 new hooks. 6. Update observance dates to next upcoming occurrence if annual.',
-      'Return ONLY valid JSON: {"eventsSite":[{"title":"","date":"Mon D YYYY","venue":"","source":"","recurring":false,"notes":""}],"eventsWeb":[{"title":"","date":"Mon D YYYY","venue":"","source":"","recurring":false,"notes":""}],"observances":[{"title":"","date":"Mon D-D YYYY","notes":""}],"recentNews":[{"headline":"","date":"Mon YYYY","sourceUrl":""}],"salesHooks":[{"type":"event|observance|milestone|news|industry","finding":"","pitch":"","source":""}],"removedEvents":[],"refreshSummary":""}',
-      'Never return events or observances with dates in the past.'
+      'Instructions: 1. Run 1-2 searches to find current upcoming events. 2. REMOVE any events whose date has passed. 3. ADD newly found upcoming events. 4. Remove hooks tied to expired events, keep/update the rest. 5. Add up to 3 new hooks focused on milestones, expansions, news, brand angles (NOT individual events). 6. Update observance dates to next upcoming occurrence if annual.',
+      'Return ONLY valid JSON: {"eventsSite":[{"title":"","date":"Mon D YYYY","venue":"","source":"","recurring":false,"notes":""}],"eventsWeb":[{"title":"","date":"Mon D YYYY","venue":"","source":"","recurring":false,"notes":""}],"observances":[{"title":"","date":"Mon D-D YYYY","notes":""}],"recentNews":[{"headline":"","date":"Mon YYYY","sourceUrl":""}],"salesHooks":[{"type":"milestone|expansion|hiring|news|brand|award|industry","finding":"","pitch":"","date":"Mon D YYYY or empty","source":""}],"removedEvents":[],"refreshSummary":""}',
+      'Never return events or observances with dates in the past. salesHooks must NOT duplicate events or observances.'
     ].join('\n');
 
 
@@ -8948,6 +8951,7 @@
       _researchData.tradeShows     = Array.isArray(rd.tradeShows) ? rd.tradeShows.filter(function(t){ return t && t.title; }) : [];
       _researchData.competitors    = Array.isArray(rd.competitors) ? rd.competitors : [];
       _researchData.attackPlan     = rd.attackPlan || '';
+      _researchData.companyIntel   = rd.companyIntel || '';
       _researchData.searchCostUSD  = parseFloat(rd.searchCostUSD) || 0;
       _researchData.searchDuration = rd.searchDuration || null;
       _researchData.ivState = 'none';
@@ -9021,6 +9025,7 @@
       _researchData.tradeShows     = Array.isArray(rd.tradeShows)  ? rd.tradeShows.filter(function(t){ return t && t.title; })  : [];
       _researchData.competitors    = Array.isArray(rd.competitors) ? rd.competitors : [];
       _researchData.attackPlan     = rd.attackPlan || '';
+      _researchData.companyIntel   = rd.companyIntel || '';
       _researchData.companyLinkedIn= rd.companyLinkedIn || '';
       _researchData.decisionMakers = rd.decisionMakers  || null;
       // IV check state is transient — reset
@@ -9079,6 +9084,7 @@
       _researchData.tradeShows     = Array.isArray(_rdRestore.tradeShows)   ? _rdRestore.tradeShows.filter(function(t){ return t && t.title; }) : [];
       _researchData.competitors    = Array.isArray(_rdRestore.competitors)  ? _rdRestore.competitors  : [];
       _researchData.attackPlan     = _rdRestore.attackPlan || '';
+      _researchData.companyIntel   = _rdRestore.companyIntel || '';
       _researchData.searchCostUSD  = parseFloat(_rdRestore.searchCostUSD) || 0;
       _researchData.searchDuration = _rdRestore.searchDuration || null;
       // IV check state is transient (not persisted) — reset to prevent stale mismatch display
@@ -9092,7 +9098,7 @@
         companyName:'', domain:'', employees:'', industry:'', blurb:'',
         ivState:'none', ivYourTier:'', ivYourScore:0, ivAiTier:'', ivAiScore:0,
         eventsSite:[], eventsWeb:[], observances:[], emailResearchBlock:'',
-        companyLinkedIn:'', contactLinkedIn:'', revenue:'', foundedYear:'', recentNews:[], socialMedia:{}, searchCostUSD:0, searchDuration:null, salesHooks:[], keyPeople:[], tradeShows:[], competitors:[], attackPlan:''
+        companyLinkedIn:'', contactLinkedIn:'', revenue:'', foundedYear:'', recentNews:[], socialMedia:{}, searchCostUSD:0, searchDuration:null, salesHooks:[], keyPeople:[], tradeShows:[], competitors:[], attackPlan:'', companyIntel:''
       };
     }
     _ivAccepted = false;
@@ -11003,7 +11009,7 @@
       companyName:'', domain:'', employees:'', industry:'', blurb:'',
       ivState:'none', ivYourTier:'', ivYourScore:0, ivAiTier:'', ivAiScore:0,
       eventsSite:[], eventsWeb:[], observances:[], emailResearchBlock:'',
-      companyLinkedIn:'', contactLinkedIn:'', revenue:'', foundedYear:'', recentNews:[], socialMedia:{}, searchCostUSD:0, searchDuration:null, salesHooks:[], keyPeople:[], tradeShows:[], competitors:[], attackPlan:''
+      companyLinkedIn:'', contactLinkedIn:'', revenue:'', foundedYear:'', recentNews:[], socialMedia:{}, searchCostUSD:0, searchDuration:null, salesHooks:[], keyPeople:[], tradeShows:[], competitors:[], attackPlan:'', companyIntel:''
     };
     _liveEmailIntent = 'checkin'; _liveEmailInstruction = ''; _liveEmailCoupon = ''; _liveEmailSelected = []; _liveEmailItems = [];
     // Clear AI-filled green fields
@@ -11966,9 +11972,11 @@
       if (rd.recentNews && rd.recentNews.length) { ctx.push('RECENT NEWS:'); rd.recentNews.forEach(function(n) { ctx.push('  - ' + n.headline + (n.date ? ' (' + n.date + ')' : '')); }); }
       ctx.push('TODAY: ' + todayStr);
       return [
-        'Sales hook generator for QLP (promo products). Use ONLY data below. No web search. 3-5 hooks max.',
+        'Sales talking point generator for QLP (promo products). Use ONLY data below. No web search. 3-5 hooks max.',
+        'IMPORTANT: Do NOT create hooks about individual events, conferences, or observances. Those are tracked separately. Focus on: milestones, expansions, hiring, news, brand angles, awards, industry trends.',
+        'If events are listed, you may reference them as context (e.g. "with multiple events this quarter") but do NOT create a separate hook per event.',
         ctx.join('\n'),
-        'Return ONLY valid JSON: {"salesHooks":[{"type":"event|observance|milestone|news|industry","finding":"specific fact","pitch":"concrete product angle","source":"URL where this was found or empty"}]}',
+        'Return ONLY valid JSON: {"salesHooks":[{"type":"milestone|expansion|hiring|news|brand|award|industry","finding":"specific fact","pitch":"concrete product angle","date":"Mon D YYYY if time-sensitive or empty","source":"URL or empty"}]}',
         'If no hooks: {"salesHooks":[]}'
       ].join('\n');
     }
@@ -12110,6 +12118,45 @@
             if (data) try { _updateCostBadge(data, 'p2b-tradeshows-' + _tsToken); } catch(e) {}
           })
           .catch(function() {}).then(_onFetchSettled, _onFetchSettled); // silent fail + track settle
+        })();
+
+        // P2c: Company Intel background brief (parallel, non-blocking, Haiku + web search)
+        (function() {
+          var _ciToken = _thisToken;
+          var _ciCompany  = _researchData.companyName || company || '';
+          var _ciIndustry = _researchData.industry || '';
+          var _ciBlurb    = _researchData.blurb || '';
+          var _ciEmp      = _researchData.employees || '';
+          var _ciRev      = _researchData.revenue || '';
+          var _ciFounded  = _researchData.foundedYear || '';
+          var _ciDomain   = _researchData.domain || searchDomain || '';
+          if (!_ciCompany) return;
+          var ciCtx = ['Company: ' + _ciCompany, _ciIndustry ? 'Industry: ' + _ciIndustry : '', _ciBlurb ? 'About: ' + _ciBlurb : '', _ciEmp ? 'Employees: ' + _ciEmp : '', _ciRev ? 'Revenue: ' + _ciRev : '', _ciFounded ? 'Founded: ' + _ciFounded : '', _ciDomain ? 'Website: ' + _ciDomain : ''].filter(Boolean).join('\n');
+          var ciPrompt = [
+            'You are a sales intelligence researcher. Generate a concise company background brief for a sales rep.',
+            '', ciCtx, '',
+            'Write 4-6 short paragraphs: 1) Origin story with founder names. 2) Mission and values. 3) Key growth milestones. 4) Culture and community involvement. 5) What differentiates them. 6) 2-3 specific talking points that would impress a founder.',
+            'Plain prose, no headers, no bullets, no markdown. 2-3 sentences per paragraph. Be specific. Skip topics you cannot verify.'
+          ].join('\n');
+          _onFetchStart();
+          fetch(GS_URL, { method: 'POST', body: JSON.stringify({ action: 'runResearch', prompt: ciPrompt, rep: window._currentRep || '', noSearch: false }) })
+          .then(function(res) { return res.text(); })
+          .then(function(raw) {
+            if (_pipelineAborted || _searchToken !== _ciToken) return;
+            var data; try { data = JSON.parse(raw); } catch(e) { return; }
+            if (data) try { _updateCostBadge(data, 'p2c-companyintel-' + _ciToken); } catch(e) {}
+            var result = '';
+            if (data && data.result) {
+              result = typeof data.result === 'string' ? data.result : (data.result.text || '');
+              result = result.replace(/```[\s\S]*?```/g, '').trim();
+            }
+            if (result) {
+              _researchData.companyIntel = result.split(/\n\n+/).filter(Boolean).map(function(p) {
+                return '<p style="margin:0 0 12px;line-height:1.7;">' + p.replace(/\n/g, ' ') + '</p>';
+              }).join('');
+            }
+          })
+          .catch(function() {}).then(_onFetchSettled, _onFetchSettled);
         })();
 
         _runPhase(2,
@@ -12510,21 +12557,28 @@
 
   function _resendSavedRecord() {
     if (!_hasDeliveryEmail()) { _showNoEmailToast(); return; }
-    // Re-email the already-saved record without creating a new one
     var records = getRecords();
     if (!records.length) return;
-    var r = records[records.length - 1]; // most recent = just saved
+    var r = records[records.length - 1];
     if (!r) return;
+    // Find the button that triggered this (footer re-send or main pdf-btn)
     var btn = document.getElementById('pdf-btn');
-    gsPost({ action: 'emailRecord', record: r, plainText: false });
-    gsPost({ action: 'incrementSent', id: r.id });
-    if (btn) {
-      var orig = btn.innerHTML;
-      var ico = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>';
-      btn.innerHTML = ico + ' ✓ Re-sent';
-      btn.classList.add('copied');
-      setTimeout(function() { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2000);
-    }
+    var footerBtns = document.getElementById('rp-footer-btns');
+    var footerResendBtn = footerBtns ? footerBtns.querySelector('button') : null;
+    var ico = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>';
+    // Show sending state
+    if (footerResendBtn) { footerResendBtn.disabled = true; footerResendBtn.style.opacity = '0.6'; var _origFR = footerResendBtn.innerHTML; footerResendBtn.innerHTML = ico + ' Sending...'; }
+    if (btn) { var origBtn = btn.innerHTML; btn.disabled = true; btn.style.opacity = '0.6'; btn.innerHTML = ico + ' Sending...'; }
+    gsPost({ action: 'emailRecord', record: r, plainText: false })
+    .then(function() {
+      gsPost({ action: 'incrementSent', id: r.id });
+      if (footerResendBtn) { footerResendBtn.innerHTML = ico + ' \u2713 Sent'; footerResendBtn.style.opacity = '1'; setTimeout(function(){ footerResendBtn.disabled = false; footerResendBtn.innerHTML = _origFR; footerResendBtn.style.opacity = ''; }, 1500); }
+      if (btn) { btn.innerHTML = ico + ' \u2713 Re-sent'; btn.classList.add('copied'); btn.style.opacity = '1'; setTimeout(function(){ btn.innerHTML = origBtn; btn.classList.remove('copied'); btn.disabled = false; btn.style.opacity = ''; }, 2000); }
+    })
+    .catch(function() {
+      if (footerResendBtn) { footerResendBtn.disabled = false; footerResendBtn.innerHTML = _origFR; footerResendBtn.style.opacity = ''; }
+      if (btn) { btn.disabled = false; btn.innerHTML = origBtn; btn.style.opacity = ''; }
+    });
   }
 
   // ── Auto-save research data after pipeline completes ──────────
@@ -12647,7 +12701,7 @@
     };
     if (hasAI) {
       rec.aiResearch = 'YES';
-      rec.researchData = (function(){ try { var rd = _researchData; return JSON.stringify({ companyName:rd.companyName, domain:rd.domain, employees:rd.employees, industry:rd.industry, blurb:rd.blurb, revenue:rd.revenue, foundedYear:rd.foundedYear, socialMedia:rd.socialMedia, recentNews:rd.recentNews, eventsSite:rd.eventsSite, eventsWeb:rd.eventsWeb, observances:rd.observances, companyLinkedIn:rd.companyLinkedIn, contactLinkedIn:rd.contactLinkedIn, contactPerson:rd.contactPerson, decisionMakers:rd.decisionMakers, salesHooks:rd.salesHooks, keyPeople:rd.keyPeople||[], searchCostUSD:rd.searchCostUSD, searchDuration:rd.searchDuration, tradeShows:rd.tradeShows||[], competitors:rd.competitors||[], attackPlan:rd.attackPlan||'' }); } catch(e){ return ''; } })();
+      rec.researchData = (function(){ try { var rd = _researchData; return JSON.stringify({ companyName:rd.companyName, domain:rd.domain, employees:rd.employees, industry:rd.industry, blurb:rd.blurb, revenue:rd.revenue, foundedYear:rd.foundedYear, socialMedia:rd.socialMedia, recentNews:rd.recentNews, eventsSite:rd.eventsSite, eventsWeb:rd.eventsWeb, observances:rd.observances, companyLinkedIn:rd.companyLinkedIn, contactLinkedIn:rd.contactLinkedIn, contactPerson:rd.contactPerson, decisionMakers:rd.decisionMakers, salesHooks:rd.salesHooks, keyPeople:rd.keyPeople||[], searchCostUSD:rd.searchCostUSD, searchDuration:rd.searchDuration, tradeShows:rd.tradeShows||[], competitors:rd.competitors||[], attackPlan:rd.attackPlan||'', companyIntel:rd.companyIntel||'' }); } catch(e){ return ''; } })();
       rec.researchEvents = (function(){ try { return JSON.stringify({ events:(_researchData.eventsSite||[]).concat(_researchData.eventsWeb||[]), observances:_researchData.observances||[], tradeShows:_researchData.tradeShows||[] }); } catch(e){ return ''; } })();
       rec.researchNotes = typeof buildResearchBlock === 'function' ? buildResearchBlock() : '';
       rec.aiEmailHtml = (function(){ try { var el = document.getElementById('rp-email-preview-html'); return el ? (el._fullEmailDoc || el.innerHTML) : ''; } catch(e){ return ''; } })();
@@ -12899,152 +12953,179 @@
 
   // ── Research-only PDF download ──────────────────────────────────
   function generateResearchPDF(archiveRecord) {
-    var rd, company, name, email, phone, rep, ivScore, ivLabel, website, ipaNum, dateStr, timeStr;
+    var pdfBtn = document.getElementById('rp-pdf-btn');
+    if (pdfBtn) { pdfBtn.disabled = true; pdfBtn.style.opacity = '0.6'; var _origPdf = pdfBtn.innerHTML; pdfBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> Generating...'; }
+    setTimeout(function() {
+    var _resetPdfBtn = function() { if (pdfBtn) { pdfBtn.disabled = false; pdfBtn.style.opacity = ''; pdfBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> Generate PDF'; } };
+    var rd, company, name, email, phone, rep, ivScore, ivLabel, pvScore, pvLabel, avScore, avLabel, website, ipaNum, dateStr, timeStr, totalScore;
     if (archiveRecord) {
-      // Archive mode
       try { rd = typeof archiveRecord.researchData === 'string' ? JSON.parse(archiveRecord.researchData) : (archiveRecord.researchData||{}); } catch(e){ rd = {}; }
-      company  = archiveRecord.company || rd.companyName || '—';
-      name     = archiveRecord.name || '—';
+      company  = archiveRecord.company || rd.companyName || '';
+      name     = archiveRecord.name || '';
       email    = archiveRecord.email || '';
       phone    = archiveRecord.phone || '';
-      rep      = archiveRecord.rep || '—';
-      ivScore  = archiveRecord.iv || 0;
-      ivLabel  = archiveRecord.ivLabel || '';
+      rep      = archiveRecord.rep || '';
+      ivScore  = archiveRecord.iv || 0; ivLabel = archiveRecord.ivLabel || '';
+      pvScore  = archiveRecord.pv || 0; pvLabel = archiveRecord.pvLabel || '';
+      avScore  = archiveRecord.av || 0; avLabel = archiveRecord.avLabel || '';
       website  = archiveRecord.website || rd.domain || '';
       ipaNum   = archiveRecord.recordNum || '';
       dateStr  = archiveRecord.date || '';
       timeStr  = archiveRecord.time || '';
+      totalScore = (ivScore||0)+(pvScore||0)+(avScore||0);
     } else {
-      // Live form mode
       rd       = _researchData || {};
-      company  = (document.getElementById('f-company')||{}).value || rd.companyName || '—';
-      name     = (document.getElementById('f-name')||{}).value || '—';
+      company  = (document.getElementById('f-company')||{}).value || rd.companyName || '';
+      name     = (document.getElementById('f-name')||{}).value || '';
       email    = (document.getElementById('f-email')||{}).value || '';
       phone    = (document.getElementById('f-phone')||{}).value || '';
-      rep      = window._currentRep || '—';
-      ivScore  = scores.iv || 0;
-      ivLabel  = labels.iv || '';
+      rep      = window._currentRep || '';
+      ivScore  = scores.iv || 0; ivLabel = labels.iv || '';
+      pvScore  = scores.pv || 0; pvLabel = labels.pv || '';
+      avScore  = scores.av || 0; avLabel = labels.av || '';
       website  = (document.getElementById('f-website')||{}).value || rd.domain || '';
       ipaNum   = window._lastSavedRecordNum || '';
       var now  = new Date();
       dateStr  = now.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
       timeStr  = now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',hour12:true});
+      totalScore = (ivScore||0)+(pvScore||0)+(avScore||0);
     }
-    var tierName  = ivScore>=3?'AG':ivScore>=2?'CP':'Assistants';
-    var tierColor = ivScore>=3?'#1D9E75':ivScore>=2?'#d97706':'#6d28d9';
-    var tierBg    = ivScore>=3?'#0F6E56':ivScore>=2?'#854F0B':'#3C3489';
-    var _rTierBlockBg = ivScore>=3?'#04342C':ivScore>=2?'#412402':'#26215C';
-    var _rTierClr     = ivScore>=3?'#9FE1CB':ivScore>=2?'#FAC775':'#AFA9EC';
-    var _rTierBdr     = ivScore>=3?'rgba(159,225,203,0.3)':ivScore>=2?'rgba(250,199,117,0.3)':'rgba(175,169,236,0.3)';
-    var _rDetails = (function(){ var parts=[]; if(website)parts.push(website); if(rd.employees)parts.push(rd.employees+' employees'); if(rd.industry)parts.push(rd.industry); return parts.join(' &middot; '); })();
+    var pc = totalScore >= 7 ? 'ag' : totalScore >= 4 ? 'cp' : 'asst';
+    var tierName  = pc==='ag'?'AG':pc==='cp'?'CP':'Assistants';
+    var tierBg    = pc==='ag'?'#0F6E56':pc==='cp'?'#854F0B':'#3C3489';
+    var _rTierBlockBg = pc==='ag'?'#04342C':pc==='cp'?'#412402':'#26215C';
+    var _rTierClr     = pc==='ag'?'#9FE1CB':pc==='cp'?'#FAC775':'#AFA9EC';
+    var _rTierBdr     = pc==='ag'?'rgba(159,225,203,0.3)':pc==='cp'?'rgba(250,199,117,0.3)':'rgba(175,169,236,0.3)';
+    var isRO = !pvScore && !avScore;
 
-    function fRow(label,val){ if(!val||val==='—')return ''; return '<tr><td class="lbl">'+label+'</td><td class="val">'+val+'</td></tr>'; }
+    function fRow(label,val){ if(!val||val==='—'||val==='')return ''; return '<tr><td class="lbl">'+label+'</td><td class="val">'+val+'</td></tr>'; }
     function fSec(title,inner){ if(!inner)return ''; return '<div class="section"><div class="section-title">'+title+'</div><table><tbody>'+inner+'</tbody></table></div>'; }
+    function fBlock(title){ return '<div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:#94a3b8;border-bottom:2px solid #e2e8f0;padding:16px 0 5px;margin:24px 0 14px;">'+title+'</div>'; }
+
+    // ── A2 HEADER ──────────────────────────────────
+    var pillHtml = '<td style="padding:4px 6px;border-radius:4px;background:rgba(255,255,255,0.12);text-align:center;"><div style="font-size:8px;color:rgba(255,255,255,0.5);text-transform:uppercase;">IV</div><div style="font-size:13px;font-weight:700;color:#fff;">'+(ivScore||0)+'/3</div></td>' +
+      '<td style="padding:4px 6px;border-radius:4px;background:rgba(255,255,255,0.12);text-align:center;"><div style="font-size:8px;color:rgba(255,255,255,0.5);text-transform:uppercase;">PV</div><div style="font-size:13px;font-weight:700;color:#fff;">'+(pvScore||0)+'/3</div></td>' +
+      '<td style="padding:4px 6px;border-radius:4px;background:rgba(255,255,255,0.12);text-align:center;"><div style="font-size:8px;color:rgba(255,255,255,0.5);text-transform:uppercase;">AV</div><div style="font-size:13px;font-weight:700;color:#fff;">'+(avScore||0)+'/3</div></td>';
 
     var headerHtml =
-      '<div class="section" style="margin-bottom:20px;">' +
+      '<div class="section" style="margin-bottom:6px;">' +
       '<table style="width:100%;border-collapse:collapse;background:'+tierBg+';border-radius:8px;" cellpadding="0" cellspacing="0"><tr>' +
         '<td style="padding:14px 18px;vertical-align:middle;width:60px;text-align:center;">' +
-          '<div style="font-size:32px;font-weight:700;color:#fff;line-height:1;">'+ivScore+'<span style="font-size:15px;font-weight:400;color:rgba(255,255,255,0.5);">/3</span></div>' +
+          '<div style="font-size:36px;font-weight:700;color:#fff;line-height:1;">'+totalScore+'<span style="font-size:15px;font-weight:400;color:rgba(255,255,255,0.5);">/9</span></div>' +
         '</td>' +
         '<td style="width:1px;padding:10px 0;vertical-align:middle;"><div style="width:1px;height:40px;background:rgba(255,255,255,0.15);"></div></td>' +
         '<td style="padding:14px 14px;vertical-align:middle;">' +
-          '<div style="font-size:15px;font-weight:600;color:#fff;margin-bottom:3px;">'+company+'</div>' +
-          '<div style="font-size:11px;color:rgba(255,255,255,0.6);">'+(_rDetails||company)+'</div>' +
+          '<div style="font-size:16px;font-weight:700;color:#fff;margin-bottom:3px;">'+company+(rd.industry?' <span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;background:rgba(255,255,255,0.18);vertical-align:middle;margin-left:6px;">'+rd.industry+'</span>':'')+'</div>' +
+          '<div style="font-size:11px;color:rgba(255,255,255,0.6);">'+(website||'')+' &middot; '+(rd.employees?rd.employees+' employees':'')+(rd.foundedYear?' &middot; Est. '+rd.foundedYear:'')+'</div>' +
         '</td>' +
+        '<td style="padding:8px 10px;vertical-align:middle;"><table style="border-collapse:separate;border-spacing:3px;" cellpadding="0"><tr>'+pillHtml+'</tr></table></td>' +
         '<td style="padding:14px 18px 14px 10px;vertical-align:middle;">' +
-          '<div style="text-align:center;padding:5px 12px;border-radius:8px;background:'+_rTierBlockBg+';border:1px solid '+_rTierBdr+';">' +
-            '<div style="font-size:16px;font-weight:700;color:#fff;letter-spacing:0.03em;">'+tierName+'</div>' +
-            '<div style="font-size:9px;color:'+_rTierClr+';font-weight:600;letter-spacing:0.04em;margin-top:1px;">RESEARCH ONLY</div>' +
+          '<div style="text-align:center;padding:6px 14px;border-radius:8px;background:'+_rTierBlockBg+';border:1px solid '+_rTierBdr+';">' +
+            '<div style="font-size:18px;font-weight:700;color:#fff;letter-spacing:0.03em;">'+tierName+'</div>' +
+            '<div style="font-size:8px;color:'+_rTierClr+';font-weight:600;letter-spacing:0.04em;margin-top:1px;">'+(isRO?'RESEARCH ONLY':'SCORED')+'</div>' +
           '</div>' +
         '</td>' +
       '</tr></table>' +
+      '</div>' +
+      '<div style="display:flex;justify-content:space-between;font-size:9px;color:#94a3b8;margin-bottom:18px;padding:0 2px;">' +
+        '<span>'+(ipaNum?ipaNum+' &middot; ':'')+'Entered by '+rep+' &middot; '+dateStr+(timeStr?' &middot; '+timeStr:'')+'</span>' +
+        '<span>'+name+(email?' &middot; '+email:'')+(phone?' &middot; '+phone:'')+'</span>' +
       '</div>';
 
-    var contactInner = fRow('Contact', name) + (phone?fRow('Phone','<a href="tel:'+phone.replace(/\D/g,'')+'" style="color:#1e293b;text-decoration:none;">'+phone+'</a>'):'')+
-      (email?fRow('Email','<a href="mailto:'+email+'" style="color:#1D9E75;text-decoration:none;">'+email+'</a>'):'')+fRow('Entered By', rep);
-    var companyInner = (website?fRow('Website','<a href="'+(website.match(/^https?:\/\//)?website:'https://'+website)+'" style="color:#1D9E75;">'+website.replace(/^https?:\/\//i,'')+'</a>'):'')+fRow('Industry', rd.industry||'') + fRow('About', rd.blurb||'') + fRow('Employees', rd.employees||'') + fRow('Est. Revenue', rd.revenue||'') + fRow('Founded', rd.foundedYear||'') + fRow('IV Score', ivScore+'/3'+(ivLabel?' &mdash; '+ivLabel:''));
+    // ── BLOCK 1: KNOW THE COMPANY ──────────────────
+    var block1 = fBlock('Know the company');
+    // Company Intel
+    if (rd.companyIntel) {
+      block1 += '<div class="section" style="border-left:3px solid #60a5fa;padding-left:14px;margin-bottom:16px;">' +
+        '<div class="section-title">Company Intel</div>' +
+        '<div style="font-size:11px;color:#334155;line-height:1.7;">'+rd.companyIntel+'</div></div>';
+    }
+    // Company Profile
+    var companyInner = fRow('About', rd.blurb||'') + fRow('Employees', rd.employees||'') + fRow('Est. Revenue', rd.revenue||'') + fRow('Founded', rd.foundedYear||'') +
+      (website?fRow('Website','<a href="'+(website.match(/^https?:\/\//)?website:'https://'+website)+'" style="color:#1D9E75;">'+website.replace(/^https?:\/\//i,'')+'</a>'):'');
+    block1 += fSec('Company Profile', companyInner);
+    // Social Media
     var sm = rd.socialMedia || {};
     var socialInner = '';
     if (rd.companyLinkedIn) socialInner += fRow('LinkedIn', '<a href="'+rd.companyLinkedIn+'" style="color:#1D9E75;">'+rd.companyLinkedIn.replace('https://','')+'</a>');
     ['facebook','instagram','twitter','tiktok','youtube'].forEach(function(k){ if(sm[k]) socialInner += fRow(k.charAt(0).toUpperCase()+k.slice(1),'<a href="'+sm[k]+'" style="color:#1D9E75;">'+sm[k].replace('https://','')+'</a>'); });
+    if (socialInner) block1 += fSec('Social Media', socialInner);
 
-    var sectionsHtml = fSec('Contact', contactInner) + fSec('Company Profile', companyInner) + (socialInner ? fSec('Social Media', socialInner) : '');
-
-    // Date helper for sorting and past detection
+    // ── BLOCK 2: KNOW YOUR ANGLES ──────────────────
+    var block2 = fBlock('Know your angles');
+    // Date helpers
     function _pdfParseDate(s) { if(!s) return null; var d = new Date(String(s).replace(/(\w+ \d+)[-\u2013]\d+/,'$1').replace(/varies/i,'')); return isNaN(d.getTime()) ? null : d; }
     function _pdfDaysAway(s) { var d = _pdfParseDate(s); if(!d) return null; var t = new Date(); t.setHours(0,0,0,0); return Math.round((d - t) / 86400000); }
-    function _pdfSortByDate(arr) {
-      var now = new Date(); now.setHours(0,0,0,0); var nowT = now.getTime();
-      return (arr||[]).slice().sort(function(a,b) {
-        var ta = _pdfParseDate(a.date), tb = _pdfParseDate(b.date);
-        var taT = ta ? ta.getTime() : null, tbT = tb ? tb.getTime() : null;
-        var aF = taT !== null && taT >= nowT, bF = tbT !== null && tbT >= nowT;
-        if (aF && bF) return taT - tbT;
-        if (!aF && !bF) { if (taT===null && tbT===null) return 0; if (taT===null) return 1; if (tbT===null) return -1; return tbT - taT; }
-        return aF ? -1 : 1;
-      });
-    }
-    function _pdfDateBadge(s) {
-      var diff = _pdfDaysAway(s);
-      if (diff === null) return '';
-      if (diff < 0) return ' <span style="color:var(--text-muted);font-size:9px;font-weight:700;">[PAST — '+Math.abs(diff)+'d ago]</span>';
-      if (diff === 0) return ' <span style="color:#059669;font-size:9px;font-weight:700;">[TODAY]</span>';
-      if (diff <= 30) return ' <span style="color:#c2410c;font-size:9px;font-weight:700;">['+diff+'d away]</span>';
-      return ' <span style="color:#64748b;font-size:9px;">['+diff+'d away]</span>';
-    }
+    function _pdfSortByDate(arr) { var nw = new Date(); nw.setHours(0,0,0,0); var nwT=nw.getTime(); return (arr||[]).slice().sort(function(a,b){ var ta=_pdfParseDate(a.date),tb=_pdfParseDate(b.date); var taT=ta?ta.getTime():null,tbT=tb?tb.getTime():null; var aF=taT!==null&&taT>=nwT,bF=tbT!==null&&tbT>=nwT; if(aF&&bF)return taT-tbT; if(!aF&&!bF){if(taT===null&&tbT===null)return 0;if(taT===null)return 1;if(tbT===null)return -1;return tbT-taT;} return aF?-1:1; }); }
+    function _pdfDateBadge(s) { var diff=_pdfDaysAway(s); if(diff===null)return ''; if(diff<0)return ' <span style="color:#94a3b8;font-size:9px;font-weight:700;">['+Math.abs(diff)+'d ago]</span>'; if(diff===0)return ' <span style="color:#059669;font-size:9px;font-weight:700;">[TODAY]</span>'; if(diff<=30)return ' <span style="color:#c2410c;font-size:9px;font-weight:700;">['+diff+'d away]</span>'; return ' <span style="color:#64748b;font-size:9px;">['+diff+'d away]</span>'; }
 
-    // Trade Shows
-    var pdfTS = rd.tradeShows || [];
-    if (pdfTS.length) {
-      var confOrder = { confirmed: 0, likely: 1, 'industry-match': 2 };
-      var sortedPdfTS = pdfTS.slice().sort(function(a,b) {
-        var ca = confOrder[a.confidence]!==undefined?confOrder[a.confidence]:2, cb = confOrder[b.confidence]!==undefined?confOrder[b.confidence]:2;
-        if (ca!==cb) return ca-cb;
-        var da = _pdfParseDate(a.date), db = _pdfParseDate(b.date);
-        return (da||Infinity)-(db||Infinity);
-      });
-      var tsRows = sortedPdfTS.map(function(t) {
-        var confLabel = t.confidence==='confirmed'?' <span style="color:#059669;font-weight:700;">[CONFIRMED]</span>':t.confidence==='likely'?' <span style="color:#d97706;font-weight:700;">[LIKELY]</span>':' <span style="color:var(--text-muted);font-weight:700;">[INDUSTRY MATCH]</span>';
-        return fRow((t.date||'—'), '<strong>'+(t.title||'')+'</strong>'+(t.venue?' &middot; '+t.venue:'')+confLabel+_pdfDateBadge(t.date)+(t.attendees?' <span style="color:#64748b;font-size:9px;">~'+t.attendees+' attendees</span>':''));
+    // Call Cheat Sheet (hooks)
+    if (rd.salesHooks && rd.salesHooks.length) {
+      var catColors = { milestone:'#dc2626', news:'#dc2626', expansion:'#d97706', hiring:'#d97706', brand:'#2563eb', sponsorship:'#2563eb', campaign:'#2563eb', award:'#7c3aed', industry:'#7c3aed' };
+      var hookRows = rd.salesHooks.map(function(h) {
+        var dotClr = catColors[h.type] || '#64748b';
+        return '<tr><td style="padding:6px 10px 6px 0;vertical-align:top;width:12px;"><div style="width:7px;height:7px;border-radius:50%;background:'+dotClr+';margin-top:3px;"></div></td>' +
+          '<td style="padding:6px 0;vertical-align:top;">' +
+            '<div style="font-size:11px;font-weight:600;color:#1e293b;">'+(h.finding||'')+'</div>' +
+            (h.pitch?'<div style="font-size:10px;color:#059669;margin-top:2px;">'+h.pitch+'</div>':'') +
+          '</td></tr>';
       }).join('');
-      sectionsHtml += fSec('Trade Shows ('+pdfTS.length+')', tsRows);
+      block2 += fSec('Call Cheat Sheet ('+rd.salesHooks.length+')', hookRows);
+    }
+    // Events (merged: trade shows, company events, industry dates)
+    var pdfTS = rd.tradeShows || [];
+    var allEvts = _pdfSortByDate((rd.eventsSite||[]).concat(rd.eventsWeb||[]));
+    var obs = _pdfSortByDate(rd.observances || []);
+    var eventsRows = '';
+    if (pdfTS.length) {
+      var confOrder = { confirmed:0, likely:1, 'industry-match':2 };
+      pdfTS.slice().sort(function(a,b){ var ca=confOrder[a.confidence]!==undefined?confOrder[a.confidence]:2,cb=confOrder[b.confidence]!==undefined?confOrder[b.confidence]:2; if(ca!==cb)return ca-cb; return (_pdfParseDate(a.date)||Infinity)-(_pdfParseDate(b.date)||Infinity); }).forEach(function(t) {
+        var confLabel = t.confidence==='confirmed'?' <span style="color:#059669;font-weight:700;">[CONFIRMED]</span>':t.confidence==='likely'?' <span style="color:#d97706;font-weight:700;">[LIKELY]</span>':' <span style="color:#94a3b8;font-weight:700;">[INDUSTRY]</span>';
+        eventsRows += fRow((t.date||''), '<strong>'+(t.title||'')+'</strong> <span style="font-size:9px;color:#7c3aed;font-weight:700;">[TRADESHOW]</span>'+confLabel+_pdfDateBadge(t.date)+(t.venue?' &middot; '+t.venue:''));
+      });
+    }
+    if (allEvts.length) {
+      allEvts.forEach(function(e){ eventsRows += fRow((e.date||''), '<strong>'+(e.title||'')+'</strong>'+(e.recurring?' <span style="color:#c2410c;font-size:9px;">[RECURRING]</span>':'')+_pdfDateBadge(e.date)+(e.venue?' &middot; '+e.venue:'')); });
+    }
+    if (obs.length) {
+      obs.forEach(function(o){ eventsRows += fRow((o.date||''), (o.title||'')+' <span style="font-size:9px;color:#64748b;">[INDUSTRY DATE]</span>'+_pdfDateBadge(o.date)); });
+    }
+    var totalEvts = pdfTS.length + allEvts.length + obs.length;
+    if (eventsRows) block2 += fSec('Events & Dates ('+totalEvts+')', eventsRows);
+    // Competitors
+    var comps = rd.competitors || [];
+    if (comps.length) {
+      var compRows = comps.map(function(c) {
+        return fRow((c.name||''), (c.overlap||'')+(c.differentiator?' <span style="color:#dc2626;font-style:italic;font-size:10px;">'+c.differentiator+'</span>':'')+(c.website?' <a href="'+c.website+'" style="color:#1D9E75;font-size:10px;">'+c.website.replace(/^https?:\/\/(www\.)?/,'').replace(/\/.*$/,'')+'</a>':''));
+      }).join('');
+      block2 += fSec('Competitors ('+comps.length+')', compRows);
     }
 
-    // Events
-    var allEvts = _pdfSortByDate((rd.eventsSite||[]).concat(rd.eventsWeb||[]));
-    if (allEvts.length) {
-      var evtRows = allEvts.map(function(e){ return fRow((e.date||'—'), '<strong>'+(e.title||'')+'</strong>'+(e.venue?' &middot; '+e.venue:'')+(e.recurring?' <span style="color:#c2410c;">[RECURRING]</span>':'')+_pdfDateBadge(e.date)); }).join('');
-      sectionsHtml += fSec('Events ('+allEvts.length+')', evtRows);
-    }
-    // Observances
-    if (rd.observances && rd.observances.length) {
-      var sortedObsPdf = _pdfSortByDate(rd.observances);
-      var obsRows = sortedObsPdf.map(function(o){ return fRow((o.date||'—'), (o.title||'')+_pdfDateBadge(o.date)); }).join('');
-      sectionsHtml += fSec('Industry Observances ('+rd.observances.length+')', obsRows);
-    }
-    // Recent News
-    if (rd.recentNews && rd.recentNews.length) {
-      var newsRows = rd.recentNews.map(function(n){ return fRow((n.date||'—'), (n.headline||'')); }).join('');
-      sectionsHtml += fSec('Recent News', newsRows);
-    }
-    // Decision Makers
+    // ── BLOCK 3: KNOW THE PEOPLE ──────────────────
+    var block3 = fBlock('Know the people');
+    // Decision Makers & Key People
     var dm = rd.decisionMakers || {};
     var dmRows = '';
     [{key:'ownerExec',label:'Owner / Exec'},{key:'marketing',label:'Marketing'},{key:'procurement',label:'Procurement'}].forEach(function(r){
       var p = dm[r.key]; if(!p||!p.name) return;
-      dmRows += fRow(r.label, p.name+(p.title?' &mdash; '+p.title:'')+(p.linkedin?' <a href="'+p.linkedin+'" style="color:#1D9E75;">[LinkedIn]</a>':''));
+      dmRows += fRow(r.label, '<strong>'+p.name+'</strong>'+(p.title?' &mdash; '+p.title:'')+(p.linkedin?' <a href="'+p.linkedin+'" style="color:#1D9E75;">[LinkedIn]</a>':''));
     });
     var kp = rd.keyPeople || [];
-    kp.forEach(function(p){ if(p.name) dmRows += fRow((p.role||'Key Person'), p.name+(p.title?' &mdash; '+p.title:'')+(p.linkedin?' <a href="'+p.linkedin+'" style="color:#1D9E75;">[LinkedIn]</a>':'')); });
-    if (dmRows) sectionsHtml += fSec('Decision Makers & Key People', dmRows);
-    // Sales Hooks
-    if (rd.salesHooks && rd.salesHooks.length) {
-      var hookRows = rd.salesHooks.map(function(h){
-        return '<tr><td class="lbl" style="text-transform:uppercase;font-size:9px;font-weight:700;letter-spacing:0.06em;">'+(h.type||'hook')+'</td><td class="val"><strong>'+(h.finding||'')+'</strong><br><span style="color:#059669;font-size:10px;">Swag angle: '+(h.pitch||'')+'</span></td></tr>';
-      }).join('');
-      sectionsHtml += fSec('Sales Hooks ('+rd.salesHooks.length+')', hookRows);
+    kp.forEach(function(p){ if(p.name) dmRows += fRow((p.role||'Key Person'), '<strong>'+p.name+'</strong>'+(p.title?' &mdash; '+p.title:'')+(p.linkedin?' <a href="'+p.linkedin+'" style="color:#1D9E75;">[LinkedIn]</a>':'')); });
+    if (dmRows) block3 += fSec('Decision Makers & Key People', dmRows);
+    // Recent News
+    if (rd.recentNews && rd.recentNews.length) {
+      var newsRows = rd.recentNews.map(function(n){ return fRow((n.date||''), (n.headline||'')); }).join('');
+      block3 += fSec('Recent News', newsRows);
     }
+    // Attack Plan
+    if (rd.attackPlan) {
+      block3 += '<div class="section" style="border-left:3px solid #f59e0b;padding-left:14px;">' +
+        '<div class="section-title">Attack Plan</div>' +
+        '<div style="font-size:11px;color:#334155;line-height:1.6;">'+rd.attackPlan+'</div></div>';
+    }
+
+    var sectionsHtml = block1 + block2 + block3;
 
     var html =
       '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Company Research — '+company+'</title>' +
@@ -13074,6 +13155,8 @@
     a.href=url; a.download='IPA-Research-'+safeName+'.html';
     document.body.appendChild(a); a.click();
     setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(url);},1000);
+    _resetPdfBtn();
+    }, 50);
   }
 
   // ── Archive record PDF download ───────────────────────────────────
@@ -14611,6 +14694,7 @@
 
     populateIVCheck();
     populateEvents();
+    populateCompanyIntel();
     populateEmailPreview();
     populatePeoplePanel();
     // Update competitors badge count
@@ -14674,6 +14758,8 @@
 
     if (txt) txt.textContent = 'Analyzing...';
     if (btn) { btn.disabled = true; btn.classList.add('deep-search-pulsing'); }
+    var rerunBtn = document.getElementById('rp-hooks-rerun');
+    if (rerunBtn) { rerunBtn.disabled = true; rerunBtn.textContent = 'Analyzing...'; rerunBtn.style.opacity = '0.6'; }
 
     // 45-second hard cap — GAS + Anthropic round-trip can take 15-30s
     var _rpAborted = false;
@@ -14685,6 +14771,7 @@
       _lbSetDigit('rpD1', elapsed%10);
       if (txt) txt.textContent = 'GET SALES HOOKS!';
       if (btn) { btn.disabled = false; btn.classList.remove('deep-search-pulsing'); btn.style.opacity = ''; }
+      if (rerunBtn) { rerunBtn.disabled = false; rerunBtn.textContent = 'Rerun'; rerunBtn.style.opacity = ''; }
     }, 45000);
 
     // ── Build context from already-loaded research data ──────────────
@@ -14696,6 +14783,7 @@
     if (!company) {
       if (txt) txt.textContent = 'GET SALES HOOKS!';
       if (btn) { btn.disabled = false; btn.classList.remove('deep-search-pulsing'); btn.style.opacity = ''; }
+      if (rerunBtn) { rerunBtn.disabled = false; rerunBtn.textContent = 'Rerun'; rerunBtn.style.opacity = ''; }
       clearTimeout(rpTimeout); clearInterval(rpTimer);
       return;
     }
@@ -14734,14 +14822,20 @@
     ctx.push('TODAY: ' + todayStr2);
 
     var prompt = [
-      'You are a sales hook generator for a promotional products company (QLP). Using ONLY the company data below, generate 3-5 sales conversation hooks. Do NOT search the web.',
+      'You are a sales strategist for a promotional products company (QLP). Using ONLY the company data below, generate 3-5 SALES TALKING POINTS for a phone call.',
       '',
       ctx.join('\n'),
       '',
-      'For each hook identify a specific angle from the data above — anniversaries, upcoming events, observances, news, industry, headcount growth, etc. Make the pitch concrete: what product type fits and why.',
+      'CRITICAL RULES:',
+      '- Do NOT generate hooks about events, conferences, trade shows, or observances. Those are tracked separately.',
+      '- Instead, focus on: company milestones (anniversaries, growth), recent news/PR, hiring surges, expansions (new locations, markets), brand identity angles, awards/recognition, industry trends they should capitalize on.',
+      '- If events are listed above, you may reference them as CONTEXT for a talking point (e.g. "with 3 events coming up this quarter, suggest a bulk swag order") but do NOT create a hook for each individual event.',
+      '- Each "finding" should be a specific fact the rep can mention on the call to sound informed.',
+      '- Each "pitch" should be a concrete product suggestion tied to that finding.',
+      '- Include a "date" field ONLY if the finding is time-sensitive (e.g. an anniversary date, a fiscal quarter end). Use format "Mon D YYYY". Omit for evergreen findings.',
       '',
       'Return ONLY valid JSON, no markdown:',
-      '{"salesHooks":[{"type":"milestone|award|expansion|observance|event|news|industry","finding":"one sentence — specific fact from the data","pitch":"one sentence — concrete swag/promo product angle","source":"URL where this was found or empty"}]}',
+      '{"salesHooks":[{"type":"milestone|expansion|hiring|news|brand|award|industry","finding":"one sentence specific fact","pitch":"one sentence concrete swag/promo product angle","date":"Mon D YYYY or empty","source":"URL or empty"}]}',
       '',
       'If no useful hooks: {"salesHooks":[]}'
     ].join('\n');
@@ -14759,6 +14853,7 @@
       var resetBtn = function() {
         if (txt) txt.textContent = 'GET SALES HOOKS!';
         if (btn) { btn.disabled = false; btn.classList.remove('deep-search-pulsing'); btn.style.opacity = ''; }
+        if (rerunBtn) { rerunBtn.disabled = false; rerunBtn.textContent = 'Rerun'; rerunBtn.style.opacity = ''; }
       };
 
       if (!data) { resetBtn(); return; }
@@ -14766,6 +14861,7 @@
 
       if (txt) txt.textContent = 'Rerun Sales Hooks';
       if (btn) { btn.classList.remove('deep-search-pulsing'); btn.disabled = false; btn.style.opacity = '1'; btn.style.cursor = 'pointer'; }
+      if (rerunBtn) { rerunBtn.disabled = false; rerunBtn.textContent = 'Rerun'; rerunBtn.style.opacity = ''; }
 
       // Robustly extract salesHooks from whatever shape comes back
       var hooks = null;
@@ -14804,6 +14900,7 @@
       } else {
         if (txt) txt.textContent = 'GET SALES HOOKS!';
         if (btn) { btn.disabled = false; btn.classList.remove('deep-search-pulsing'); btn.style.opacity = ''; }
+        if (rerunBtn) { rerunBtn.disabled = false; rerunBtn.textContent = 'Rerun'; rerunBtn.style.opacity = ''; }
       }
 
       populateResearchPopup();
@@ -14812,6 +14909,7 @@
       clearTimeout(rpTimeout); clearInterval(rpTimer);
       if (txt) txt.textContent = 'GET SALES HOOKS!';
       if (btn) { btn.disabled = false; btn.classList.remove('deep-search-pulsing'); btn.style.opacity = ''; }
+      if (rerunBtn) { rerunBtn.disabled = false; rerunBtn.textContent = 'Rerun'; rerunBtn.style.opacity = ''; }
     });
   }
 
@@ -16075,46 +16173,120 @@
     if (emptyEl)  { emptyEl.style.display = 'none'; }
     if (headerEl) { headerEl.style.display = 'flex'; }
     if (badge) { badge.textContent = hooks.length; badge.style.display = ''; }
-    var typeColors = {
-      'milestone':    { bg: 'rgba(245,158,11,0.1)',  border: 'rgba(245,158,11,0.3)',  text: '#f59e0b' },
-      'award':        { bg: 'rgba(139,143,168,0.1)',  border: 'rgba(139,143,168,0.3)',  text: '#a78bfa' },
-      'expansion':    { bg: 'rgba(52,211,153,0.08)', border: 'rgba(52,211,153,0.3)',  text: '#34d399' },
-      'sponsorship':  { bg: 'rgba(96,165,250,0.1)',  border: 'rgba(96,165,250,0.3)',  text: '#60a5fa' },
-      'campaign':     { bg: 'rgba(244,63,94,0.08)',  border: 'rgba(244,63,94,0.3)',   text: '#fb7185' },
-      'news':         { bg: 'rgba(100,116,139,0.1)', border: 'rgba(100,116,139,0.3)', text: '#94a3b8' },
-      'hiring':       { bg: 'rgba(29,158,117,0.08)', border: 'rgba(29,158,117,0.3)',  text: '#4ade80' },
+
+    // Type to category mapping for color dots
+    var catMap = {
+      'milestone':   { cat: 'timing',  dot: '#f87171', label: 'TIMING',  bg: 'rgba(248,113,113,0.12)', border: 'rgba(248,113,113,0.25)', text: '#f87171' },
+      'news':        { cat: 'timing',  dot: '#f87171', label: 'TIMING',  bg: 'rgba(248,113,113,0.12)', border: 'rgba(248,113,113,0.25)', text: '#f87171' },
+      'expansion':   { cat: 'growth',  dot: '#f59e0b', label: 'GROWTH',  bg: 'rgba(245,158,11,0.12)',  border: 'rgba(245,158,11,0.25)',  text: '#f59e0b' },
+      'hiring':      { cat: 'growth',  dot: '#f59e0b', label: 'GROWTH',  bg: 'rgba(245,158,11,0.12)',  border: 'rgba(245,158,11,0.25)',  text: '#f59e0b' },
+      'brand':       { cat: 'brand',   dot: '#60a5fa', label: 'BRAND',   bg: 'rgba(96,165,250,0.12)',  border: 'rgba(96,165,250,0.25)',  text: '#60a5fa' },
+      'sponsorship': { cat: 'brand',   dot: '#60a5fa', label: 'BRAND',   bg: 'rgba(96,165,250,0.12)',  border: 'rgba(96,165,250,0.25)',  text: '#60a5fa' },
+      'campaign':    { cat: 'brand',   dot: '#60a5fa', label: 'BRAND',   bg: 'rgba(96,165,250,0.12)',  border: 'rgba(96,165,250,0.25)',  text: '#60a5fa' },
+      'award':       { cat: 'culture', dot: '#a78bfa', label: 'CULTURE', bg: 'rgba(167,139,250,0.12)', border: 'rgba(167,139,250,0.25)', text: '#a78bfa' },
+      'industry':    { cat: 'culture', dot: '#a78bfa', label: 'INDUSTRY', bg: 'rgba(167,139,250,0.12)', border: 'rgba(167,139,250,0.25)', text: '#a78bfa' },
     };
-    var _parseDateHp = function(s){ if(!s)return null; var d=new Date(s+(s.split(' ').length<3?' 1':'')); return isNaN(d)?null:d; };
-    var _daysFromHp  = function(s){ var d=_parseDateHp(s); if(!d)return null; var t=new Date();t.setHours(0,0,0,0); return Math.round((d-t)/86400000); };
-    var html = hooks.map(function(h) {
-      var c = typeColors[h.type] || typeColors['news'];
-      var diff = _daysFromHp(h.date);
-      var daysTag = '';
-      if (diff === null) {
-        daysTag = '<span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;background:rgba(245,158,11,0.1);color:#f59e0b;border:1px solid rgba(245,158,11,0.3);">Ongoing</span>';
-      } else if (diff === 0) {
-        daysTag = '<span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;background:rgba(93,202,165,0.12);color:#5DCAA5;border:1px solid rgba(93,202,165,0.3);">Today</span>';
-      } else if (diff > 0) {
-        var dBg = diff <= 30 ? 'rgba(251,146,60,0.12)' : 'rgba(139,143,168,0.1)';
-        var dBorder = diff <= 30 ? 'rgba(251,146,60,0.3)' : 'rgba(139,143,168,0.25)';
-        var dText = diff <= 30 ? '#fb923c' : '#B8BBCC';
-        daysTag = '<span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;background:' + dBg + ';color:' + dText + ';border:1px solid ' + dBorder + ';">' + diff + ' days away</span>';
-      } else {
-        var ago = Math.abs(diff);
-        var agoLabel = ago >= 365 ? Math.round(ago/365) + 'yr ago' : ago + ' days ago';
-        daysTag = '<span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;background:rgba(100,116,139,0.1);color:var(--text-muted);border:1px solid rgba(100,116,139,0.25);">' + agoLabel + '</span>';
+    var defaultCat = { cat: 'info', dot: '#94a3b8', label: 'INFO', bg: 'rgba(148,163,184,0.12)', border: 'rgba(148,163,184,0.25)', text: '#94a3b8' };
+
+    // Sort: timing first, then growth, brand, culture
+    var catOrder = { timing: 0, growth: 1, brand: 2, culture: 3, info: 4 };
+    var sorted = hooks.slice().sort(function(a, b) {
+      var ca = (catMap[a.type] || defaultCat).cat;
+      var cb = (catMap[b.type] || defaultCat).cat;
+      return (catOrder[ca]||4) - (catOrder[cb]||4);
+    });
+
+    var rows = sorted.map(function(h, i) {
+      var cm = catMap[h.type] || defaultCat;
+      var finding = (h.finding || '').replace(/</g, '&lt;');
+      var pitch = (h.pitch || '').replace(/</g, '&lt;');
+      var copyText = finding + (pitch ? ' → ' + pitch : '');
+      // Days-away badge for date-bearing hooks
+      var daysBadge = '';
+      var _hookDateStr = h.date || '';
+      // Fallback: extract date from finding text if no explicit date field
+      if (!_hookDateStr && h.finding) {
+        var _dateMatch = h.finding.match(/(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s+\d{1,2}(?:\s*[-–]\s*\d{1,2})?,?\s*\d{4}/i);
+        if (_dateMatch) _hookDateStr = _dateMatch[0].replace(/\s*[-–]\s*\d{1,2}/, '');
+        // Also check for "since YYYY" pattern for milestones
+        if (!_hookDateStr) {
+          var _yearMatch = h.finding.match(/since\s+(\d{4})/i);
+          if (_yearMatch) {
+            var _age = new Date().getFullYear() - parseInt(_yearMatch[1]);
+            if (_age > 0 && _age < 200) {
+              daysBadge = '<span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;background:rgba(245,158,11,0.12);color:#f59e0b;border:1px solid rgba(245,158,11,0.3);flex-shrink:0;">' + _age + ' yrs</span>';
+            }
+          }
+        }
       }
-      return '<div style="background:' + c.bg + ';border:1px solid ' + c.border + ';border-radius:10px;padding:12px 14px;margin-bottom:8px;">' +
-        '<div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">' +
-          '<span style="font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:' + c.text + ';background:' + c.bg + ';border:1px solid ' + c.border + ';border-radius:4px;padding:1px 6px;">' + (h.type || 'news') + '</span>' +
-          daysTag +
+      if (_hookDateStr && !daysBadge) {
+        var _hd = new Date(_hookDateStr + (_hookDateStr.split(' ').length < 3 ? ' 1' : ''));
+        if (!isNaN(_hd)) {
+          var _today = new Date(); _today.setHours(0,0,0,0);
+          var _diff = Math.round((_hd - _today) / 86400000);
+          if (_diff >= 0 && _diff <= 1) {
+            daysBadge = '<span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;background:rgba(248,113,113,0.15);color:#f87171;border:1px solid rgba(248,113,113,0.3);flex-shrink:0;">TODAY</span>';
+          } else if (_diff > 1 && _diff <= 14) {
+            daysBadge = '<span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;background:rgba(248,113,113,0.15);color:#f87171;border:1px solid rgba(248,113,113,0.3);flex-shrink:0;">' + _diff + 'd</span>';
+          } else if (_diff > 14 && _diff <= 60) {
+            daysBadge = '<span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;background:rgba(245,158,11,0.12);color:#f59e0b;border:1px solid rgba(245,158,11,0.3);flex-shrink:0;">' + _diff + 'd</span>';
+          } else if (_diff > 60) {
+            daysBadge = '<span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;background:rgba(139,143,168,0.1);color:#B8BBCC;border:1px solid rgba(139,143,168,0.25);flex-shrink:0;">' + _diff + 'd</span>';
+          } else if (_diff < 0) {
+            var ago = Math.abs(_diff);
+            daysBadge = '<span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;background:rgba(100,116,139,0.08);color:#717378;border:1px solid rgba(100,116,139,0.2);flex-shrink:0;">' + (ago >= 365 ? Math.round(ago/365) + 'yr ago' : ago + 'd ago') + '</span>';
+          }
+        }
+      }
+      return '<div data-hook-idx="' + i + '" onclick="_copyHookRow(this)" ' +
+        'style="padding:10px 16px;border-bottom:1px solid rgba(255,255,255,0.04);cursor:pointer;transition:background 0.12s;" ' +
+        'onmouseenter="this.style.background=\'rgba(255,255,255,0.03)\'" onmouseleave="this.style.background=\'transparent\'">' +
+        '<div style="display:flex;align-items:center;gap:8px;">' +
+          '<div style="width:6px;height:6px;border-radius:50%;background:' + cm.dot + ';flex-shrink:0;"></div>' +
+          '<span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;background:' + cm.bg + ';border:1px solid ' + cm.border + ';color:' + cm.text + ';letter-spacing:0.04em;flex-shrink:0;">' + cm.label + '</span>' +
+          '<span style="font-size:12px;color:#e8eaed;font-weight:500;line-height:1.4;">' + finding + '</span>' +
+          daysBadge +
         '</div>' +
-        '<div style="font-size:13px;color:var(--text);font-weight:500;line-height:1.4;margin-bottom:6px;">' + (h.finding || '') + '</div>' +
-        '<div style="font-size:11px;color:' + c.text + ';opacity:0.85;line-height:1.4;padding-top:6px;border-top:1px solid rgba(255,255,255,0.05);">💡 ' + (h.pitch || '') + '</div>' +
-        (h.source && h.source.match(/^https?:\/\//) ? '<div style="margin-top:5px;"><a href="' + h.source + '" target="_blank" style="font-size:10px;color:#60a5fa;text-decoration:none;" onclick="event.stopPropagation()">↗ ' + h.source.replace(/^https?:\/\/(www\.)?/,'').replace(/\/.*$/,'') + '</a></div>' : '') +
+        (pitch ? '<div style="display:flex;align-items:flex-start;gap:6px;margin:5px 0 0 14px;">' +
+          '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.5" style="margin-top:2px;flex-shrink:0;"><path d="M5 12h14M12 5l7 7-7 7"/></svg>' +
+          '<span style="font-size:11px;color:#5DCAA5;font-weight:500;line-height:1.4;">' + pitch + '</span>' +
+        '</div>' : '') +
       '</div>';
     }).join('');
-    listEl.innerHTML = html;
+
+    // Legend
+    var usedCats = {};
+    sorted.forEach(function(h) { var cm = catMap[h.type] || defaultCat; usedCats[cm.label] = cm; });
+    var legend = Object.keys(usedCats).map(function(label) {
+      var cm = usedCats[label];
+      return '<div style="display:flex;align-items:center;gap:4px;"><div style="width:6px;height:6px;border-radius:50%;background:' + cm.dot + ';"></div><span style="font-size:9px;color:#717378;">' + label.charAt(0) + label.slice(1).toLowerCase() + '</span></div>';
+    }).join('');
+
+    listEl.innerHTML = '<div style="padding:2px 0;">' + rows + '</div>' +
+      '<div style="padding:6px 16px 10px;border-top:1px solid rgba(255,255,255,0.04);display:flex;align-items:center;justify-content:space-between;">' +
+        '<div style="display:flex;gap:12px;align-items:center;">' + legend + '</div>' +
+        '<span style="font-size:9px;color:#717378;font-style:italic;">Click any row to copy</span>' +
+      '</div>';
+  }
+
+  function _copyHookRow(el) {
+    var idx = parseInt(el.dataset.hookIdx);
+    var hooks = _researchData.salesHooks || [];
+    var h = hooks[idx];
+    if (!h) return;
+    var text = (h.finding || '') + (h.pitch ? ' → ' + h.pitch : '');
+    navigator.clipboard.writeText(text).then(function() {
+      el.style.background = 'rgba(29,158,117,0.08)';
+      var origBorder = el.style.borderBottom;
+      el.style.borderBottom = '1px solid rgba(29,158,117,0.2)';
+      var firstSpan = el.querySelector('span[style*="color:#e8eaed"]');
+      if (firstSpan) { firstSpan._origColor = firstSpan.style.color; firstSpan.style.color = '#5DCAA5'; }
+      setTimeout(function() {
+        el.style.background = 'transparent';
+        el.style.borderBottom = origBorder || '1px solid rgba(255,255,255,0.04)';
+        if (firstSpan && firstSpan._origColor) firstSpan.style.color = firstSpan._origColor;
+      }, 800);
+    }).catch(function() {});
   }
 
   function switchResearchTab(tab) {
@@ -16124,7 +16296,8 @@
     if (tab === 'custemail') renderLiveEmailTab();
     if (tab === 'competitors') populateCompetitorsPanel();
     if (tab === 'attackplan') populateAttackPlanPanel();
-    var panels = ['events','people','hooks','email','custemail','competitors','attackplan'];
+    if (tab === 'companyintel') populateCompanyIntel();
+    var panels = ['events','companyintel','people','hooks','email','custemail','competitors','attackplan'];
     // Fade out all inactive panels immediately
     panels.forEach(function(t) {
       var panel = document.getElementById('rpanel-' + t);
@@ -16138,10 +16311,8 @@
     setTimeout(function() {
       var incoming = document.getElementById('rpanel-' + tab);
       var inBtn    = document.getElementById('rtab-' + tab);
-      if (incoming) incoming.classList.add('active');
+      if (incoming) { incoming.classList.add('active'); incoming.scrollTop = 0; }
       if (inBtn)    inBtn.classList.add('active');
-      var scrollEl = document.querySelector('.research-popup-scroll');
-      if (scrollEl) scrollEl.scrollTop = 0;
     }, 80);
   }
 
@@ -16207,11 +16378,19 @@
 
   function findCompetitors() {
     var btn = document.getElementById('rp-competitors-btn');
+    var rerunBtn = document.getElementById('rp-competitors-rerun');
     var list = document.getElementById('rp-competitors-list');
     var empty = document.getElementById('rp-competitors-empty');
     var header = document.getElementById('rp-competitors-header');
-    // Show loading state
-    if (btn) { btn.disabled = true; btn.innerHTML = 'Searching...'; }
+    // Show loading state with timer
+    var _cStart = Date.now();
+    if (btn) { btn.disabled = true; btn.innerHTML = 'Searching 0s'; }
+    if (rerunBtn) { rerunBtn.disabled = true; rerunBtn.textContent = 'Searching 0s'; rerunBtn.style.opacity = '0.6'; }
+    var _cTimer = setInterval(function() {
+      var s = Math.round((Date.now()-_cStart)/1000);
+      if (btn && btn.disabled) btn.innerHTML = 'Searching ' + s + 's';
+      if (rerunBtn && rerunBtn.disabled) rerunBtn.textContent = 'Searching ' + s + 's';
+    }, 1000);
     if (empty) empty.style.display = 'none';
     if (header) header.style.display = 'none';
     if (list) list.innerHTML = '<div style="padding:32px;text-align:center;"><div style="font-size:12px;color:var(--text-muted);margin-top:8px;">Finding direct competitors...</div></div>';
@@ -16276,8 +16455,10 @@
         if (result && result.reason) _researchData._competitorReason = result.reason;
       }
       populateCompetitorsPanel();
-      // Reset button
+      // Reset buttons
+      clearInterval(_cTimer);
       if (btn) { btn.disabled = false; btn.innerHTML = 'FIND COMPETITORS'; }
+      if (rerunBtn) { rerunBtn.disabled = false; rerunBtn.textContent = 'Rerun'; rerunBtn.style.opacity = ''; }
       // Show empty state with reason if no results
       if (!_researchData.competitors.length) {
         var emptyEl = document.getElementById('rp-competitors-empty');
@@ -16296,8 +16477,101 @@
     })
     .catch(function(err) {
       console.warn('[VRC] Competitors fetch failed:', err);
+      clearInterval(_cTimer);
       if (btn) { btn.disabled = false; btn.innerHTML = 'FIND COMPETITORS'; }
+      if (rerunBtn) { rerunBtn.disabled = false; rerunBtn.textContent = 'Rerun'; rerunBtn.style.opacity = ''; }
       if (list) list.innerHTML = '<div style="padding:20px;text-align:center;font-size:12px;color:#f87171;">Search failed. Try again.</div>';
+    });
+  }
+
+  // ── Company Intel ────────────────────────────────────────────────
+  function populateCompanyIntel() {
+    var content = document.getElementById('rp-companyintel-content');
+    var empty = document.getElementById('rp-companyintel-empty');
+    var intel = _researchData.companyIntel || '';
+    if (intel) {
+      if (content) { content.innerHTML = intel; content.style.display = 'block'; }
+      if (empty) empty.style.display = 'none';
+    } else {
+      if (content) { content.innerHTML = ''; content.style.display = 'none'; }
+      if (empty) empty.style.display = 'flex';
+    }
+  }
+
+  function generateCompanyIntel() {
+    var btn = document.getElementById('rp-companyintel-btn');
+    var content = document.getElementById('rp-companyintel-content');
+    var empty = document.getElementById('rp-companyintel-empty');
+    var _ciStart = Date.now();
+    if (btn) { btn.disabled = true; btn.innerHTML = 'Researching 0s'; }
+    var _ciTimer = setInterval(function() {
+      var s = Math.round((Date.now()-_ciStart)/1000);
+      if (btn && btn.disabled) btn.innerHTML = 'Researching ' + s + 's';
+    }, 1000);
+    if (empty) empty.style.display = 'none';
+    if (content) { content.style.display = 'block'; content.innerHTML = '<div style="display:flex;align-items:center;gap:8px;padding:16px 0;"><div style="width:14px;height:14px;border:2px solid rgba(96,165,250,0.3);border-top-color:#60a5fa;border-radius:50%;animation:spin 0.8s linear infinite;flex-shrink:0;"></div><span style="font-size:11px;color:var(--text-muted);">Researching company background...</span></div>'; }
+
+    var rd = _researchData || {};
+    var company = rd.companyName || document.getElementById('f-company').value.trim() || '';
+    var ctx = [
+      'Company: ' + company,
+      rd.industry ? 'Industry: ' + rd.industry : '',
+      rd.blurb ? 'About: ' + rd.blurb : '',
+      rd.employees ? 'Employees: ' + rd.employees : '',
+      rd.revenue ? 'Revenue: ' + rd.revenue : '',
+      rd.foundedYear ? 'Founded: ' + rd.foundedYear : '',
+      rd.domain ? 'Website: ' + rd.domain : ''
+    ].filter(Boolean).join('\n');
+
+    var prompt = [
+      'You are a sales intelligence researcher. Generate a concise company background brief for a sales rep who needs to sound knowledgeable when talking to a founder, CEO, or someone passionate about this company.',
+      '',
+      ctx,
+      '',
+      'Write 4-6 short paragraphs covering:',
+      '1. ORIGIN STORY: How and why the company was founded. Key founder names if findable.',
+      '2. MISSION & VALUES: What drives them. Their stated purpose or philosophy.',
+      '3. GROWTH STORY: Key milestones, pivots, or expansions that shaped who they are today.',
+      '4. CULTURE: What they are known for internally. Employee culture, community involvement, or causes they champion.',
+      '5. COMPETITIVE POSITION: What makes them different from competitors in their space.',
+      '6. TALKING POINTS: 2-3 specific things a sales rep could say that would make a founder or long-time employee think "this person did their homework."',
+      '',
+      'Write in plain prose, no headers or bullet points. Each paragraph should be 2-3 sentences max. Be specific, not generic. If you cannot find information on a topic, skip it rather than guessing.',
+      '',
+      'Return ONLY the paragraphs, no JSON, no markdown formatting.'
+    ].join('\n');
+
+    fetch(GS_URL, { method: 'POST', body: JSON.stringify({ action: 'runResearch', prompt: prompt, rep: window._currentRep || '', noSearch: false }) })
+    .then(function(r) { return r.text(); })
+    .then(function(raw) {
+      clearInterval(_ciTimer);
+      var data; try { data = JSON.parse(raw); } catch(e) { data = null; }
+      if (data) _updateCostBadge(data);
+      var result = '';
+      if (data && data.result) {
+        result = typeof data.result === 'string' ? data.result : (data.result.text || JSON.stringify(data.result));
+        result = result.replace(/```[\s\S]*?```/g, '').trim();
+      }
+      if (result) {
+        var formatted = result.split(/\n\n+/).filter(Boolean).map(function(p) {
+          return '<p style="margin:0 0 12px;line-height:1.7;">' + p.replace(/\n/g, ' ') + '</p>';
+        }).join('');
+        _researchData.companyIntel = formatted;
+        if (content) { content.innerHTML = formatted; content.style.display = 'block'; }
+        if (empty) empty.style.display = 'none';
+        try { if (_savedRecordId) {
+          var rec = _buildCurrentRecord(); rec.id = _savedRecordId;
+          gsPost({ action: 'updateRecord', record: rec });
+        }} catch(e) {}
+      } else {
+        if (content) content.innerHTML = '<span style="color:#f87171;font-size:11px;">Could not generate. Try running AI research first.</span>';
+      }
+      if (btn) { btn.disabled = false; btn.innerHTML = 'GENERATE INTEL'; }
+    })
+    .catch(function() {
+      clearInterval(_ciTimer);
+      if (btn) { btn.disabled = false; btn.innerHTML = 'GENERATE INTEL'; }
+      if (content) content.innerHTML = '<span style="color:#f87171;font-size:11px;">Generation failed. Try again.</span>';
     });
   }
 
@@ -16319,7 +16593,12 @@
     var btn = document.getElementById('rp-attackplan-btn');
     var content = document.getElementById('rp-attackplan-content');
     var empty = document.getElementById('rp-attackplan-empty');
-    if (btn) { btn.disabled = true; btn.innerHTML = 'Analyzing...'; }
+    var _apStart = Date.now();
+    if (btn) { btn.disabled = true; btn.innerHTML = 'Analyzing 0s'; }
+    var _apTimer = setInterval(function() {
+      var s = Math.round((Date.now()-_apStart)/1000);
+      if (btn && btn.disabled) btn.innerHTML = 'Analyzing ' + s + 's';
+    }, 1000);
     if (empty) empty.style.display = 'none';
     if (content) { content.style.display = 'block'; content.innerHTML = '<div style="padding:32px;text-align:center;"><div style="display:inline-block;width:16px;height:16px;border:2px solid rgba(245,158,11,0.3);border-top-color:#f59e0b;border-radius:50%;animation:spin 0.8s linear infinite;margin-right:8px;vertical-align:middle;"></div><span style="font-size:12px;color:var(--text-muted);">Building your attack plan...</span></div>'; }
 
@@ -16405,6 +16684,7 @@
         if (content) content.innerHTML = '<div style="padding:20px;text-align:center;font-size:12px;color:#f87171;">Could not generate attack plan. Try running AI research first.</div>';
       }
       if (btn) { btn.disabled = false; btn.innerHTML = 'GENERATE ATTACK PLAN'; }
+      clearInterval(_apTimer);
       // Auto-save
       try { if (_savedRecordId) {
         var rec = _buildCurrentRecord(); rec.id = _savedRecordId;
@@ -16413,6 +16693,7 @@
     })
     .catch(function(err) {
       console.warn('[VRC] Attack plan failed:', err);
+      clearInterval(_apTimer);
       if (btn) { btn.disabled = false; btn.innerHTML = 'GENERATE ATTACK PLAN'; }
       if (content) content.innerHTML = '<div style="padding:20px;text-align:center;font-size:12px;color:#f87171;">Generation failed. Try again.</div>';
     });
@@ -17105,6 +17386,9 @@
         <button class="research-tab active" id="rtab-events" onclick="switchResearchTab('events')">
           Events <span class="research-tab-badge" id="rtab-events-badge">0</span>
         </button>
+        <button class="research-tab" id="rtab-companyintel" onclick="switchResearchTab('companyintel')" style="white-space:nowrap;">
+          Company Intel
+        </button>
         <button class="research-tab" id="rtab-hooks" onclick="switchResearchTab('hooks')">
           Sales Hooks <span class="research-tab-badge" id="rtab-hooks-badge" style="display:none;"></span>
         </button>
@@ -17147,6 +17431,21 @@
         <div id="rp-events-empty" style="font-size:12px;color:var(--text-muted);text-align:center;padding:20px 0;">No events found for this company.</div>
       </div>
 
+      <!-- Company Intel panel -->
+      <div class="research-panel" id="rpanel-companyintel" style="padding:20px 24px;">
+        <div id="rp-companyintel-content" style="font-size:12.5px;color:var(--text);line-height:1.7;"></div>
+        <div id="rp-companyintel-empty" style="padding:48px 24px;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;">
+          <div style="width:40px;height:40px;border-radius:50%;background:rgba(96,165,250,0.12);border:1px solid rgba(96,165,250,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          </div>
+          <div>
+            <p style="margin:0 0 4px;font-size:13px;font-weight:600;color:var(--text);">Company background brief</p>
+            <p style="margin:0;font-size:12px;color:#717378;max-width:340px;line-height:1.6;">Founding story, mission, culture, and talking points for connecting with founders and passionate employees. Runs automatically during research.</p>
+          </div>
+          <button id="rp-companyintel-btn" onclick="generateCompanyIntel()" style="margin-top:6px;height:34px;padding:0 20px;border-radius:8px;border:1px solid rgba(96,165,250,0.5);background:rgba(96,165,250,0.15);color:#60a5fa;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:0.05em;display:inline-flex;align-items:center;gap:6px;">GENERATE INTEL</button>
+        </div>
+      </div>
+
       <!-- Email preview panel -->
       <div class="research-panel" id="rpanel-email">
         <p class="research-section-label" style="margin:0 0 10px;">Full Email That Will Be Sent</p>
@@ -17156,11 +17455,11 @@
 
       <!-- Key People panel -->
       <div class="research-panel" id="rpanel-hooks" style="padding:0;">
-        <div id="rp-hooks-header" style="display:none;padding:14px 20px 10px;justify-content:space-between;align-items:center;">
-          <span style="font-size:10px;font-weight:600;color:#717378;text-transform:uppercase;letter-spacing:0.08em;">Sales Hooks &amp; Swag Talking Points</span>
-          <button onclick="loadMoreResearch()" style="height:24px;padding:0 10px;border-radius:6px;border:1px solid rgba(29,158,117,0.3);background:transparent;color:#5DCAA5;font-size:10px;font-weight:600;cursor:pointer;letter-spacing:0.04em;">Rerun</button>
+        <div id="rp-hooks-header" style="display:none;padding:10px 20px 6px;justify-content:space-between;align-items:center;">
+          <span style="font-size:10px;font-weight:600;color:#717378;text-transform:uppercase;letter-spacing:0.08em;">Call Cheat Sheet</span>
+          <button id="rp-hooks-rerun" onclick="loadMoreResearch()" style="height:24px;padding:0 10px;border-radius:6px;border:1px solid rgba(29,158,117,0.3);background:transparent;color:#5DCAA5;font-size:10px;font-weight:600;cursor:pointer;letter-spacing:0.04em;">Rerun</button>
         </div>
-        <div id="rp-hooks-list" style="padding:0 20px 16px;"></div>
+        <div id="rp-hooks-list" style="padding:0;"></div>
         <div id="rp-hooks-empty" style="padding:48px 24px;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;">
           <div style="width:40px;height:40px;border-radius:50%;background:rgba(29,158,117,0.12);border:1px solid rgba(29,158,117,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5DCAA5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
@@ -17184,16 +17483,16 @@
       </div>
 
       <!-- Customer Email panel (side-by-side layout) -->
-      <div class="research-panel" id="rpanel-custemail" style="padding:0;">
-        <div style="display:flex;min-height:300px;">
-          <!-- LEFT: Events & Observances -->
-          <div style="width:380px;padding:14px 16px;border-right:0.5px solid rgba(255,255,255,0.07);overflow-y:auto;max-height:380px;box-sizing:border-box;flex-shrink:0;">
+      <div class="research-panel" id="rpanel-custemail" style="padding:0;overflow:hidden;">
+        <div style="display:flex;height:100%;">
+          <!-- LEFT: Events & Observances — scrolls independently -->
+          <div style="width:45%;padding:14px 16px;border-right:0.5px solid rgba(255,255,255,0.07);overflow-y:auto;box-sizing:border-box;flex-shrink:0;scrollbar-width:thin;scrollbar-color:rgba(29,158,117,0.3) transparent;">
             <div style="font-size:9px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:#717378;margin-bottom:8px;">Events &amp; Hooks</div>
             <div id="live-evtemail-events"></div>
             <div id="live-evtemail-sel-summary" style="font-size:10px;color:var(--text-muted);margin-top:8px;min-height:14px;">None selected</div>
           </div>
-          <!-- RIGHT: Email composer -->
-          <div style="flex:1;padding:14px 16px;display:flex;flex-direction:column;box-sizing:border-box;min-width:0;max-height:380px;overflow:hidden;">
+          <!-- RIGHT: Email composer — fills remaining space -->
+          <div style="flex:1;padding:14px 16px;display:flex;flex-direction:column;box-sizing:border-box;min-width:0;overflow:hidden;">
             <div style="font-size:9px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:#717378;margin-bottom:10px;">Quick outreach</div>
             <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:10px;">
               <div id="live-pill-checkin" onclick="setLiveEmailIntent('checkin')" style="padding:5px 11px;font-size:10px;font-weight:600;border-radius:14px;cursor:pointer;background:#0F6E56;color:#9FE1CB;border:1px solid rgba(159,225,203,0.25);white-space:nowrap;flex-shrink:0;">Friendly check-in</div>
@@ -17230,7 +17529,7 @@
       <div class="research-panel" id="rpanel-competitors" style="padding:0;">
         <div id="rp-competitors-header" style="display:none;padding:14px 20px 10px;justify-content:space-between;align-items:center;">
           <span style="font-size:10px;font-weight:600;color:#717378;text-transform:uppercase;letter-spacing:0.08em;">Direct Competitors</span>
-          <button onclick="findCompetitors()" style="height:24px;padding:0 10px;border-radius:6px;border:1px solid rgba(251,113,133,0.3);background:transparent;color:#FB7185;font-size:10px;font-weight:600;cursor:pointer;letter-spacing:0.04em;">Rerun</button>
+          <button id="rp-competitors-rerun" onclick="findCompetitors()" style="height:24px;padding:0 10px;border-radius:6px;border:1px solid rgba(251,113,133,0.3);background:transparent;color:#FB7185;font-size:10px;font-weight:600;cursor:pointer;letter-spacing:0.04em;">Rerun</button>
         </div>
         <div id="rp-competitors-list" style="padding:0 20px 16px;"></div>
         <div id="rp-competitors-empty" style="padding:48px 24px;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;">
@@ -17268,7 +17567,7 @@
       <div style="display:flex;align-items:center;gap:8px;">
         <span id="deep-people-cost" style="display:none;font-size:9px;color:rgba(93,202,165,0.6);font-weight:600;"></span>
         <button id="deep-people-btn" onclick="loadDeepPeopleSearch()" style="height:32px;padding:0 12px;border-radius:8px;border:1px solid rgba(96,165,250,0.3);background:transparent;color:#60a5fa;font-size:11px;font-weight:600;cursor:pointer;letter-spacing:0.04em;display:inline-flex;align-items:center;gap:5px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Deep Search</button>
-        <button onclick="generateResearchPDF(window._viewingArchiveRecord||undefined)" style="height:32px;padding:0 12px;border-radius:8px;border:1px solid rgba(139,143,168,0.3);background:transparent;color:#B8BBCC;font-size:11px;font-weight:600;cursor:pointer;letter-spacing:0.04em;display:inline-flex;align-items:center;gap:5px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> Generate PDF</button>
+        <button id="rp-pdf-btn" onclick="generateResearchPDF(window._viewingArchiveRecord||undefined)" style="height:32px;padding:0 12px;border-radius:8px;border:1px solid rgba(139,143,168,0.3);background:transparent;color:#B8BBCC;font-size:11px;font-weight:600;cursor:pointer;letter-spacing:0.04em;display:inline-flex;align-items:center;gap:5px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> Generate PDF</button>
         <div class="research-footer-btns" id="rp-footer-btns">
           <!-- Populated dynamically by openResearchPopup() -->
         </div>
