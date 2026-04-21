@@ -12832,88 +12832,132 @@
 
   function _pdfStyles() {
     return '*{box-sizing:border-box;margin:0;padding:0;}' +
-      'html,body{font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#1e293b;background:#fff;orphans:2;widows:2;}' +
-      'body{padding:0;}table{width:100%;border-collapse:collapse;}' +
-      '@page{size:8.5in 11in;margin:0.6in 0.65in 0.8in 0.65in;}' +
-      '.section{margin-bottom:16px;page-break-inside:avoid;break-inside:avoid;}' +
-      '.section-title{font-size:8px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.12em;border-bottom:1px solid #e2e8f0;padding-bottom:4px;margin-bottom:8px;}' +
-      'td.lbl{padding:4px 14px 4px 0;font-size:11px;color:#64748b;white-space:nowrap;width:140px;vertical-align:top;}' +
-      'td.val{padding:4px 0;font-size:11px;color:#1e293b;font-weight:500;vertical-align:top;}' +
-      '.block-hdr{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:#94a3b8;border-bottom:2px solid #e2e8f0;padding:18px 0 5px;margin:20px 0 14px;}' +
-      '.intel-box{border-left:3px solid #60a5fa;padding-left:14px;font-size:11px;color:#334155;line-height:1.7;margin-bottom:16px;}' +
-      '.atk-box{border-left:3px solid #f59e0b;padding-left:14px;font-size:11px;color:#334155;line-height:1.6;}' +
-      '.hook-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:middle;}' +
-      '.footer{position:fixed;bottom:0;left:0;right:0;padding:5px 0.65in;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;font-size:8px;color:#94a3b8;background:#fff;}';
+      'html,body{font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#1e293b;background:#fff;}' +
+      'body{padding:0.5in 0.65in 0.8in 0.65in;max-width:8.5in;margin:0 auto;}' +
+      '@page{size:8.5in 11in;margin:0.5in 0.65in 0.8in 0.65in;}' +
+      '@media print{body{padding:0;}}' +
+      'table{width:100%;border-collapse:collapse;}' +
+      'a{color:#1D9E75;text-decoration:none;}' +
+      'img{max-width:100%;}' +
+      'button{display:none !important;}' +
+      '.section{margin-bottom:14px;}' +
+      '.section-title{font-size:8px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.12em;border-bottom:1px solid #e2e8f0;padding-bottom:4px;margin-bottom:6px;}' +
+      'td.lbl{padding:3px 12px 3px 0;font-size:11px;color:#64748b;white-space:nowrap;width:130px;vertical-align:top;}' +
+      'td.val{padding:3px 0;font-size:11px;color:#1e293b;font-weight:500;vertical-align:top;word-wrap:break-word;word-break:break-word;}' +
+      '.block-hdr{margin:18px 0 12px;border-top:2px solid #e2e8f0;padding-top:10px;page-break-after:avoid;}' +
+      '.intel-box{border-left:3px solid #60a5fa;padding:8px 0 8px 14px;font-size:11px;color:#334155;line-height:1.65;margin-bottom:14px;}' +
+      '.atk-box{border-left:3px solid #f59e0b;padding:8px 0 8px 14px;font-size:11px;color:#334155;line-height:1.55;}' +
+      '.pdf-footer{border-top:1px solid #e2e8f0;padding:8px 0 0;margin-top:24px;font-size:8px;color:#94a3b8;}' +
+      '.pdf-footer table{width:100%;border-collapse:collapse;table-layout:auto;}' +
+      '.pdf-footer td{padding:0;font-size:8px;color:#94a3b8;}' +
+      '.score-grid{width:100%;border-collapse:separate;border-spacing:6px 0;margin:4px 0;}' +
+      '.score-grid td{background:#f8fafc;border:1px solid #e2e8f0;padding:8px 10px;text-align:center;width:33%;}' +
+      '.info-bar{border-bottom:1px solid #e2e8f0;padding:6px 0;margin-bottom:16px;font-size:9px;color:#94a3b8;}' +
+      '.info-bar table{width:100%;border-collapse:collapse;table-layout:auto;}' +
+      '.info-bar td{padding:0;font-size:9px;color:#94a3b8;}';
   }
 
   function _pdfA2Header(o) {
-    var pillHtml = '<td style="padding:4px 6px;border-radius:4px;background:rgba(255,255,255,0.12);text-align:center;"><div style="font-size:8px;color:rgba(255,255,255,0.5);text-transform:uppercase;">IV</div><div style="font-size:13px;font-weight:700;color:#fff;">'+(o.ivScore||0)+'/3</div></td>' +
-      '<td style="padding:4px 6px;border-radius:4px;background:rgba(255,255,255,0.12);text-align:center;"><div style="font-size:8px;color:rgba(255,255,255,0.5);text-transform:uppercase;">PV</div><div style="font-size:13px;font-weight:700;color:'+(o.isRO?'rgba(255,255,255,0.35)':'#fff')+';">'+(o.isRO?'--':(o.pvScore||0)+'/3')+'</div></td>' +
-      '<td style="padding:4px 6px;border-radius:4px;background:rgba(255,255,255,0.12);text-align:center;"><div style="font-size:8px;color:rgba(255,255,255,0.5);text-transform:uppercase;">AV</div><div style="font-size:13px;font-weight:700;color:'+(o.isRO?'rgba(255,255,255,0.35)':'#fff')+';">'+(o.isRO?'--':(o.avScore||0)+'/3')+'</div></td>';
     var scoreNum = o.isRO ? (o.ivScore||0) : (o.totalScore||0);
     var scoreMax = o.isRO ? '3' : '9';
-    var starsHtml = o.isRO ? '<div style="font-size:10px;color:rgba(255,255,255,0.5);margin-top:2px;">IV only</div>' : '<div style="font-size:11px;color:rgba(255,255,255,0.7);letter-spacing:0.5px;margin-top:2px;">'+(o.stars||'')+'</div>';
-    return '<div class="section" style="margin-bottom:6px;">' +
-      '<table style="width:100%;border-collapse:collapse;background:'+o.tierBg+';border-radius:8px;" cellpadding="0" cellspacing="0"><tr>' +
-        '<td style="padding:14px 18px;vertical-align:middle;width:60px;text-align:center;">' +
-          '<div style="font-size:36px;font-weight:700;color:#fff;line-height:1;">'+scoreNum+'<span style="font-size:15px;font-weight:400;color:rgba(255,255,255,0.5);">/'+scoreMax+'</span></div>' +
-          starsHtml +
+    var starsLine = o.isRO ? '<div style="font-size:10px;color:rgba(255,255,255,0.5);margin-top:2px;">IV only</div>' : (o.stars ? '<div style="font-size:11px;color:rgba(255,255,255,0.7);letter-spacing:0.5px;margin-top:2px;">'+o.stars+'</div>' : '');
+    var metaParts = [];
+    var cleanWebsite = (o.website||'').replace(/^https?:\/\//i,'');
+    if (cleanWebsite) metaParts.push(cleanWebsite);
+    if (o.employees) metaParts.push(o.employees + ' employees');
+    if (o.foundedYear) metaParts.push('Est. ' + o.foundedYear);
+    if (o.searchCost) metaParts.push(o.searchCost);
+
+    // Row 1: Score + Company info + Tier block (3 columns only)
+    var row1 =
+      '<table style="width:100%;border-collapse:collapse;table-layout:auto;background:'+o.tierBg+';" cellpadding="0" cellspacing="0"><tr>' +
+        '<td style="padding:14px 14px;vertical-align:middle;width:70px;text-align:center;">' +
+          '<div style="font-size:32px;font-weight:700;color:#fff;line-height:1;">'+scoreNum+'<span style="font-size:13px;font-weight:400;color:rgba(255,255,255,0.5);">/'+scoreMax+'</span></div>' +
+          starsLine +
         '</td>' +
-        '<td style="width:1px;padding:10px 0;vertical-align:middle;"><div style="width:1px;height:40px;background:rgba(255,255,255,0.15);"></div></td>' +
-        '<td style="padding:14px 14px;vertical-align:middle;">' +
-          '<div style="font-size:16px;font-weight:700;color:#fff;margin-bottom:3px;">'+(o.isHot?'&#128293; ':'')+o.company+(o.industry?' <span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;background:rgba(255,255,255,0.18);vertical-align:middle;margin-left:6px;">'+o.industry+'</span>':'')+'</div>' +
-          '<div style="font-size:11px;color:rgba(255,255,255,0.6);">'+(o.website||'')+(o.employees?' &middot; '+o.employees+' employees':'')+(o.foundedYear?' &middot; Est. '+o.foundedYear:'')+(o.searchCost?' &middot; '+o.searchCost:'')+'</div>' +
+        '<td style="width:1px;padding:10px 0;vertical-align:middle;"><div style="width:1px;height:34px;background:rgba(255,255,255,0.15);"></div></td>' +
+        '<td style="padding:10px 14px;vertical-align:middle;">' +
+          '<div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:2px;">'+(o.isHot?'&#128293; ':'')+o.company+(o.industry?' <span style="font-size:9px;font-weight:600;padding:1px 6px;background:rgba(255,255,255,0.18);color:#fff;">'+o.industry+'</span>':'')+'</div>' +
+          '<div style="font-size:10px;color:rgba(255,255,255,0.55);">'+metaParts.join(' &middot; ')+'</div>' +
         '</td>' +
-        '<td style="padding:8px 10px;vertical-align:middle;"><table style="border-collapse:separate;border-spacing:3px;" cellpadding="0"><tr>'+pillHtml+'</tr></table></td>' +
-        '<td style="padding:14px 18px 14px 10px;vertical-align:middle;">' +
-          '<div style="text-align:center;padding:6px 14px;border-radius:8px;background:'+o.tierBlockBg+';border:1px solid '+o.tierBdr+';">' +
-            '<div style="font-size:18px;font-weight:700;color:#fff;letter-spacing:0.03em;">'+(o.isRO?'RO':o.tierName)+'</div>' +
-            '<div style="font-size:8px;color:'+o.tierClr+';font-weight:600;letter-spacing:0.04em;margin-top:1px;">'+(o.isRO?'RESEARCH ONLY':(o.priority||'SCORED'))+'</div>' +
-          '</div>' +
+        '<td style="padding:10px 14px;vertical-align:middle;text-align:right;white-space:nowrap;">' +
+          '<span style="display:inline-block;padding:3px 8px;background:rgba(255,255,255,0.12);font-size:11px;font-weight:700;color:#fff;margin-right:3px;">IV '+(o.ivScore||0)+'</span>' +
+          '<span style="display:inline-block;padding:3px 8px;background:rgba(255,255,255,0.12);font-size:11px;font-weight:700;color:'+(o.isRO?'rgba(255,255,255,0.3)':'#fff')+';margin-right:3px;">PV '+(o.isRO?'--':(o.pvScore||0))+'</span>' +
+          '<span style="display:inline-block;padding:3px 8px;background:rgba(255,255,255,0.12);font-size:11px;font-weight:700;color:'+(o.isRO?'rgba(255,255,255,0.3)':'#fff')+';margin-right:8px;">AV '+(o.isRO?'--':(o.avScore||0))+'</span>' +
+          '<span style="display:inline-block;padding:4px 10px;background:'+o.tierBlockBg+';border:1px solid '+o.tierBdr+';text-align:center;">' +
+            '<span style="font-size:14px;font-weight:700;color:#fff;letter-spacing:0.03em;">'+(o.isRO?'RO':o.tierName)+'</span> ' +
+            '<span style="font-size:8px;color:'+o.tierClr+';font-weight:600;letter-spacing:0.04em;">'+(o.isRO?'RESEARCH ONLY':(o.priority||'SCORED'))+'</span>' +
+          '</span>' +
         '</td>' +
-      '</tr></table>' +
-      '</div>' +
-      (o.blurb ? '<div style="font-size:11px;color:#475569;line-height:1.6;margin-bottom:6px;padding:0 2px;">'+o.blurb+'</div>' : '') +
-      '<div style="display:flex;justify-content:space-between;font-size:9px;color:#94a3b8;margin-bottom:18px;padding:0 2px;">' +
-        '<span>'+(o.ipaNum?o.ipaNum+' &middot; ':'')+'Entered by '+o.rep+' &middot; '+o.dateStr+(o.timeStr?' &middot; '+o.timeStr:'')+'</span>' +
-        '<span>'+o.name+(o.email?' &middot; '+o.email:'')+(o.phone?' &middot; '+o.phone:'')+'</span>' +
-      '</div>';
+      '</tr></table>';
+
+    // Blurb
+    var blurbHtml = o.blurb ? '<div style="font-size:10px;color:#475569;line-height:1.5;padding:6px 2px 4px;border-bottom:1px solid #e2e8f0;">'+o.blurb+'</div>' : '';
+
+    // Info bar
+    var rightInfo = o.name || '';
+    if (o.email && o.email !== '\u2014') rightInfo += (rightInfo ? ' &middot; ' : '') + o.email;
+    if (o.phone && o.phone !== '\u2014') rightInfo += (rightInfo ? ' &middot; ' : '') + o.phone;
+    var infoBar = '<div class="info-bar"><table><tr>' +
+      '<td style="text-align:left;">'+(o.ipaNum?o.ipaNum+' &middot; ':'')+'Entered by '+(o.rep||'\u2014')+' &middot; '+o.dateStr+(o.timeStr?' &middot; '+o.timeStr:'')+'</td>' +
+      '<td style="text-align:right;">'+rightInfo+'</td>' +
+      '</tr></table></div>';
+
+    return row1 + blurbHtml + infoBar;
   }
 
   function _pdfContentBlocks(rd, o) {
     var fRow = function(label,val){ if(!val||val==='\u2014'||val==='')return ''; return '<tr><td class="lbl">'+label+'</td><td class="val">'+val+'</td></tr>'; };
     var fSec = function(title,inner){ if(!inner)return ''; return '<div class="section"><div class="section-title">'+title+'</div><table><tbody>'+inner+'</tbody></table></div>'; };
     var dh = _pdfDateHelpers();
+    var bHdr = function(num, title, color, textColor) {
+      return '<div class="block-hdr" style="border-top-color:'+color+';">' +
+        '<table style="width:100%" cellpadding="0" cellspacing="0"><tr>' +
+        '<td style="width:28px;vertical-align:middle;"><div style="width:24px;height:24px;border-radius:50%;background:'+color+';color:#fff;font-size:11px;font-weight:700;text-align:center;line-height:24px;">'+num+'</div></td>' +
+        '<td style="padding-left:8px;font-size:10px;font-weight:700;color:'+textColor+';letter-spacing:0.1em;text-transform:uppercase;vertical-align:middle;">'+title+'</td>' +
+        '</tr></table></div>';
+    };
     var html = '';
-    html += '<div class="block-hdr" style="color:#2563eb;">Block 1 &middot; Know the company</div>';
-    if (rd.companyIntel) html += '<div class="section"><div class="section-title">Company Intel</div><div class="intel-box">'+rd.companyIntel+'</div></div>';
-    var profInner = fRow('Industry', rd.industry||'') + fRow('Employees', rd.employees||'') + fRow('Est. Revenue', rd.revenue||'') + fRow('Founded', rd.foundedYear||'') + (o.website?fRow('Website','<a href="'+(o.website.match(/^https?:\/\//)?o.website:'https://'+o.website)+'" style="color:#1D9E75;">'+o.website.replace(/^https?:\/\//i,'')+'</a>'):'');
+
+    // ── BLOCK 1: KNOW THE COMPANY ──
+    html += bHdr('1', 'Know the company', '#2563eb', '#1e40af');
+    if (rd.companyIntel) {
+      html += '<div style="margin-bottom:14px;"><div class="section-title">Company Intel</div><div class="intel-box">'+rd.companyIntel+'</div></div>';
+    }
+    var profInner = fRow('Industry', rd.industry||'') + fRow('Employees', rd.employees||'') + fRow('Est. Revenue', rd.revenue||'') + fRow('Founded', rd.foundedYear||'');
+    if (o.website) profInner += fRow('Website', '<a href="'+(o.website.match(/^https?:\/\//)?o.website:'https://'+o.website)+'">'+o.website.replace(/^https?:\/\//i,'')+'</a>');
     html += fSec('Company Profile', profInner);
+
     var sm = rd.socialMedia || {};
     var socialInner = '';
-    if (rd.companyLinkedIn) socialInner += fRow('LinkedIn', '<a href="'+rd.companyLinkedIn+'" style="color:#1D9E75;">'+rd.companyLinkedIn.replace('https://','')+'</a>');
-    ['facebook','instagram','twitter','tiktok','youtube','snapchat'].forEach(function(k){ if(sm[k]) socialInner += fRow(k.charAt(0).toUpperCase()+k.slice(1),'<a href="'+sm[k]+'" style="color:#1D9E75;">'+sm[k].replace('https://','')+'</a>'); });
+    if (rd.companyLinkedIn) socialInner += fRow('LinkedIn', '<a href="'+rd.companyLinkedIn+'">'+rd.companyLinkedIn.replace('https://','')+'</a>');
+    ['facebook','instagram','twitter','tiktok','youtube','snapchat'].forEach(function(k){ if(sm[k]) socialInner += fRow(k.charAt(0).toUpperCase()+k.slice(1),'<a href="'+sm[k]+'">'+sm[k].replace('https://','')+'</a>'); });
     if (socialInner) html += fSec('Social Media', socialInner);
-    html += '<div class="block-hdr" style="color:#d97706;">Block 2 &middot; Know your angles</div>';
+
+    // ── BLOCK 2: KNOW YOUR ANGLES ──
+    html += bHdr('2', 'Know your angles', '#d97706', '#92400e');
+
     if (rd.salesHooks && rd.salesHooks.length) {
       var catColors = { milestone:'#dc2626', news:'#dc2626', expansion:'#d97706', hiring:'#d97706', brand:'#2563eb', sponsorship:'#2563eb', campaign:'#2563eb', award:'#7c3aed', industry:'#7c3aed' };
       var hookRows = rd.salesHooks.map(function(h) {
         var dotClr = catColors[h.type] || '#64748b';
-        return '<tr><td style="padding:6px 10px 6px 0;vertical-align:top;width:12px;"><div class="hook-dot" style="background:'+dotClr+';margin-top:3px;"></div></td>' +
-          '<td style="padding:6px 0;vertical-align:top;">' +
+        return '<tr>' +
+          '<td style="padding:5px 8px 5px 0;vertical-align:top;width:14px;"><div style="display:inline-block;width:7px;height:7px;border-radius:50%;background:'+dotClr+';margin-top:3px;"></div></td>' +
+          '<td style="padding:5px 0;vertical-align:top;border-bottom:1px solid #f1f5f9;">' +
             '<div style="font-size:11px;font-weight:600;color:#1e293b;">'+(h.finding||h.hook||'')+'</div>' +
-            (h.pitch?'<div style="font-size:10px;color:#059669;margin-top:2px;">'+h.pitch+'</div>':'') +
+            (h.pitch?'<div style="font-size:10px;color:#059669;margin-top:1px;">'+h.pitch+'</div>':'') +
           '</td></tr>';
       }).join('');
       html += fSec('Call Cheat Sheet ('+rd.salesHooks.length+')', hookRows);
     }
+
     var pdfTS = rd.tradeShows || [];
     var allEvts = dh.sortByDate((rd.eventsSite||[]).concat(rd.eventsWeb||[]));
     var obs = dh.sortByDate(rd.observances || []);
     var eventsRows = '';
     if (pdfTS.length) {
       pdfTS.slice().sort(function(a,b){ var co={confirmed:0,likely:1,'industry-match':2}; var ca=co[a.confidence]!==undefined?co[a.confidence]:2,cb=co[b.confidence]!==undefined?co[b.confidence]:2; if(ca!==cb)return ca-cb; return (dh.parse(a.date)||Infinity)-(dh.parse(b.date)||Infinity); }).forEach(function(t) {
-        var confLabel = t.confidence==='confirmed'?' <span style="color:#059669;font-weight:700;">[CONFIRMED]</span>':t.confidence==='likely'?' <span style="color:#d97706;font-weight:700;">[LIKELY]</span>':' <span style="color:#94a3b8;font-weight:700;">[INDUSTRY]</span>';
+        var confLabel = t.confidence==='confirmed'?' <span style="color:#059669;font-weight:700;font-size:9px;">[CONFIRMED]</span>':t.confidence==='likely'?' <span style="color:#d97706;font-weight:700;font-size:9px;">[LIKELY]</span>':' <span style="color:#94a3b8;font-weight:700;font-size:9px;">[INDUSTRY]</span>';
         eventsRows += fRow((t.date||''), '<strong>'+(t.title||'')+'</strong> <span style="font-size:9px;color:#7c3aed;font-weight:700;">[TRADESHOW]</span>'+confLabel+dh.badge(t.date)+(t.venue?' &middot; '+t.venue:''));
       });
     }
@@ -12921,56 +12965,72 @@
     if (obs.length) { obs.forEach(function(oo){ eventsRows += fRow((oo.date||''), (oo.title||'')+' <span style="font-size:9px;color:#64748b;">[INDUSTRY DATE]</span>'+dh.badge(oo.date)); }); }
     var totalEvts = pdfTS.length + allEvts.length + obs.length;
     if (eventsRows) html += fSec('Events & Dates ('+totalEvts+')', eventsRows);
+
     var comps = rd.competitors || [];
     if (comps.length) {
       var compRows = comps.map(function(c) {
-        return fRow((c.name||''), (c.overlap||'')+(c.differentiator?' <span style="color:#dc2626;font-style:italic;font-size:10px;">'+c.differentiator+'</span>':'')+(c.website?' <a href="'+c.website+'" style="color:#1D9E75;font-size:10px;">'+c.website.replace(/^https?:\/\/(www\.)?/,'').replace(/\/.*$/,'')+'</a>':''));
+        return fRow((c.name||''), (c.overlap||'')+(c.differentiator?' <span style="color:#dc2626;font-style:italic;font-size:10px;">'+c.differentiator+'</span>':'')+(c.website?' <a href="'+c.website+'" style="font-size:10px;">'+c.website.replace(/^https?:\/\/(www\.)?/,'').replace(/\/.*$/,'')+'</a>':''));
       }).join('');
       html += fSec('Competitors ('+comps.length+')', compRows);
     }
-    html += '<div class="block-hdr" style="color:#7c3aed;">Block 3 &middot; Know the people</div>';
+
+    // ── BLOCK 3: KNOW THE PEOPLE ──
+    html += bHdr('3', 'Know the people', '#7c3aed', '#5b21b6');
+
     var dm = rd.decisionMakers || {};
     var dmRows = '';
     [{key:'ownerExec',label:'Owner / Exec'},{key:'marketing',label:'Marketing'},{key:'procurement',label:'Procurement'}].forEach(function(r){
       var p = dm[r.key]; if(!p||!p.name) return;
-      dmRows += fRow(r.label, '<strong>'+p.name+'</strong>'+(p.title?' &mdash; '+p.title:'')+(p.linkedin?' <a href="'+p.linkedin+'" style="color:#1D9E75;">[LinkedIn]</a>':''));
+      dmRows += fRow(r.label, '<strong>'+p.name+'</strong>'+(p.title?' &mdash; '+p.title:'')+(p.linkedin?' <a href="'+p.linkedin+'">[LinkedIn]</a>':''));
     });
     var kp = rd.keyPeople || [];
-    kp.forEach(function(p){ if(p.name) dmRows += fRow((p.role||'Key Person'), '<strong>'+p.name+'</strong>'+(p.title?' &mdash; '+p.title:'')+(p.linkedin?' <a href="'+p.linkedin+'" style="color:#1D9E75;">[LinkedIn]</a>':'')); });
+    kp.forEach(function(p){ if(p.name) dmRows += fRow((p.role||'Key Person'), '<strong>'+p.name+'</strong>'+(p.title?' &mdash; '+p.title:'')+(p.linkedin?' <a href="'+p.linkedin+'">[LinkedIn]</a>':'')); });
     if (dmRows) html += fSec('Decision Makers & Key People', dmRows);
+
     if (rd.recentNews && rd.recentNews.length) {
       var newsRows = rd.recentNews.map(function(n){ return fRow((n.date||''), (n.sourceUrl?'<a href="'+n.sourceUrl+'" style="color:#1e293b;text-decoration:underline;text-underline-offset:2px;">'+(n.headline||'')+'</a>':(n.headline||''))); }).join('');
       html += fSec('Recent News', newsRows);
     }
+
     if (rd.attackPlan) {
-      html += '<div class="section"><div class="section-title">Attack Plan</div><div class="atk-box">'+rd.attackPlan+'</div></div>';
+      var cleanAtk = rd.attackPlan.replace(/<button[^>]*>[\s\S]*?<\/button>/gi, '').replace(/Regenerate/g, '');
+      html += '<div style="margin-bottom:14px;"><div class="section-title">Attack Plan</div><div class="atk-box">'+cleanAtk+'</div></div>';
     }
+
+    // ── SCORING BREAKDOWN (SC only) ──
     if (!o.isRO) {
       html += '<div class="section"><div class="section-title">Scoring Breakdown</div>' +
-        '<table style="border-collapse:separate;border-spacing:8px 0;"><tr>' +
-        '<td style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:8px 12px;text-align:center;width:33%;">' +
-          '<div style="font-size:9px;color:#64748b;text-transform:uppercase;">Implied Value</div>' +
-          '<div style="font-size:20px;font-weight:700;color:'+(o.ivScore>=3?'#059669':o.ivScore>=2?'#d97706':'#ef4444')+';margin:2px 0;">'+(o.ivScore||0)+'/3</div>' +
-          '<div style="font-size:9px;color:#94a3b8;">'+(o.ivLabel||'')+'</div>' +
-        '</td>' +
-        '<td style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:8px 12px;text-align:center;width:33%;">' +
-          '<div style="font-size:9px;color:#64748b;text-transform:uppercase;">Potential Value</div>' +
-          '<div style="font-size:20px;font-weight:700;color:'+(o.pvScore>=3?'#059669':o.pvScore>=2?'#d97706':'#ef4444')+';margin:2px 0;">'+(o.pvScore||0)+'/3</div>' +
-          '<div style="font-size:9px;color:#94a3b8;">'+(o.pvLabel||'')+'</div>' +
-        '</td>' +
-        '<td style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:8px 12px;text-align:center;width:33%;">' +
-          '<div style="font-size:9px;color:#64748b;text-transform:uppercase;">Actual Value</div>' +
-          '<div style="font-size:20px;font-weight:700;color:'+(o.avScore>=3?'#059669':o.avScore>=2?'#d97706':'#ef4444')+';margin:2px 0;">'+(o.avScore||0)+'/3</div>' +
-          '<div style="font-size:9px;color:#94a3b8;">'+(o.avLabel||'')+'</div>' +
-        '</td></tr></table></div>';
+        '<table class="score-grid"><tr>' +
+          '<td><div style="font-size:9px;color:#64748b;text-transform:uppercase;">Implied Value</div>' +
+            '<div style="font-size:20px;font-weight:700;color:'+(o.ivScore>=3?'#059669':o.ivScore>=2?'#d97706':'#ef4444')+';margin:2px 0;">'+(o.ivScore||0)+'/3</div>' +
+            '<div style="font-size:9px;color:#94a3b8;">'+(o.ivLabel||'')+'</div></td>' +
+          '<td><div style="font-size:9px;color:#64748b;text-transform:uppercase;">Potential Value</div>' +
+            '<div style="font-size:20px;font-weight:700;color:'+(o.pvScore>=3?'#059669':o.pvScore>=2?'#d97706':'#ef4444')+';margin:2px 0;">'+(o.pvScore||0)+'/3</div>' +
+            '<div style="font-size:9px;color:#94a3b8;">'+(o.pvLabel||'')+'</div></td>' +
+          '<td><div style="font-size:9px;color:#64748b;text-transform:uppercase;">Actual Value</div>' +
+            '<div style="font-size:20px;font-weight:700;color:'+(o.avScore>=3?'#059669':o.avScore>=2?'#d97706':'#ef4444')+';margin:2px 0;">'+(o.avScore||0)+'/3</div>' +
+            '<div style="font-size:9px;color:#94a3b8;">'+(o.avLabel||'')+'</div></td>' +
+        '</tr></table></div>';
     }
-    var contactInner = fRow('Customer Name', o.name) + fRow('Phone', o.phone?(o.phone!=='\u2014'?'<a href="tel:'+o.phone.replace(/\D/g,'')+'" style="color:#1e293b;text-decoration:none;">'+o.phone+'</a>':''):'') + fRow('Email', o.email?(o.email!=='\u2014'?'<a href="mailto:'+o.email+'" style="color:#1D9E75;text-decoration:none;">'+o.email+'</a>':''):'') + fRow('CID', o.cid) + fRow('Company', o.company) + fRow('Address', o.address);
+
+    // ── CONTACT & DETAILS ──
+    var contactInner = fRow('Customer Name', o.name) +
+      fRow('Phone', o.phone?(o.phone!=='\u2014'?'<a href="tel:'+o.phone.replace(/\D/g,'')+'" style="color:#1e293b;text-decoration:none;">'+o.phone+'</a>':''):'') +
+      fRow('Email', o.email?(o.email!=='\u2014'?'<a href="mailto:'+o.email+'">'+o.email+'</a>':''):'') +
+      fRow('CID', o.cid) + fRow('Company', o.company) + fRow('Address', o.address) +
+      (o.website ? fRow('Website', '<a href="'+(o.website.match(/^https?:\/\//)?o.website:'https://'+o.website)+'">'+o.website.replace(/^https?:\/\//i,'')+'</a>') : '');
     if (!o.isRO) {
-      contactInner += fRow('Budget Type', o.budgetType) + (o.budgetAmount?fRow('Budget Amount','$'+Number(o.budgetAmount).toLocaleString()):'') + fRow('Customer Type', o.customerType) + (o.avAmount?fRow('Lifetime Spend','$'+Number(o.avAmount).toLocaleString()):'');
+      contactInner += fRow('Budget Type', o.budgetType) +
+        (o.budgetAmount?fRow('Budget Amount','$'+Number(o.budgetAmount).toLocaleString()):'') +
+        fRow('Customer Type', o.customerType) +
+        (o.avAmount?fRow('Lifetime Spend','$'+Number(o.avAmount).toLocaleString()):'');
     }
     contactInner += fRow('Assigned To', o.owner+(o.overrideNote||'')) + fRow('Rep', o.rep);
     html += fSec('Contact & Details', contactInner);
-    if (o.notes && o.notes !== '\u2014') { html += '<div class="section"><div class="section-title">Notes</div><div style="font-size:11px;white-space:pre-wrap;color:#1e293b;line-height:1.5;">'+o.notes+'</div></div>'; }
+
+    if (o.notes && o.notes !== '\u2014') {
+      html += '<div class="section"><div class="section-title">Notes</div><div style="font-size:11px;white-space:pre-wrap;color:#1e293b;line-height:1.5;">'+o.notes+'</div></div>';
+    }
     return html;
   }
 
@@ -12978,7 +13038,10 @@
     return '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+title+'</title>' +
       '<style>'+_pdfStyles()+'</style></head><body>' +
       headerHtml + contentHtml +
-      '<div class="footer"><span>'+(ipaNum?ipaNum+' &middot; ':'')+'AG&apos;s IPA Report Card &middot; '+footerLabel+' &middot; Confidential</span><span>Page 1</span></div>' +
+      '<div class="pdf-footer"><table><tr>' +
+        '<td style="text-align:left;">'+(ipaNum?ipaNum+' &middot; ':'')+'AG&apos;s IPA Report Card &middot; '+footerLabel+' &middot; Confidential</td>' +
+        '<td style="text-align:right;">Page 1</td>' +
+      '</tr></table></div>' +
       '</body></html>';
   }
 
@@ -15432,8 +15495,13 @@
       return '<tr><td style="padding:4px 14px 4px 0;font-size:12px;color:#64748b;white-space:nowrap;vertical-align:top;width:120px;">' + label + '</td>' +
              '<td style="padding:4px 0;font-size:12px;color:#1e293b;font-weight:500;">' + value + '</td></tr>';
     }
-    function esec(title, color) {
-      return '<tr><td colspan="2" style="padding:16px 0 6px;"><p style="margin:0;font-size:9px;font-weight:700;color:'+(color||'#94a3b8')+';text-transform:uppercase;letter-spacing:0.12em;border-bottom:2px solid #e2e8f0;padding-bottom:5px;">' + title + '</p></td></tr>';
+    function esec(num, title, color, textColor) {
+      return '<tr><td colspan="2" style="padding:18px 0 6px;">' +
+        '<div style="border-top:2px solid '+color+';padding-top:10px;">' +
+        '<table style="width:100%" cellpadding="0" cellspacing="0"><tr>' +
+        '<td style="width:28px;vertical-align:middle;"><div style="width:24px;height:24px;border-radius:50%;background:'+color+';color:#fff;font-size:11px;font-weight:700;text-align:center;line-height:24px;">'+num+'</div></td>' +
+        '<td style="padding-left:8px;font-size:10px;font-weight:700;color:'+(textColor||color)+';letter-spacing:0.1em;text-transform:uppercase;vertical-align:middle;">'+title+'</td>' +
+        '</tr></table></div></td></tr>';
     }
     function ssec(title) {
       return '<tr><td colspan="2" style="padding:12px 0 6px;"><p style="margin:0;font-size:9px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.1em;border-bottom:1px solid #e2e8f0;padding-bottom:4px;">' + title + '</p></td></tr>';
@@ -15500,7 +15568,7 @@
     }
 
     // BLOCK 1: Know the company
-    bodyHtml += esec('Block 1 &middot; Know the company', '#2563eb');
+    bodyHtml += esec('1', 'Know the company', '#2563eb', '#1e40af');
     if (rd.companyIntel) bodyHtml += '<tr><td colspan="2" style="padding:6px 0;"><div style="border-left:3px solid #60a5fa;padding-left:12px;font-size:11px;color:#334155;line-height:1.7;">'+rd.companyIntel+'</div></td></tr>';
     bodyHtml += ssec('Company Profile');
     bodyHtml += prow('Industry', rd.industry||'') + prow('Employees', rd.employees||'') + prow('Est. Revenue', rd.revenue||'') + prow('Founded', rd.foundedYear||'');
@@ -15512,7 +15580,7 @@
     if (socialLinks.length) bodyHtml += prow('Social Media', socialLinks.join(' &middot; '));
 
     // BLOCK 2: Know your angles
-    bodyHtml += esec('Block 2 &middot; Know your angles', '#d97706');
+    bodyHtml += esec('2', 'Know your angles', '#d97706', '#92400e');
     if (rd.salesHooks && rd.salesHooks.length) {
       bodyHtml += ssec('Call Cheat Sheet ('+rd.salesHooks.length+')');
       var catColors = { milestone:'#dc2626', news:'#dc2626', expansion:'#d97706', hiring:'#d97706', brand:'#2563eb', award:'#7c3aed', industry:'#7c3aed' };
@@ -15549,7 +15617,7 @@
     }
 
     // BLOCK 3: Know the people
-    bodyHtml += esec('Block 3 &middot; Know the people', '#7c3aed');
+    bodyHtml += esec('3', 'Know the people', '#7c3aed', '#5b21b6');
     var dmRows = '';
     [{key:'ownerExec',label:'Owner / Exec'},{key:'marketing',label:'Marketing'},{key:'procurement',label:'Procurement'}].forEach(function(r){
       var p = dm[r.key]; if(!p||!p.name) return;
@@ -15563,8 +15631,9 @@
       rd.recentNews.forEach(function(n){ bodyHtml += prow((n.date||''), (n.sourceUrl?'<a href="'+n.sourceUrl+'" style="color:#1e293b;text-decoration:underline;text-underline-offset:2px;">'+(n.headline||'')+'</a>':(n.headline||''))); });
     }
     if (rd.attackPlan) {
+      var cleanAtkEmail = rd.attackPlan.replace(/<button[^>]*>[\s\S]*?<\/button>/gi, '').replace(/Regenerate/g, '');
       bodyHtml += ssec('Attack Plan');
-      bodyHtml += '<tr><td colspan="2" style="padding:6px 0;"><div style="border-left:3px solid #f59e0b;padding-left:12px;font-size:11px;color:#334155;line-height:1.6;">'+rd.attackPlan+'</div></td></tr>';
+      bodyHtml += '<tr><td colspan="2" style="padding:6px 0;"><div style="border-left:3px solid #f59e0b;padding-left:12px;font-size:11px;color:#334155;line-height:1.6;">'+cleanAtkEmail+'</div></td></tr>';
     }
 
     // Scoring breakdown (SC only)
