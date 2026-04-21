@@ -3699,7 +3699,7 @@
         <div style="display:grid;grid-template-columns:1fr auto;gap:8px;">
           <div class="field-group">
             <label class="field-label"><span data-lk="lk_field_phone" class="editable-text">Phone Number</span><span class="req-star" id="star-phone" title="Phone or email required">★</span></label>
-            <input class="field-input required-field" type="tel" id="f-phone" placeholder="" maxlength="12">
+            <input class="field-input required-field" type="tel" id="f-phone" placeholder="" maxlength="14">
           </div>
           <div class="field-group">
             <label class="field-label"><span data-lk="lk_field_ext" class="editable-text">Ext.</span></label>
@@ -6953,6 +6953,19 @@
 
 
   // Phone number auto-formatting
+  document.getElementById('f-phone').addEventListener('paste', function(e) {
+    e.preventDefault();
+    var pasted = (e.clipboardData || window.clipboardData).getData('text') || '';
+    var digits = pasted.replace(/\D/g, '');
+    if (digits.length > 10 && digits.charAt(0) === '1') digits = digits.substring(1);
+    digits = digits.substring(0, 10);
+    var formatted = '';
+    if (digits.length <= 3) formatted = digits;
+    else if (digits.length <= 6) formatted = '(' + digits.slice(0,3) + ') ' + digits.slice(3);
+    else formatted = '(' + digits.slice(0,3) + ') ' + digits.slice(3,6) + '-' + digits.slice(6);
+    e.target.value = formatted;
+    checkCopyReady();
+  });
   document.getElementById('f-phone').addEventListener('input', function(e) {
     var digits = e.target.value.replace(/\D/g, '').substring(0, 10);
     var formatted = '';
