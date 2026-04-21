@@ -2126,7 +2126,7 @@
     border: 1px solid var(--border);
     border-radius: 14px;
     width: 100%;
-    max-width: 1400px;
+    max-width: 1500px;
     height: 96vh;
     max-height: 96vh;
     overflow: hidden;
@@ -3813,7 +3813,7 @@
           <div class="lb-phase-seg" id="lb-seg-0" style="display:flex;align-items:center;gap:5px;flex:none;">
             <div class="lb-seg-circle" id="lb-seg-circle-0" style="width:22px;height:22px;"><span class="lb-seg-circle-num" id="lb-seg-cnum-0">—</span></div>
             <div style="display:flex;flex-direction:column;">
-              <span class="lb-seg-name" id="lb-seg-name-0">Company</span>
+              <span class="lb-seg-name" id="lb-seg-name-0">Discover</span>
               <span class="lb-seg-time" id="lb-seg-passes-0"></span>
             </div>
           </div>
@@ -3829,7 +3829,7 @@
           <div class="lb-phase-seg" id="lb-seg-2" style="display:flex;align-items:center;gap:5px;flex:none;">
             <div class="lb-seg-circle" id="lb-seg-circle-2" style="width:22px;height:22px;"><span class="lb-seg-circle-num" id="lb-seg-cnum-2">—</span></div>
             <div style="display:flex;flex-direction:column;">
-              <span class="lb-seg-name" id="lb-seg-name-2">LinkedIn</span>
+              <span class="lb-seg-name" id="lb-seg-name-2">Details</span>
               <span class="lb-seg-time" id="lb-seg-passes-2"></span>
             </div>
           </div>
@@ -3837,7 +3837,7 @@
           <div class="lb-phase-seg" id="lb-seg-3" style="display:flex;align-items:center;gap:5px;flex:none;">
             <div class="lb-seg-circle" id="lb-seg-circle-3" style="width:22px;height:22px;"><span class="lb-seg-circle-num" id="lb-seg-cnum-3">—</span></div>
             <div style="display:flex;flex-direction:column;">
-              <span class="lb-seg-name" id="lb-seg-name-3">Hooks</span>
+              <span class="lb-seg-name" id="lb-seg-name-3">Analyze</span>
               <span class="lb-seg-time" id="lb-seg-passes-3"></span>
             </div>
           </div>
@@ -8157,11 +8157,11 @@
         var statusTag = isRO ? 'RO' : 'SC';
         rowsHtml +=
           '<div data-record-id="' + r.id + '" onclick="activityRowClick(' + r.id + ')" onmouseenter="activityRowHover(this,true)" onmouseleave="activityRowHover(this,false)"' +
-          ' style="display:flex;align-items:center;padding:7px 8px;border-radius:5px;cursor:pointer;transition:background 0.15s;flex:1;' + bg + '">' +
-          '<span style="font-size:12px;font-weight:700;color:' + col + ';width:32px;flex-shrink:0;">' + scoreLabel + '</span>' +
-          '<span style="font-size:12px;color:var(--text);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 8px;">' + (r.company || r.name || '\u2014') + '</span>' +
-          '<span style="font-size:10px;color:var(--text-dim, #b0b2b6);flex-shrink:0;">' + dtLabel + '</span>' +
-          '<span style="font-size:8px;font-weight:600;color:#717378;width:20px;text-align:right;flex-shrink:0;margin-left:6px;letter-spacing:0.03em;">' + statusTag + '</span>' +
+          ' style="display:flex;align-items:center;padding:4px 8px;border-radius:5px;cursor:pointer;transition:background 0.15s;flex:1;' + bg + '">' +
+          '<span style="font-size:11px;font-weight:700;color:' + col + ';width:30px;flex-shrink:0;">' + scoreLabel + '</span>' +
+          '<span style="font-size:11px;color:var(--text);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 6px;">' + (r.company || r.name || '\u2014') + '</span>' +
+          '<span style="font-size:9px;color:var(--text-dim, #b0b2b6);flex-shrink:0;">' + dtLabel + '</span>' +
+          '<span style="font-size:8px;font-weight:600;color:#717378;width:18px;text-align:right;flex-shrink:0;margin-left:4px;letter-spacing:0.03em;">' + statusTag + '</span>' +
           '</div>';
       });
     }
@@ -8208,18 +8208,21 @@
     var fSc  = _activityFilter === 'sc'  ? 'background:rgba(29,158,117,0.15);color:#5DCAA5;border-color:rgba(29,158,117,0.4);' : 'background:transparent;color:#717378;border-color:rgba(255,255,255,0.08);';
     var fRo  = _activityFilter === 'ro'  ? 'background:rgba(139,143,168,0.2);color:#e8eaed;border-color:rgba(139,143,168,0.4);' : 'background:transparent;color:#717378;border-color:rgba(255,255,255,0.08);';
     var filterBar =
-      '<div style="display:flex;align-items:center;gap:5px;padding:6px 8px 4px;">' +
+      '<div style="display:flex;align-items:center;gap:5px;padding:4px 8px 3px;">' +
         '<div onclick="setActivityFilter(\'all\')" style="padding:2px 8px;font-size:9px;font-weight:600;border-radius:10px;cursor:pointer;border:1px solid;letter-spacing:0.03em;' + fAll + '">All</div>' +
         '<div onclick="setActivityFilter(\'sc\')" style="padding:2px 8px;font-size:9px;font-weight:600;border-radius:10px;cursor:pointer;border:1px solid;letter-spacing:0.03em;' + fSc + '">SC</div>' +
         '<div onclick="setActivityFilter(\'ro\')" style="padding:2px 8px;font-size:9px;font-weight:600;border-radius:10px;cursor:pointer;border:1px solid;letter-spacing:0.03em;' + fRo + '">RO</div>' +
-        '<div style="flex:1;position:relative;margin-left:4px;">' +
-          '<input id="activity-search-input" type="text" placeholder="Search..." value="' + (_activitySearch || '') + '" oninput="setActivitySearch(this.value)" style="width:100%;height:20px;padding:0 6px 0 20px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);color:var(--text);font-size:9px;font-family:Inter,sans-serif;outline:none;box-sizing:border-box;">' +
-          '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#717378" stroke-width="2.5" style="position:absolute;left:6px;top:5px;pointer-events:none;"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>' +
+        '<div style="flex:1;display:flex;align-items:center;gap:0;margin-left:4px;">' +
+          '<input id="activity-search-input" type="text" placeholder="Search..." value="' + (_activitySearch || '') + '" onkeydown="if(event.key===\'Enter\')setActivitySearch(this.value)" style="flex:1;height:20px;padding:0 6px;border-radius:6px 0 0 6px;border:1px solid rgba(255,255,255,0.08);border-right:none;background:rgba(255,255,255,0.04);color:var(--text);font-size:9px;font-family:Inter,sans-serif;outline:none;box-sizing:border-box;min-width:0;">' +
+          (_activitySearch
+            ? '<div onclick="document.getElementById(\'activity-search-input\').value=\'\';setActivitySearch(\'\')" style="height:20px;padding:0 7px;border-radius:0 6px 6px 0;border:1px solid rgba(248,113,113,0.3);background:rgba(248,113,113,0.12);color:#f87171;font-size:8px;font-weight:700;cursor:pointer;display:flex;align-items:center;letter-spacing:0.03em;flex-shrink:0;">✕</div>'
+            : '<div onclick="setActivitySearch(document.getElementById(\'activity-search-input\').value)" style="height:20px;padding:0 7px;border-radius:0 6px 6px 0;border:1px solid rgba(29,158,117,0.3);background:rgba(29,158,117,0.15);color:#5DCAA5;font-size:8px;font-weight:700;cursor:pointer;display:flex;align-items:center;letter-spacing:0.03em;flex-shrink:0;">GO</div>'
+          ) +
         '</div>' +
       '</div>';
 
     // Render rows into body
-    card.innerHTML = filterBar + '<div style="display:flex;flex-direction:column;gap:2px;flex:1;">' + rowsHtml + '</div>';
+    card.innerHTML = filterBar + '<div style="display:flex;flex-direction:column;gap:0;flex:1;">' + rowsHtml + '</div>';
   }
 
 
@@ -11136,24 +11139,14 @@
       if (srchBtn) srchBtn.style.display = 'none';
       if (ws) { ws.disabled = true; ws.style.opacity = '0.8'; ws.style.cursor = 'not-allowed'; ws.style.color = '#B8BBCC'; ws.style.borderColor = 'rgba(139,143,168,0.35)'; ws.style.background = 'rgba(139,143,168,0.05)'; }
     } else if (state === 'complete') {
-      btn.textContent = '↺';
-      btn.style.display = 'flex';
-      btn.style.borderColor = 'rgba(29,158,117,0.4)';
-      btn.style.background  = 'rgba(29,158,117,0.08)';
-      btn.style.color       = '#5DCAA5';
-      btn.title = 'Rerun research';
+      btn.style.display = 'none';
       btn.dataset.state = 'complete';
-      if (srchBtn) srchBtn.style.display = 'none';
-      if (ws) { ws.disabled = true; ws.style.opacity = '0.85'; ws.style.cursor = 'not-allowed'; ws.style.color = '#5DCAA5'; ws.style.borderColor = 'rgba(29,158,117,0.35)'; ws.style.background = 'rgba(29,158,117,0.04)'; }
+      if (srchBtn) { srchBtn.style.display = ''; srchBtn.textContent = 'Re-search'; }
+      if (ws) { ws.disabled = false; ws.style.opacity = ''; ws.style.cursor = ''; ws.style.color = ''; ws.style.borderColor = 'rgba(29,158,117,0.8)'; ws.style.background = 'rgba(29,158,117,0.18)'; }
     } else if (state === 'stopped') {
-      btn.textContent = '↺';
-      btn.style.display = 'flex';
-      btn.style.borderColor = 'rgba(245,158,11,0.4)';
-      btn.style.background  = 'rgba(245,158,11,0.08)';
-      btn.style.color       = '#f59e0b';
-      btn.title = 'Rerun research';
+      btn.style.display = 'none';
       btn.dataset.state = 'stopped';
-      if (srchBtn) srchBtn.style.display = 'none';
+      if (srchBtn) { srchBtn.style.display = ''; srchBtn.textContent = 'Re-search'; }
     } else {
       btn.style.display = 'none';
       btn.dataset.state = '';
@@ -11952,8 +11945,9 @@
     var p2 = [
       "Research this company for QLP (promotional products). Return ONLY valid JSON, no markdown.",
       "Company: " + company + " | Domain: " + searchDomain + " | Today: " + todayStr,
-      "Use MAX 3 searches: (1) Search '" + searchDomain + "' for: employees (number only), revenue, founded year, industry, 1-sentence blurb, recent news, full corporate address (street, city, state, zip). (2) Search for industry observances/awareness months for this company's industry. (3) Search '" + company + " facebook instagram twitter tiktok youtube' for social media profile URLs.",
-      "For socialMedia: search '" + company + " facebook instagram twitter tiktok youtube' and ONLY return URLs you find in actual search results. Do NOT guess or construct URLs from the domain name. Leave empty string for any platform not found in results. Return ONLY valid JSON:",
+      "Use MAX 3 searches: (1) Search '" + searchDomain + " contact address headquarters' for: employees (number only), revenue, founded year, industry, 1-sentence blurb, recent news, and CORPORATE ADDRESS (check contact page, about page, or footer for street address including city, state, zip). (2) Search for industry observances/awareness months for this company's industry. (3) Search '" + company + " facebook instagram twitter tiktok youtube' for social media profile URLs.",
+      "CRITICAL: corporateAddress is HIGH PRIORITY. Check the company's contact page, about page, footer, or Google Maps listing. If you find a partial address, include what you have. Never leave corporateAddress empty if any address info exists online.",
+      "For socialMedia: ONLY return URLs you find in actual search results. Do NOT guess or construct URLs. Leave empty string for any platform not found. Return ONLY valid JSON:",
       "{\"companyName\":\"\",\"employees\":\"number only\",\"industry\":\"Healthcare|Education|Finance|Nonprofit|Retail|Technology|Manufacturing|Government|Legal|Real Estate or empty\",\"blurb\":\"1 sentence max\",\"revenue\":\"e.g. $2M or empty\",\"foundedYear\":\"4-digit or empty\",\"socialMedia\":{\"facebook\":\"\",\"instagram\":\"\",\"twitter\":\"\",\"tiktok\":\"\",\"youtube\":\"\"},\"recentNews\":[{\"headline\":\"short\",\"date\":\"Mon YYYY\",\"sourceUrl\":\"\"}],\"observances\":[{\"title\":\"\",\"date\":\"Mon D YYYY\",\"notes\":\"\"}],\"corporateAddress\":{\"street\":\"\",\"suite\":\"\",\"city\":\"\",\"state\":\"\",\"zip\":\"\"}}"
     ].join("\n");
 
@@ -12120,45 +12114,6 @@
           .catch(function() {}).then(_onFetchSettled, _onFetchSettled); // silent fail + track settle
         })();
 
-        // P2c: Company Intel background brief (parallel, non-blocking, Haiku + web search)
-        (function() {
-          var _ciToken = _thisToken;
-          var _ciCompany  = _researchData.companyName || company || '';
-          var _ciIndustry = _researchData.industry || '';
-          var _ciBlurb    = _researchData.blurb || '';
-          var _ciEmp      = _researchData.employees || '';
-          var _ciRev      = _researchData.revenue || '';
-          var _ciFounded  = _researchData.foundedYear || '';
-          var _ciDomain   = _researchData.domain || searchDomain || '';
-          if (!_ciCompany) return;
-          var ciCtx = ['Company: ' + _ciCompany, _ciIndustry ? 'Industry: ' + _ciIndustry : '', _ciBlurb ? 'About: ' + _ciBlurb : '', _ciEmp ? 'Employees: ' + _ciEmp : '', _ciRev ? 'Revenue: ' + _ciRev : '', _ciFounded ? 'Founded: ' + _ciFounded : '', _ciDomain ? 'Website: ' + _ciDomain : ''].filter(Boolean).join('\n');
-          var ciPrompt = [
-            'You are a sales intelligence researcher. Generate a concise company background brief for a sales rep.',
-            '', ciCtx, '',
-            'Write 4-6 short paragraphs: 1) Origin story with founder names. 2) Mission and values. 3) Key growth milestones. 4) Culture and community involvement. 5) What differentiates them. 6) 2-3 specific talking points that would impress a founder.',
-            'Plain prose, no headers, no bullets, no markdown. 2-3 sentences per paragraph. Be specific. Skip topics you cannot verify.'
-          ].join('\n');
-          _onFetchStart();
-          fetch(GS_URL, { method: 'POST', body: JSON.stringify({ action: 'runResearch', prompt: ciPrompt, rep: window._currentRep || '', noSearch: false }) })
-          .then(function(res) { return res.text(); })
-          .then(function(raw) {
-            if (_pipelineAborted || _searchToken !== _ciToken) return;
-            var data; try { data = JSON.parse(raw); } catch(e) { return; }
-            if (data) try { _updateCostBadge(data, 'p2c-companyintel-' + _ciToken); } catch(e) {}
-            var result = '';
-            if (data && data.result) {
-              result = typeof data.result === 'string' ? data.result : (data.result.text || '');
-              result = result.replace(/```[\s\S]*?```/g, '').trim();
-            }
-            if (result) {
-              _researchData.companyIntel = result.split(/\n\n+/).filter(Boolean).map(function(p) {
-                return '<p style="margin:0 0 12px;line-height:1.7;">' + p.replace(/\n/g, ' ') + '</p>';
-              }).join('');
-            }
-          })
-          .catch(function() {}).then(_onFetchSettled, _onFetchSettled);
-        })();
-
         _runPhase(2,
           { action: 'runResearch', prompt: p2, rep: window._currentRep || '' },
           function(result, elapsed) {
@@ -12250,6 +12205,48 @@
               // Auto-save research data so it persists even without manual send
               try { _autoSaveResearch(); } catch(e) {}
             }
+
+            // Fire Company Intel in parallel with hooks (P2 data now available)
+            (function() {
+              var _ciToken = _thisToken;
+              var rd = _researchData;
+              var _ciCompany = rd.companyName || company || '';
+              if (!_ciCompany || rd.companyIntel) { console.log('[CI] Skipped: company=' + _ciCompany + ', already=' + !!rd.companyIntel); return; }
+              console.log('[CI] Firing Company Intel for: ' + _ciCompany + ' | industry: ' + (rd.industry||'none'));
+              var ciCtx = ['Company: ' + _ciCompany, rd.industry ? 'Industry: ' + rd.industry : '', rd.blurb ? 'About: ' + rd.blurb : '', rd.employees ? 'Employees: ' + rd.employees : '', rd.revenue ? 'Revenue: ' + rd.revenue : '', rd.foundedYear ? 'Founded: ' + rd.foundedYear : '', rd.domain ? 'Website: ' + rd.domain : ''].filter(Boolean).join('\n');
+              var ciPrompt = [
+                'You are a sales intelligence researcher. Generate a concise company background brief for a sales rep.',
+                '', ciCtx, '',
+                'Write 4-6 short paragraphs: 1) Origin story with founder names. 2) Mission and values. 3) Key growth milestones. 4) Culture and community involvement. 5) What differentiates them. 6) 2-3 specific talking points that would impress a founder.',
+                'Plain prose, 2-3 sentences per paragraph. Be specific. Skip topics you cannot verify.',
+                'Return ONLY valid JSON: {"companyIntel":["paragraph 1 text","paragraph 2 text","paragraph 3 text"]}'
+              ].join('\n');
+              gsPost({ action: 'runResearch', prompt: ciPrompt, rep: window._currentRep || '', noSearch: false })
+              .then(function(data2) {
+                if (_pipelineAborted || _searchToken !== _ciToken) { console.log('[CI] Aborted or token mismatch'); return; }
+                console.log('[CI] Response:', JSON.stringify(data2).slice(0, 300));
+                if (data2) try { _updateCostBadge(data2, 'ci-' + _ciToken); } catch(e) {}
+                var paragraphs = null;
+                if (data2 && data2.result) {
+                  var r2 = data2.result;
+                  if (typeof r2 === 'string') { try { r2 = JSON.parse(r2); } catch(e) {} }
+                  if (r2 && r2.companyIntel && Array.isArray(r2.companyIntel)) paragraphs = r2.companyIntel;
+                } else if (data2 && data2.error) {
+                  console.warn('[CI] Backend error:', data2.error);
+                }
+                if (paragraphs && paragraphs.length) {
+                  console.log('[CI] Success: ' + paragraphs.length + ' paragraphs');
+                  _researchData.companyIntel = paragraphs.map(function(p) {
+                    return '<p style="margin:0 0 12px;line-height:1.7;">' + p.replace(/\n/g, ' ') + '</p>';
+                  }).join('');
+                  try { var ov = document.getElementById('research-overlay'); if (ov && ov.classList.contains('open')) populateCompanyIntel(); } catch(e) {}
+                  // Auto-save with intel included
+                  try { if (_savedRecordId) { var rec = _buildCurrentRecord(); rec.id = _savedRecordId; gsPost({ action: 'updateRecord', record: rec }); } } catch(e) {}
+                } else {
+                  console.warn('[CI] No paragraphs extracted from response');
+                }
+              }).catch(function(err) { console.warn('[CI] Fetch failed:', err); });
+            })();
 
             fetch(GS_URL, { method: 'POST', body: JSON.stringify({ action: 'runResearch', prompt: _buildHooksPrompt(), rep: window._currentRep || '', noSearch: true }) })
             .then(function(r) { return r.text(); })
@@ -16536,9 +16533,8 @@
       '5. COMPETITIVE POSITION: What makes them different from competitors in their space.',
       '6. TALKING POINTS: 2-3 specific things a sales rep could say that would make a founder or long-time employee think "this person did their homework."',
       '',
-      'Write in plain prose, no headers or bullet points. Each paragraph should be 2-3 sentences max. Be specific, not generic. If you cannot find information on a topic, skip it rather than guessing.',
-      '',
-      'Return ONLY the paragraphs, no JSON, no markdown formatting.'
+      'Each paragraph should be 2-3 sentences max. Be specific, not generic. Skip topics you cannot verify.',
+      'Return ONLY valid JSON: {"companyIntel":["paragraph 1 text","paragraph 2 text","paragraph 3 text","etc"]}'
     ].join('\n');
 
     fetch(GS_URL, { method: 'POST', body: JSON.stringify({ action: 'runResearch', prompt: prompt, rep: window._currentRep || '', noSearch: false }) })
@@ -16547,13 +16543,14 @@
       clearInterval(_ciTimer);
       var data; try { data = JSON.parse(raw); } catch(e) { data = null; }
       if (data) _updateCostBadge(data);
-      var result = '';
+      var paragraphs = null;
       if (data && data.result) {
-        result = typeof data.result === 'string' ? data.result : (data.result.text || JSON.stringify(data.result));
-        result = result.replace(/```[\s\S]*?```/g, '').trim();
+        var r2 = data.result;
+        if (typeof r2 === 'string') { try { r2 = JSON.parse(r2); } catch(e) {} }
+        if (r2 && r2.companyIntel && Array.isArray(r2.companyIntel)) paragraphs = r2.companyIntel;
       }
-      if (result) {
-        var formatted = result.split(/\n\n+/).filter(Boolean).map(function(p) {
+      if (paragraphs && paragraphs.length) {
+        var formatted = paragraphs.map(function(p) {
           return '<p style="margin:0 0 12px;line-height:1.7;">' + p.replace(/\n/g, ' ') + '</p>';
         }).join('');
         _researchData.companyIntel = formatted;
