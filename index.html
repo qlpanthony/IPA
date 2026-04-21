@@ -12215,35 +12215,31 @@
               console.log('[CI] Firing Company Intel for: ' + _ciCompany + ' | industry: ' + (rd.industry||'none'));
               var ciCtx = ['Company: ' + _ciCompany, rd.industry ? 'Industry: ' + rd.industry : '', rd.blurb ? 'About: ' + rd.blurb : '', rd.employees ? 'Employees: ' + rd.employees : '', rd.revenue ? 'Revenue: ' + rd.revenue : '', rd.foundedYear ? 'Founded: ' + rd.foundedYear : '', rd.domain ? 'Website: ' + rd.domain : ''].filter(Boolean).join('\n');
               var ciPrompt = [
-                'You are a sales intelligence researcher. Generate a concise company background brief for a sales rep.',
+                'You are a sales intelligence researcher. Generate a company background brief for a sales rep.',
                 '', ciCtx, '',
-                'Write 4-6 short paragraphs: 1) Origin story with founder names. 2) Mission and values. 3) Key growth milestones. 4) Culture and community involvement. 5) What differentiates them. 6) 2-3 specific talking points that would impress a founder.',
-                'Plain prose, 2-3 sentences per paragraph. Be specific. Skip topics you cannot verify.',
-                'Return ONLY valid JSON: {"companyIntel":["paragraph 1 text","paragraph 2 text","paragraph 3 text"]}'
+                'Return ONLY valid JSON with this structure:',
+                '{"companyIntel":{"origin":"How/why founded, key founder names, 2-3 sentences","mission":"What drives them, stated purpose, 2-3 sentences","growth":"Key milestones and expansions, 2-3 sentences","culture":"Internal culture, community involvement, causes, 2-3 sentences","edge":"What differentiates them from competitors, 2-3 sentences","talkingPoints":["Specific thing to say that impresses a founder","Another specific insider fact","Third talking point"]}}'
               ].join('\n');
               gsPost({ action: 'runResearch', prompt: ciPrompt, rep: window._currentRep || '', noSearch: false })
               .then(function(data2) {
                 if (_pipelineAborted || _searchToken !== _ciToken) { console.log('[CI] Aborted or token mismatch'); return; }
                 console.log('[CI] Response:', JSON.stringify(data2).slice(0, 300));
                 if (data2) try { _updateCostBadge(data2, 'ci-' + _ciToken); } catch(e) {}
-                var paragraphs = null;
+                var ciObj = null;
                 if (data2 && data2.result) {
                   var r2 = data2.result;
                   if (typeof r2 === 'string') { try { r2 = JSON.parse(r2); } catch(e) {} }
-                  if (r2 && r2.companyIntel && Array.isArray(r2.companyIntel)) paragraphs = r2.companyIntel;
+                  if (r2 && r2.companyIntel) ciObj = r2.companyIntel;
                 } else if (data2 && data2.error) {
                   console.warn('[CI] Backend error:', data2.error);
                 }
-                if (paragraphs && paragraphs.length) {
-                  console.log('[CI] Success: ' + paragraphs.length + ' paragraphs');
-                  _researchData.companyIntel = paragraphs.map(function(p) {
-                    return '<p style="margin:0 0 12px;line-height:1.7;">' + p.replace(/\n/g, ' ') + '</p>';
-                  }).join('');
+                if (ciObj) {
+                  console.log('[CI] Success: structured intel received');
+                  _researchData.companyIntel = _renderCompanyIntelHtml(ciObj);
                   try { var ov = document.getElementById('research-overlay'); if (ov && ov.classList.contains('open')) populateCompanyIntel(); } catch(e) {}
-                  // Auto-save with intel included
                   try { if (_savedRecordId) { var rec = _buildCurrentRecord(); rec.id = _savedRecordId; gsPost({ action: 'updateRecord', record: rec }); } } catch(e) {}
                 } else {
-                  console.warn('[CI] No paragraphs extracted from response');
+                  console.warn('[CI] No structured intel extracted');
                 }
               }).catch(function(err) { console.warn('[CI] Fetch failed:', err); });
             })();
@@ -16482,6 +16478,44 @@
   }
 
   // ── Company Intel ────────────────────────────────────────────────
+  // ── Company Intel ────────────────────────────────────────────────
+  function _renderCompanyIntelHtml(ci) {
+    if (!ci) return '';
+    var sections = [
+      { key:'origin', label:'Origin Story', icon:'M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5', color:'#60a5fa' },
+      { key:'mission', label:'Mission & Values', icon:'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z', color:'#5DCAA5' },
+      { key:'growth', label:'Growth Story', icon:'M23 6l-9.5 9.5-5-5L1 18', color:'#f59e0b' },
+      { key:'culture', label:'Culture', icon:'M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75', color:'#a78bfa' },
+      { key:'edge', label:'Competitive Edge', icon:'M13 2L3 14h9l-1 8 10-12h-9l1-8z', color:'#FB7185' }
+    ];
+    var html = '';
+    sections.forEach(function(s) {
+      if (!ci[s.key]) return;
+      html += '<div style="margin-bottom:16px;padding:12px 16px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:10px;border-left:3px solid ' + s.color + ';">' +
+        '<div style="display:flex;align-items:center;gap:7px;margin-bottom:6px;">' +
+          '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="' + s.color + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="' + s.icon + '"/></svg>' +
+          '<span style="font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:' + s.color + ';">' + s.label + '</span>' +
+        '</div>' +
+        '<div style="font-size:12.5px;color:var(--text);line-height:1.7;">' + ci[s.key] + '</div>' +
+      '</div>';
+    });
+    if (ci.talkingPoints && ci.talkingPoints.length) {
+      html += '<div style="margin-bottom:12px;padding:14px 16px;background:rgba(29,158,117,0.04);border:1px solid rgba(29,158,117,0.2);border-radius:10px;">' +
+        '<div style="display:flex;align-items:center;gap:7px;margin-bottom:10px;">' +
+          '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5DCAA5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>' +
+          '<span style="font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#5DCAA5;">Say this on the call</span>' +
+        '</div>';
+      ci.talkingPoints.forEach(function(tp, i) {
+        html += '<div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:8px;">' +
+          '<span style="font-size:11px;font-weight:700;color:#5DCAA5;flex-shrink:0;min-width:16px;">' + (i+1) + '</span>' +
+          '<span style="font-size:12px;color:var(--text);line-height:1.6;">' + tp + '</span>' +
+        '</div>';
+      });
+      html += '</div>';
+    }
+    return html;
+  }
+
   function populateCompanyIntel() {
     var content = document.getElementById('rp-companyintel-content');
     var empty = document.getElementById('rp-companyintel-empty');
@@ -16521,20 +16555,13 @@
     ].filter(Boolean).join('\n');
 
     var prompt = [
-      'You are a sales intelligence researcher. Generate a concise company background brief for a sales rep who needs to sound knowledgeable when talking to a founder, CEO, or someone passionate about this company.',
+      'You are a sales intelligence researcher. Generate a company background brief for a sales rep who needs to sound knowledgeable when talking to a founder, CEO, or someone passionate about this company.',
       '',
       ctx,
       '',
-      'Write 4-6 short paragraphs covering:',
-      '1. ORIGIN STORY: How and why the company was founded. Key founder names if findable.',
-      '2. MISSION & VALUES: What drives them. Their stated purpose or philosophy.',
-      '3. GROWTH STORY: Key milestones, pivots, or expansions that shaped who they are today.',
-      '4. CULTURE: What they are known for internally. Employee culture, community involvement, or causes they champion.',
-      '5. COMPETITIVE POSITION: What makes them different from competitors in their space.',
-      '6. TALKING POINTS: 2-3 specific things a sales rep could say that would make a founder or long-time employee think "this person did their homework."',
-      '',
-      'Each paragraph should be 2-3 sentences max. Be specific, not generic. Skip topics you cannot verify.',
-      'Return ONLY valid JSON: {"companyIntel":["paragraph 1 text","paragraph 2 text","paragraph 3 text","etc"]}'
+      'Return ONLY valid JSON with this structure:',
+      '{"companyIntel":{"origin":"How/why founded, key founder names, 2-3 sentences","mission":"What drives them, stated purpose, 2-3 sentences","growth":"Key milestones and expansions, 2-3 sentences","culture":"Internal culture, community involvement, causes, 2-3 sentences","edge":"What differentiates them from competitors, 2-3 sentences","talkingPoints":["Specific thing to say that impresses a founder","Another specific insider fact","Third talking point"]}}',
+      'Be specific, not generic. Skip sections you cannot verify rather than guessing.'
     ].join('\n');
 
     fetch(GS_URL, { method: 'POST', body: JSON.stringify({ action: 'runResearch', prompt: prompt, rep: window._currentRep || '', noSearch: false }) })
@@ -16543,16 +16570,14 @@
       clearInterval(_ciTimer);
       var data; try { data = JSON.parse(raw); } catch(e) { data = null; }
       if (data) _updateCostBadge(data);
-      var paragraphs = null;
+      var ciObj = null;
       if (data && data.result) {
         var r2 = data.result;
         if (typeof r2 === 'string') { try { r2 = JSON.parse(r2); } catch(e) {} }
-        if (r2 && r2.companyIntel && Array.isArray(r2.companyIntel)) paragraphs = r2.companyIntel;
+        if (r2 && r2.companyIntel) ciObj = r2.companyIntel;
       }
-      if (paragraphs && paragraphs.length) {
-        var formatted = paragraphs.map(function(p) {
-          return '<p style="margin:0 0 12px;line-height:1.7;">' + p.replace(/\n/g, ' ') + '</p>';
-        }).join('');
+      if (ciObj) {
+        var formatted = _renderCompanyIntelHtml(ciObj);
         _researchData.companyIntel = formatted;
         if (content) { content.innerHTML = formatted; content.style.display = 'block'; }
         if (empty) empty.style.display = 'none';
