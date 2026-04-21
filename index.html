@@ -2126,7 +2126,7 @@
     border: 1px solid var(--border);
     border-radius: 14px;
     width: 100%;
-    max-width: 1500px;
+    max-width: 1468px;
     height: 96vh;
     max-height: 96vh;
     overflow: hidden;
@@ -14605,25 +14605,6 @@
             '<span class="intel-edit-ico" onclick="_editIntelPill(\'' + s.key + '\')">' + _editPencil + '</span></div>';
         }
       });
-      if (_researchData.recentNews && _researchData.recentNews.length) {
-        var sortedNews = (_researchData.recentNews).slice().sort(function(a, b) {
-          var da = new Date((a.date||'') + ' 1');
-          var db = new Date((b.date||'') + ' 1');
-          var ta = isNaN(da.getTime()) ? 0 : da.getTime();
-          var tb = isNaN(db.getTime()) ? 0 : db.getTime();
-          return tb - ta;
-        });
-        chips += '<div style="width:100%;margin-top:4px;">' +
-          '<p style="font-size:10px;font-weight:500;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin:0 0 5px;">Recent News</p>' +
-          sortedNews.map(function(n) {
-            var head = n.sourceUrl
-              ? '<a href="' + n.sourceUrl + '" target="_blank" style="color:#D3D1C7;text-decoration:underline;text-underline-offset:2px;">' + (n.headline||'') + '</a>'
-              : '<span>' + (n.headline||'') + '</span>';
-            return '<div style="font-size:12px;color:#D3D1C7;padding:3px 0;display:flex;gap:8px;align-items:baseline;">' +
-              '<span style="font-size:11px;font-weight:600;color:#5DCAA5;white-space:nowrap;flex-shrink:0;min-width:60px;">' + (n.date || '') + '</span>' +
-              head + '</div>';
-          }).join('') + '</div>';
-      }
       if (chips) {
         intelEl.innerHTML = chips;
         intelEl.style.display = 'flex';
@@ -15039,6 +15020,8 @@
 
   function populateEvents() {
     _eventCounter = 0;
+    var newsEl  = document.getElementById('rp-events-news');
+    var newsLbl = document.getElementById('rp-events-news-label');
     var tsEl    = document.getElementById('rp-events-tradeshows');
     var tsLbl   = document.getElementById('rp-events-ts-label');
     var siteEl  = document.getElementById('rp-events-site');
@@ -15052,6 +15035,25 @@
     domain = domain.indexOf('@') !== -1 ? domain.split('@')[1] : 'company site';
     var ts = _researchData.tradeShows || [];
     var obs = _researchData.observances || [];
+    var news = _researchData.recentNews || [];
+
+    // Recent News section
+    if (news.length && newsEl && newsLbl) {
+      newsLbl.style.display = 'block';
+      newsEl.innerHTML = news.map(function(n) {
+        var dateColor = '#f59e0b';
+        var headlineHtml = n.sourceUrl && n.sourceUrl.match(/^https?:\/\//)
+          ? '<a href="' + n.sourceUrl + '" target="_blank" style="color:var(--text);text-decoration:none;border-bottom:1px dotted rgba(255,255,255,0.2);">' + (n.headline||'') + '</a>'
+          : (n.headline||'');
+        return '<div style="display:flex;align-items:flex-start;gap:10px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.04);">' +
+          (n.date ? '<span style="font-size:10px;font-weight:700;color:' + dateColor + ';white-space:nowrap;min-width:65px;flex-shrink:0;">' + n.date + '</span>' : '') +
+          '<span style="font-size:12px;color:var(--text);line-height:1.4;">' + headlineHtml + '</span>' +
+        '</div>';
+      }).join('');
+    } else {
+      if (newsEl) newsEl.innerHTML = '';
+      if (newsLbl) newsLbl.style.display = 'none';
+    }
 
     // Dedup company events: merge site + web, remove duplicates by normalized title + date proximity
     var allCompanyEvents = (_researchData.eventsSite||[]).concat(_researchData.eventsWeb||[]);
@@ -15070,7 +15072,7 @@
       }
     });
 
-    var totalEvents = dedupedEvents.length + ts.length + obs.length;
+    var totalEvents = dedupedEvents.length + ts.length + obs.length + news.length;
 
     // Trade shows section
     if (ts.length && tsEl && tsLbl) {
@@ -15126,11 +15128,20 @@
       if (obsEl) obsEl.innerHTML = '';
     }
 
-    // Empty state
+    // Empty states for two-column layout
+    var leftHasContent = ts.length > 0 || dedupedEvents.length > 0;
+    var rightHasContent = news.length > 0 || obs.length > 0;
+    var columnsEl = document.getElementById('rp-events-columns');
+    var leftEmpty = document.getElementById('rp-events-left-empty');
+    var rightEmpty = document.getElementById('rp-events-right-empty');
     if (totalEvents === 0) {
+      if (columnsEl) columnsEl.style.display = 'none';
       if (emptyEl) emptyEl.style.display = 'block';
     } else {
+      if (columnsEl) columnsEl.style.display = 'flex';
       if (emptyEl) emptyEl.style.display = 'none';
+      if (leftEmpty) leftEmpty.style.display = leftHasContent ? 'none' : 'block';
+      if (rightEmpty) rightEmpty.style.display = rightHasContent ? 'none' : 'block';
     }
 
     document.getElementById('rtab-events-badge').textContent = totalEvents;
@@ -17406,7 +17417,7 @@
       <!-- Tabs -->
       <div class="research-tabs">
         <button class="research-tab active" id="rtab-events" onclick="switchResearchTab('events')">
-          Events <span class="research-tab-badge" id="rtab-events-badge">0</span>
+          News & Events <span class="research-tab-badge" id="rtab-events-badge">0</span>
         </button>
         <button class="research-tab" id="rtab-companyintel" onclick="switchResearchTab('companyintel')" style="white-space:nowrap;">
           Company Intel
@@ -17440,17 +17451,29 @@
     <!-- SCROLLABLE CONTENT: only the panel body scrolls -->
     <div class="research-popup-scroll">
 
-      <!-- Events panel (merged: trade shows, company events, industry dates) -->
-      <div class="research-panel active" id="rpanel-events">
-        <p class="research-section-label" id="rp-events-ts-label" style="display:none;margin-bottom:4px;">Trade Shows</p>
-        <div id="rp-events-tradeshows"></div>
-        <p class="research-section-label" id="rp-events-site-label" style="display:none;"></p>
-        <div id="rp-events-site"></div>
-        <p class="research-section-label" id="rp-events-web-label" style="display:none;margin-top:10px;"></p>
-        <div id="rp-events-web"></div>
-        <p class="research-section-label" id="rp-events-obs-label" style="display:none;margin-top:10px;"></p>
-        <div id="rp-events-obs"></div>
-        <div id="rp-events-empty" style="font-size:12px;color:var(--text-muted);text-align:center;padding:20px 0;">No events found for this company.</div>
+      <!-- News & Events panel (two-column layout) -->
+      <div class="research-panel active" id="rpanel-events" style="overflow:hidden;">
+        <div id="rp-events-columns" style="display:flex;gap:0;height:100%;overflow:hidden;">
+          <!-- LEFT column: Events -->
+          <div style="flex:1.35;overflow-y:auto;padding:14px 18px 14px 20px;scrollbar-width:thin;scrollbar-color:rgba(93,202,165,0.2) transparent;border-right:1px solid rgba(255,255,255,0.06);">
+            <p class="research-section-label" id="rp-events-ts-label" style="display:none;margin-bottom:4px;">Trade Shows</p>
+            <div id="rp-events-tradeshows"></div>
+            <p class="research-section-label" id="rp-events-site-label" style="display:none;"></p>
+            <div id="rp-events-site"></div>
+            <p class="research-section-label" id="rp-events-web-label" style="display:none;margin-top:10px;"></p>
+            <div id="rp-events-web"></div>
+            <div id="rp-events-left-empty" style="display:none;font-size:12px;color:var(--text-muted);text-align:center;padding:40px 0;">No events found.</div>
+          </div>
+          <!-- RIGHT column: News + Industry Dates -->
+          <div style="flex:1;overflow-y:auto;padding:14px 20px 14px 18px;scrollbar-width:thin;scrollbar-color:rgba(245,158,11,0.2) transparent;">
+            <p class="research-section-label" id="rp-events-news-label" style="display:none;margin-bottom:4px;">Recent News</p>
+            <div id="rp-events-news"></div>
+            <p class="research-section-label" id="rp-events-obs-label" style="display:none;margin-top:10px;"></p>
+            <div id="rp-events-obs"></div>
+            <div id="rp-events-right-empty" style="display:none;font-size:12px;color:var(--text-muted);text-align:center;padding:40px 0;">No news or dates found.</div>
+          </div>
+        </div>
+        <div id="rp-events-empty" style="font-size:12px;color:var(--text-muted);text-align:center;padding:20px 0;display:none;">No events found for this company.</div>
       </div>
 
       <!-- Company Intel panel -->
