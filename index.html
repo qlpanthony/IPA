@@ -12983,13 +12983,13 @@
       timeStr  = now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',hour12:true});
       totalScore = (ivScore||0)+(pvScore||0)+(avScore||0);
     }
-    var pc = totalScore >= 7 ? 'ag' : totalScore >= 4 ? 'cp' : 'asst';
+    var isRO = !pvScore && !avScore;
+    var pc = isRO ? (ivScore>=3?'ag':ivScore>=2?'cp':'asst') : (totalScore >= 7 ? 'ag' : totalScore >= 4 ? 'cp' : 'asst');
     var tierName  = pc==='ag'?'AG':pc==='cp'?'CP':'Assistants';
     var tierBg    = pc==='ag'?'#0F6E56':pc==='cp'?'#854F0B':'#3C3489';
     var _rTierBlockBg = pc==='ag'?'#04342C':pc==='cp'?'#412402':'#26215C';
     var _rTierClr     = pc==='ag'?'#9FE1CB':pc==='cp'?'#FAC775':'#AFA9EC';
     var _rTierBdr     = pc==='ag'?'rgba(159,225,203,0.3)':pc==='cp'?'rgba(250,199,117,0.3)':'rgba(175,169,236,0.3)';
-    var isRO = !pvScore && !avScore;
 
     function fRow(label,val){ if(!val||val==='—'||val==='')return ''; return '<tr><td class="lbl">'+label+'</td><td class="val">'+val+'</td></tr>'; }
     function fSec(title,inner){ if(!inner)return ''; return '<div class="section"><div class="section-title">'+title+'</div><table><tbody>'+inner+'</tbody></table></div>'; }
@@ -12997,14 +12997,14 @@
 
     // ── A2 HEADER ──────────────────────────────────
     var pillHtml = '<td style="padding:4px 6px;border-radius:4px;background:rgba(255,255,255,0.12);text-align:center;"><div style="font-size:8px;color:rgba(255,255,255,0.5);text-transform:uppercase;">IV</div><div style="font-size:13px;font-weight:700;color:#fff;">'+(ivScore||0)+'/3</div></td>' +
-      '<td style="padding:4px 6px;border-radius:4px;background:rgba(255,255,255,0.12);text-align:center;"><div style="font-size:8px;color:rgba(255,255,255,0.5);text-transform:uppercase;">PV</div><div style="font-size:13px;font-weight:700;color:#fff;">'+(pvScore||0)+'/3</div></td>' +
-      '<td style="padding:4px 6px;border-radius:4px;background:rgba(255,255,255,0.12);text-align:center;"><div style="font-size:8px;color:rgba(255,255,255,0.5);text-transform:uppercase;">AV</div><div style="font-size:13px;font-weight:700;color:#fff;">'+(avScore||0)+'/3</div></td>';
+      '<td style="padding:4px 6px;border-radius:4px;background:rgba(255,255,255,0.12);text-align:center;"><div style="font-size:8px;color:rgba(255,255,255,0.5);text-transform:uppercase;">PV</div><div style="font-size:13px;font-weight:700;color:'+(isRO?'rgba(255,255,255,0.35)':'#fff')+';">'+(isRO?'--':(pvScore||0)+'/3')+'</div></td>' +
+      '<td style="padding:4px 6px;border-radius:4px;background:rgba(255,255,255,0.12);text-align:center;"><div style="font-size:8px;color:rgba(255,255,255,0.5);text-transform:uppercase;">AV</div><div style="font-size:13px;font-weight:700;color:'+(isRO?'rgba(255,255,255,0.35)':'#fff')+';">'+(isRO?'--':(avScore||0)+'/3')+'</div></td>';
 
     var headerHtml =
       '<div class="section" style="margin-bottom:6px;">' +
       '<table style="width:100%;border-collapse:collapse;background:'+tierBg+';border-radius:8px;" cellpadding="0" cellspacing="0"><tr>' +
         '<td style="padding:14px 18px;vertical-align:middle;width:60px;text-align:center;">' +
-          '<div style="font-size:36px;font-weight:700;color:#fff;line-height:1;">'+totalScore+'<span style="font-size:15px;font-weight:400;color:rgba(255,255,255,0.5);">/9</span></div>' +
+          '<div style="font-size:36px;font-weight:700;color:#fff;line-height:1;">'+(isRO?ivScore:totalScore)+'<span style="font-size:15px;font-weight:400;color:rgba(255,255,255,0.5);">/'+(isRO?'3':'9')+'</span></div>' +
         '</td>' +
         '<td style="width:1px;padding:10px 0;vertical-align:middle;"><div style="width:1px;height:40px;background:rgba(255,255,255,0.15);"></div></td>' +
         '<td style="padding:14px 14px;vertical-align:middle;">' +
@@ -13158,9 +13158,10 @@
             (_recordsCache||[]).find(function(x){return String(x.id)===String(id);});
     if (!r) return;
     var total      = (r.iv||0)+(r.pv||0)+(r.av||0);
-    var scoreColor = total>=7?'#1D9E75':total>=4?'#d97706':'#dc2626';
-    var stars      = total>=7?'★★★★★':total>=4?'★★★':'★';
-    var tier       = _tierDisplay(total>=7?'ag':total>=4?'cp':'asst').priority;
+    var isROArc    = r.status === 'research' || (r.status === 'incomplete' && r.iv > 0 && !r.pv && !r.av);
+    var scoreColor = isROArc ? (r.iv>=3?'#1D9E75':r.iv>=2?'#d97706':'#dc2626') : (total>=7?'#1D9E75':total>=4?'#d97706':'#dc2626');
+    var stars      = isROArc ? '' : (total>=7?'★★★★★':total>=4?'★★★':'★');
+    var tier       = isROArc ? _tierDisplay(r.iv>=3?'ag':r.iv>=2?'cp':'asst').priority : _tierDisplay(total>=7?'ag':total>=4?'cp':'asst').priority;
     var arcOverride = r.assignOverride || '';
     if (arcOverride) {
       tier = _tierDisplay(arcOverride).priority;
@@ -13168,7 +13169,7 @@
     }
     var arcOwner = r.owner || '';
     var arcOverrideNote = arcOverride ? ' (Override)' : '';
-    var pc = r.pillClass || (total>=7?'ag':total>=4?'cp':'asst');
+    var pc = r.pillClass || (isROArc ? (r.iv>=3?'ag':r.iv>=2?'cp':'asst') : (total>=7?'ag':total>=4?'cp':'asst'));
     if (arcOverride) pc = arcOverride;
     var _hdrBg = pc==='ag'?'#0F6E56':pc==='cp'?'#854F0B':'#3C3489';
     var _hdrTierBg = pc==='ag'?'#04342C':pc==='cp'?'#412402':'#26215C';
@@ -13189,8 +13190,8 @@
       '<div class="section" style="margin-bottom:20px;">' +
       '<table style="width:100%;border-collapse:collapse;background:'+_hdrBg+';border-radius:8px;" cellpadding="0" cellspacing="0"><tr>' +
         '<td style="padding:14px 18px;vertical-align:middle;width:60px;text-align:center;">' +
-          '<div style="font-size:32px;font-weight:700;color:#fff;line-height:1;">'+total+'<span style="font-size:15px;font-weight:400;color:rgba(255,255,255,0.5);">/9</span></div>' +
-          '<div style="font-size:11px;color:rgba(255,255,255,0.7);letter-spacing:0.5px;margin-top:2px;">'+stars+'</div>' +
+          '<div style="font-size:32px;font-weight:700;color:#fff;line-height:1;">'+(isROArc?(r.iv||0):total)+'<span style="font-size:15px;font-weight:400;color:rgba(255,255,255,0.5);">/'+(isROArc?'3':'9')+'</span></div>' +
+          (stars?'<div style="font-size:11px;color:rgba(255,255,255,0.7);letter-spacing:0.5px;margin-top:2px;">'+stars+'</div>':'<div style="font-size:10px;color:rgba(255,255,255,0.5);margin-top:2px;">IV only</div>') +
         '</td>' +
         '<td style="width:1px;padding:10px 0;vertical-align:middle;"><div style="width:1px;height:40px;background:rgba(255,255,255,0.15);"></div></td>' +
         '<td style="padding:14px 14px;vertical-align:middle;">' +
@@ -13201,15 +13202,15 @@
           '<table style="border-collapse:collapse;"><tr>' +
             '<td style="padding:4px 7px;background:rgba(255,255,255,0.12);border-radius:5px;text-align:center;"><div style="font-size:9px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.04em;">IV</div><div style="font-size:13px;font-weight:600;color:#fff;">'+(r.iv||0)+'/3</div></td>' +
             '<td style="width:5px;"></td>' +
-            '<td style="padding:4px 7px;background:rgba(255,255,255,0.12);border-radius:5px;text-align:center;"><div style="font-size:9px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.04em;">PV</div><div style="font-size:13px;font-weight:600;color:#fff;">'+(r.pv||0)+'/3</div></td>' +
+            '<td style="padding:4px 7px;background:rgba(255,255,255,0.12);border-radius:5px;text-align:center;"><div style="font-size:9px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.04em;">PV</div><div style="font-size:13px;font-weight:600;color:'+(isROArc?'rgba(255,255,255,0.35)':'#fff')+';">'+(isROArc?'--':(r.pv||0)+'/3')+'</div></td>' +
             '<td style="width:5px;"></td>' +
-            '<td style="padding:4px 7px;background:rgba(255,255,255,0.12);border-radius:5px;text-align:center;"><div style="font-size:9px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.04em;">AV</div><div style="font-size:13px;font-weight:600;color:#fff;">'+(r.av||0)+'/3</div></td>' +
+            '<td style="padding:4px 7px;background:rgba(255,255,255,0.12);border-radius:5px;text-align:center;"><div style="font-size:9px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.04em;">AV</div><div style="font-size:13px;font-weight:600;color:'+(isROArc?'rgba(255,255,255,0.35)':'#fff')+';">'+(isROArc?'--':(r.av||0)+'/3')+'</div></td>' +
           '</tr></table>' +
         '</td>' +
         '<td style="padding:14px 18px 14px 10px;vertical-align:middle;">' +
           '<div style="text-align:center;padding:5px 12px;border-radius:8px;background:'+_hdrTierBg+';border:1px solid '+_hdrTierBdr+';">' +
             '<div style="font-size:16px;font-weight:700;color:#fff;letter-spacing:0.03em;">'+_hdrTierName+'</div>' +
-            '<div style="font-size:9px;color:'+_hdrTierClr+';font-weight:600;letter-spacing:0.04em;margin-top:1px;">'+_hdrPriority+'</div>' +
+            '<div style="font-size:9px;color:'+_hdrTierClr+';font-weight:600;letter-spacing:0.04em;margin-top:1px;">'+(isROArc?'RESEARCH ONLY':_hdrPriority)+'</div>' +
           '</div>' +
         '</td>' +
       '</tr></table>' +
