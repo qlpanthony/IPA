@@ -170,7 +170,7 @@
   .col { display: flex; flex-direction: column; gap: 8px; height: 877px; overflow-y: auto; overflow-x: hidden; scrollbar-width: none; }
   .col::-webkit-scrollbar { display: none; }
   .col > .card:last-child { flex: 1; }
-  #card-result { flex: 0 0 610px; overflow: hidden; display: flex; flex-direction: column; }
+  #card-result { flex: 0 0 auto; overflow: hidden; display: flex; flex-direction: column; }
   #leaderboard-card { flex: 1 1 0; min-height: 0; overflow: hidden; display: flex; flex-direction: column; }
 
   /* Cards */
@@ -8050,15 +8050,36 @@
 
   var _activityPage = 0;
   var _ACTIVITY_PAGE_SIZE = 5;
+  var _activityFilter = 'all';
+  var _activitySearch = '';
+
+  function setActivityFilter(f) { _activityFilter = f; _activityPage = 0; _renderActivityCard(); }
+  function setActivitySearch(v) { _activitySearch = v.trim().toLowerCase(); _activityPage = 0; _renderActivityCard(); }
 
   function activityPageUp() {
     if (_activityPage > 0) { _activityPage--; _renderActivityCard(); }
   }
   function activityPageDown() {
     var archive = _archiveCache || [];
-    var sorted = archive.slice().sort(function(a,b){ return (b.id||0)-(a.id||0); });
-    var totalPages = Math.max(1, Math.ceil(sorted.length / _ACTIVITY_PAGE_SIZE));
+    var filtered = _applyActivityFilters(archive);
+    var totalPages = Math.max(1, Math.ceil(filtered.length / _ACTIVITY_PAGE_SIZE));
     if (_activityPage < totalPages - 1) { _activityPage++; _renderActivityCard(); }
+  }
+
+  function _applyActivityFilters(arr) {
+    var sorted = arr.slice().sort(function(a,b){ return (b.id||0)-(a.id||0); });
+    if (_activityFilter === 'sc') {
+      sorted = sorted.filter(function(r){ return r.status === 'complete'; });
+    } else if (_activityFilter === 'ro') {
+      sorted = sorted.filter(function(r){ return r.status === 'research' || r.status === 'incomplete'; });
+    }
+    if (_activitySearch) {
+      sorted = sorted.filter(function(r){
+        return ((r.company||'').toLowerCase().indexOf(_activitySearch) !== -1) ||
+               ((r.name||'').toLowerCase().indexOf(_activitySearch) !== -1);
+      });
+    }
+    return sorted;
   }
 
   function _renderActivityCard() {
@@ -8089,8 +8110,8 @@
 
     function pillColor(pc){ return pc==='ag'?'#5DCAA5':pc==='cp'?'#f59e0b':'#60a5fa'; }
 
-    // Flat list sorted newest first
-    var sorted = archive.slice().sort(function(a,b){ return (b.id||0)-(a.id||0); });
+    // Flat list sorted newest first, with filters applied
+    var sorted = _applyActivityFilters(archive);
     var totalPages = Math.max(1, Math.ceil(sorted.length / _ACTIVITY_PAGE_SIZE));
     if (_activityPage >= totalPages) _activityPage = Math.max(0, totalPages - 1);
     var pageStart = _activityPage * _ACTIVITY_PAGE_SIZE;
@@ -8179,8 +8200,23 @@
         '</div>';
     }
 
+    // Filter pills + search
+    var fAll = _activityFilter === 'all' ? 'background:rgba(139,143,168,0.2);color:#e8eaed;border-color:rgba(139,143,168,0.4);' : 'background:transparent;color:#717378;border-color:rgba(255,255,255,0.08);';
+    var fSc  = _activityFilter === 'sc'  ? 'background:rgba(29,158,117,0.15);color:#5DCAA5;border-color:rgba(29,158,117,0.4);' : 'background:transparent;color:#717378;border-color:rgba(255,255,255,0.08);';
+    var fRo  = _activityFilter === 'ro'  ? 'background:rgba(139,143,168,0.2);color:#e8eaed;border-color:rgba(139,143,168,0.4);' : 'background:transparent;color:#717378;border-color:rgba(255,255,255,0.08);';
+    var filterBar =
+      '<div style="display:flex;align-items:center;gap:5px;padding:6px 8px 4px;">' +
+        '<div onclick="setActivityFilter(\'all\')" style="padding:2px 8px;font-size:9px;font-weight:600;border-radius:10px;cursor:pointer;border:1px solid;letter-spacing:0.03em;' + fAll + '">All</div>' +
+        '<div onclick="setActivityFilter(\'sc\')" style="padding:2px 8px;font-size:9px;font-weight:600;border-radius:10px;cursor:pointer;border:1px solid;letter-spacing:0.03em;' + fSc + '">SC</div>' +
+        '<div onclick="setActivityFilter(\'ro\')" style="padding:2px 8px;font-size:9px;font-weight:600;border-radius:10px;cursor:pointer;border:1px solid;letter-spacing:0.03em;' + fRo + '">RO</div>' +
+        '<div style="flex:1;position:relative;margin-left:4px;">' +
+          '<input id="activity-search-input" type="text" placeholder="Search..." value="' + (_activitySearch || '') + '" oninput="setActivitySearch(this.value)" style="width:100%;height:20px;padding:0 6px 0 20px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);color:var(--text);font-size:9px;font-family:Inter,sans-serif;outline:none;box-sizing:border-box;">' +
+          '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#717378" stroke-width="2.5" style="position:absolute;left:6px;top:5px;pointer-events:none;"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>' +
+        '</div>' +
+      '</div>';
+
     // Render rows into body
-    card.innerHTML = '<div style="display:flex;flex-direction:column;gap:2px;flex:1;">' + rowsHtml + '</div>';
+    card.innerHTML = filterBar + '<div style="display:flex;flex-direction:column;gap:2px;flex:1;">' + rowsHtml + '</div>';
   }
 
 
@@ -9186,32 +9222,36 @@
       labels.av = '';
     }
 
-    // Restore address fields from combined address string
+    // Restore address fields — prefer individual fields, fall back to parsing combined string
     ['f-street','f-suite','f-city','f-state','f-zip'].forEach(function(id) {
       var el = document.getElementById(id); if (el) el.value = '';
     });
-    if (r.address && r.address !== '\u2014' && r.address.trim()) {
+    if (r.addrStreet || r.addrCity || r.addrState || r.addrZip) {
+      // New format: individual fields saved directly
+      var fStr = document.getElementById('f-street'); if (fStr) fStr.value = r.addrStreet || '';
+      var fSui = document.getElementById('f-suite');  if (fSui) fSui.value = r.addrSuite || '';
+      var fCty = document.getElementById('f-city');   if (fCty) fCty.value = r.addrCity || '';
+      var fSta = document.getElementById('f-state');  if (fSta) fSta.value = r.addrState || '';
+      var fZip = document.getElementById('f-zip');    if (fZip) fZip.value = r.addrZip || '';
+    } else if (r.address && r.address !== '\u2014' && r.address.trim()) {
+      // Legacy fallback: parse combined string
       var addrClean = r.address.replace(/\s*\[.*?\]\s*$/, '').trim();
       var parts = addrClean.split(',').map(function(p){ return p.trim(); }).filter(Boolean);
       var zip = '', st = '', city = '', street = '', suite = '';
       if (parts.length >= 2) {
-        // Check if last part is a zip code
         if (/^\d{5}(-\d{4})?$/.test(parts[parts.length - 1])) { zip = parts.pop(); }
-        // Check if (new) last part is a 2-letter state
         if (parts.length >= 2 && /^[A-Z]{2}$/i.test(parts[parts.length - 1])) { st = parts.pop(); }
-        // Check if (new) last part is city
         if (parts.length >= 1) { city = parts.pop(); }
-        // Remaining: street and possibly suite
         if (parts.length >= 2) { street = parts[0]; suite = parts.slice(1).join(', '); }
         else if (parts.length === 1) { street = parts[0]; }
       } else if (parts.length === 1) {
         street = parts[0];
       }
-      var fStr = document.getElementById('f-street'); if (fStr && street) fStr.value = street;
-      var fSui = document.getElementById('f-suite');  if (fSui && suite)  fSui.value = suite;
-      var fCty = document.getElementById('f-city');   if (fCty && city)   fCty.value = city;
-      var fSta = document.getElementById('f-state');  if (fSta && st)     fSta.value = st;
-      var fZip = document.getElementById('f-zip');    if (fZip && zip)    fZip.value = zip;
+      var fStr2 = document.getElementById('f-street'); if (fStr2 && street) fStr2.value = street;
+      var fSui2 = document.getElementById('f-suite');  if (fSui2 && suite)  fSui2.value = suite;
+      var fCty2 = document.getElementById('f-city');   if (fCty2 && city)   fCty2.value = city;
+      var fSta2 = document.getElementById('f-state');  if (fSta2 && st)     fSta2.value = st;
+      var fZip2 = document.getElementById('f-zip');    if (fZip2 && zip)    fZip2.value = zip;
     }
     try { clearAiAddress(); } catch(e) {}
     // Restore address source badge if available
@@ -12587,6 +12627,7 @@
       date: date, time: time,
       name: name, company: company, phone: phoneOut, email: email,
       cid: cid, address: address, notes: notes,
+      addrStreet: street||snap.street||'', addrSuite: suite||snap.suite||'', addrCity: city||snap.city||'', addrState: state||snap.state||'', addrZip: zip||snap.zip||'',
       score: total, owner: owner, priority: priority,
       budgetType: budgetType, customerType: window._customerType,
       iv: scores.iv, pv: scores.pv, av: scores.av,
@@ -16100,8 +16141,31 @@
     if (header) header.style.display = 'flex';
     if (badge) { badge.textContent = comps.length; badge.style.display = 'inline'; }
     if (!list) return;
+
+    // Build archive domain/company lookup for cross-referencing
+    var archiveIndex = {};
+    (_archiveCache || []).forEach(function(r) {
+      var rDomain = _normDomain(r.website || '');
+      var rCompany = (r.company || '').trim().toLowerCase();
+      if (rDomain) archiveIndex[rDomain] = r;
+      if (rCompany) { if (!archiveIndex[rCompany]) archiveIndex[rCompany] = r; }
+    });
+
     list.innerHTML = comps.map(function(c, i) {
       var domain = (c.website || '').replace(/^https?:\/\//, '').replace(/\/+$/, '');
+      var compDomain = _normDomain(c.website || '');
+      var compName = (c.name || '').trim().toLowerCase();
+      var archiveMatch = (compDomain && archiveIndex[compDomain]) || (compName && archiveIndex[compName]) || null;
+      var matchBadge = '';
+      if (archiveMatch) {
+        var mScore = archiveMatch.score || '?';
+        var mStatus = archiveMatch.status === 'complete' ? 'SC' : 'RO';
+        var mRep = archiveMatch.rep || '';
+        matchBadge = '<div style="margin-top:6px;display:inline-flex;align-items:center;gap:5px;padding:3px 8px;border-radius:5px;background:rgba(96,165,250,0.1);border:1px solid rgba(96,165,250,0.25);font-size:10px;font-weight:600;color:#60a5fa;">' +
+          '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg> ' +
+          'In archive: ' + mScore + '/9 ' + mStatus + (mRep ? ' (' + mRep + ')' : '') +
+        '</div>';
+      }
       return '<div style="padding:14px 0;' + (i > 0 ? 'border-top:1px solid rgba(255,255,255,0.06);' : '') + '">' +
         '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;">' +
           '<div style="flex:1;min-width:0;">' +
@@ -16113,6 +16177,7 @@
         '</div>' +
         (c.overlap ? '<div style="font-size:12px;color:var(--text-muted);margin-top:6px;line-height:1.5;">' + c.overlap + '</div>' : '') +
         (c.differentiator ? '<div style="font-size:11px;color:#FB7185;margin-top:4px;font-style:italic;">' + c.differentiator + '</div>' : '') +
+        matchBadge +
         (c.website ? '<button onclick="researchThisCompany(\'' + c.website.replace(/'/g, "\\'") + '\', \'' + (c.name || '').replace(/'/g, "\\'") + '\')" style="margin-top:8px;height:28px;padding:0 14px;border-radius:6px;border:1px solid rgba(29,158,117,0.4);background:rgba(29,158,117,0.08);color:#5DCAA5;font-size:10px;font-weight:600;cursor:pointer;letter-spacing:0.04em;display:inline-flex;align-items:center;gap:5px;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Research This Company</button>' : '') +
       '</div>';
     }).join('');
