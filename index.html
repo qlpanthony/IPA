@@ -3129,6 +3129,16 @@
       <div id="apanel-scoring" style="display:none;padding:16px 20px;max-height:420px;overflow-y:auto;">
         <div style="border-left:3px solid rgba(168,144,96,0.5);background:rgba(168,144,96,0.04);border-radius:0 6px 6px 0;padding:10px 12px 2px;margin-bottom:16px;"><div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;">Potential Value — Project Budget</div><div style="background:var(--surface);border-radius:8px;padding:10px 12px;margin-bottom:14px;"><div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04);"><span style="font-size:12px;color:var(--text-muted);">Tier 1</span><div style="display:flex;align-items:center;gap:12px;"><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:var(--text-muted);margin-right:2px;">Starts at</span><span style="font-size:12px;color:var(--text-muted);">$</span><input type="number" id="cfg-pv-proj-t1" value="0" min="0" readonly style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid transparent;background:transparent;color:var(--text-muted);font-size:12px;text-align:right;pointer-events:none;"></div><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:var(--text-muted);margin-right:2px;">Ends at</span><span style="font-size:12px;color:var(--text-muted);">$</span><input type="number" id="cfg-pv-proj-t1-end" min="0" oninput="cascadeScoringField('cfg-pv-proj-t1-end')" style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;text-align:right;"></div></div></div><div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04);"><span style="font-size:12px;color:var(--text-muted);">Tier 2</span><div style="display:flex;align-items:center;gap:12px;"><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:var(--text-muted);margin-right:2px;">Starts at</span><span style="font-size:12px;color:var(--text-muted);">$</span><input type="number" id="cfg-pv-proj-t2" oninput="cascadeScoringField('cfg-pv-proj-t2')" value="500" min="0" style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;text-align:right;"></div><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:var(--text-muted);margin-right:2px;">Ends at</span><span style="font-size:12px;color:var(--text-muted);">$</span><input type="number" id="cfg-pv-proj-t2-end" min="0" oninput="cascadeScoringField('cfg-pv-proj-t2-end')" style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;text-align:right;"></div></div></div><div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;"><span style="font-size:12px;color:var(--text-muted);">Tier 3</span><div style="display:flex;align-items:center;gap:12px;"><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:var(--text-muted);margin-right:2px;">Starts at</span><span style="font-size:12px;color:var(--text-muted);">$</span><input type="number" id="cfg-pv-proj-t3" oninput="cascadeScoringField('cfg-pv-proj-t3')" value="5000" min="0" style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;text-align:right;"></div><span style="font-size:11px;color:var(--text-muted);font-style:italic;">No ceiling</span></div></div></div>        <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;">Potential Value — Yearly Budget</div><div style="background:var(--surface);border-radius:8px;padding:10px 12px;margin-bottom:14px;"><div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04);"><span style="font-size:12px;color:var(--text-muted);">Tier 1</span><div style="display:flex;align-items:center;gap:12px;"><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:var(--text-muted);margin-right:2px;">Starts at</span><span style="font-size:12px;color:var(--text-muted);">$</span><input type="number" id="cfg-pv-yr-t1" value="0" min="0" readonly style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid transparent;background:transparent;color:var(--text-muted);font-size:12px;text-align:right;pointer-events:none;"></div><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:var(--text-muted);margin-right:2px;">Ends at</span><span style="font-size:12px;color:var(--text-muted);">$</span><input type="number" id="cfg-pv-yr-t1-end" min="0" oninput="cascadeScoringField('cfg-pv-yr-t1-end')" style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;text-align:right;"></div></div></div><div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04);"><span style="font-size:12px;color:var(--text-muted);">Tier 2</span><div style="display:flex;align-items:center;gap:12px;"><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:var(--text-muted);margin-right:2px;">Starts at</span><span style="font-size:12px;color:var(--text-muted);">$</span><input type="number" id="cfg-pv-yr-t2" oninput="cascadeScoringField('cfg-pv-yr-t2')" value="5000" min="0" style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;text-align:right;"></div><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:var(--text-muted);margin-right:2px;">Ends at</span><span style="font-size:12px;color:var(--text-muted);">$</span><input type="number" id="cfg-pv-yr-t2-end" min="0" oninput="cascadeScoringField('cfg-pv-yr-t2-end')" style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;text-align:right;"></div></div></div><div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;"><span style="font-size:12px;color:var(--text-muted);">Tier 3</span><div style="display:flex;align-items:center;gap:12px;"><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:var(--text-muted);margin-right:2px;">Starts at</span><span style="font-size:12px;color:var(--text-muted);">$</span><input type="number" id="cfg-pv-yr-t3" oninput="cascadeScoringField('cfg-pv-yr-t3')" value="10000" min="0" style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;text-align:right;"></div><span style="font-size:11px;color:var(--text-muted);font-style:italic;">No ceiling</span></div></div></div>        </div>
         <div style="border-left:3px solid rgba(29,158,117,0.45);background:rgba(29,158,117,0.04);border-radius:0 6px 6px 0;padding:10px 12px 2px;margin-bottom:16px;"><div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;">Actual Value — New Customer <span style="font-size:9px;font-weight:600;letter-spacing:0.05em;color:rgba(245,158,11,0.7);text-transform:none;margin-left:4px;">↳ Mirrors Project Budget</span></div><div style="background:var(--surface);border-radius:8px;padding:10px 12px;margin-bottom:14px;"><div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04);"><span style="font-size:12px;color:var(--text-muted);">Tier 1</span><div style="display:flex;align-items:center;gap:12px;"><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:var(--text-muted);margin-right:2px;">Starts at</span><span style="font-size:12px;color:var(--text-muted);">$</span><input type="number" id="cfg-av-new-t1" value="0" min="0" readonly style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid transparent;background:transparent;color:var(--text-muted);font-size:12px;text-align:right;pointer-events:none;"></div><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:var(--text-muted);margin-right:2px;">Ends at</span><span style="font-size:12px;color:var(--text-muted);">$</span><input type="number" id="cfg-av-new-t1-end" min="0" readonly style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid transparent;background:transparent;color:var(--text-muted);font-size:12px;text-align:right;pointer-events:none;"></div></div></div><div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04);"><span style="font-size:12px;color:var(--text-muted);">Tier 2</span><div style="display:flex;align-items:center;gap:12px;"><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:var(--text-muted);margin-right:2px;">Starts at</span><span style="font-size:12px;color:var(--text-muted);">$</span><input type="number" id="cfg-av-new-t2" readonly value="500" min="0" style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid transparent;background:transparent;color:var(--text-muted);font-size:12px;text-align:right;pointer-events:none;"></div><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:var(--text-muted);margin-right:2px;">Ends at</span><span style="font-size:12px;color:var(--text-muted);">$</span><input type="number" id="cfg-av-new-t2-end" min="0" readonly style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid transparent;background:transparent;color:var(--text-muted);font-size:12px;text-align:right;pointer-events:none;"></div></div></div><div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;"><span style="font-size:12px;color:var(--text-muted);">Tier 3</span><div style="display:flex;align-items:center;gap:12px;"><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:var(--text-muted);margin-right:2px;">Starts at</span><span style="font-size:12px;color:var(--text-muted);">$</span><input type="number" id="cfg-av-new-t3" readonly value="10000" min="0" style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid transparent;background:transparent;color:var(--text-muted);font-size:12px;text-align:right;pointer-events:none;"></div><span style="font-size:11px;color:var(--text-muted);font-style:italic;">No ceiling</span></div></div></div>        <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;">Actual Value — Existing Customer</div><div style="background:var(--surface);border-radius:8px;padding:10px 12px;margin-bottom:14px;"><div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04);"><span style="font-size:12px;color:var(--text-muted);">Tier 1</span><div style="display:flex;align-items:center;gap:12px;"><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:var(--text-muted);margin-right:2px;">Starts at</span><span style="font-size:12px;color:var(--text-muted);">$</span><input type="number" id="cfg-av-ex-t1" value="0" min="0" readonly style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid transparent;background:transparent;color:var(--text-muted);font-size:12px;text-align:right;pointer-events:none;"></div><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:var(--text-muted);margin-right:2px;">Ends at</span><span style="font-size:12px;color:var(--text-muted);">$</span><input type="number" id="cfg-av-ex-t1-end" min="0" oninput="cascadeScoringField('cfg-av-ex-t1-end')" style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;text-align:right;"></div></div></div><div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04);"><span style="font-size:12px;color:var(--text-muted);">Tier 2</span><div style="display:flex;align-items:center;gap:12px;"><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:var(--text-muted);margin-right:2px;">Starts at</span><span style="font-size:12px;color:var(--text-muted);">$</span><input type="number" id="cfg-av-ex-t2" oninput="cascadeScoringField('cfg-av-ex-t2')" value="5000" min="0" style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;text-align:right;"></div><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:var(--text-muted);margin-right:2px;">Ends at</span><span style="font-size:12px;color:var(--text-muted);">$</span><input type="number" id="cfg-av-ex-t2-end" min="0" oninput="cascadeScoringField('cfg-av-ex-t2-end')" style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;text-align:right;"></div></div></div><div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;"><span style="font-size:12px;color:var(--text-muted);">Tier 3</span><div style="display:flex;align-items:center;gap:12px;"><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:11px;color:var(--text-muted);margin-right:2px;">Starts at</span><span style="font-size:12px;color:var(--text-muted);">$</span><input type="number" id="cfg-av-ex-t3" oninput="cascadeScoringField('cfg-av-ex-t3')" value="50000" min="0" style="width:80px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;text-align:right;"></div><span style="font-size:11px;color:var(--text-muted);font-style:italic;">No ceiling</span></div></div></div></div>
+                <div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:14px;margin-bottom:14px;">
+          <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;">Scorecard Content</div>
+          <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;padding:10px 12px;background:var(--surface);border-radius:8px;">
+            <input type="checkbox" id="cfg-inc-attack-plan" style="margin-top:2px;accent-color:#5DCAA5;cursor:pointer;">
+            <div>
+              <div style="font-size:12px;color:var(--text);font-weight:600;">Include Attack Plan in emailed scorecards &amp; PDFs</div>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:2px;line-height:1.5;">When off, the Attack Plan is still generated and saved with records so the research popup tab works, but it is stripped from outbound emails and PDFs. Leave off until the Attack Plan logic is dialed in.</div>
+            </div>
+          </label>
+        </div>
                 <div style="display:flex;align-items:center;gap:10px;padding-top:4px;">
           <button onclick="applyScoringConfig()" style="height:32px;padding:0 18px;border-radius:7px;border:1px solid rgba(29,158,117,0.4);background:rgba(29,158,117,0.12);color:#5DCAA5;font-size:12px;font-weight:600;cursor:pointer;">Apply &amp; Save</button>
           <span id="scoring-cfg-msg" style="font-size:11px;color:#5DCAA5;display:none;">&#10003; Thresholds updated</span>
@@ -4184,7 +4194,8 @@
     sigEnabled:false, sigText:'',
     couponCodes:[],
     tierNameAG:'AG', tierNameCP:'CP', tierNameAsst:'Assistants',
-    tierPriorityAG:'HIGH PRIORITY', tierPriorityCP:'NURTURE / GROW', tierPriorityAsst:'TRANSACTIONAL'
+    tierPriorityAG:'HIGH PRIORITY', tierPriorityCP:'NURTURE / GROW', tierPriorityAsst:'TRANSACTIONAL',
+    includeAttackPlanInScorecards:false
   };
 
   function _tierDisplay(key) {
@@ -4196,6 +4207,35 @@
 
   function _hasDeliveryEmail() {
     return !!(_appSettings.companyEmail && _appSettings.companyEmail.trim());
+  }
+
+  // Strip attackPlan from a record before sending to backend for emailing/PDF.
+  // Gated by admin toggle in Scoring tab (_appSettings.includeAttackPlanInScorecards).
+  // When off (default), we keep attackPlan saved with the record so the research
+  // popup tab can reload it, but strip it from outbound email/PDF payloads.
+  function _scrubRecordForEmail(rec) {
+    if (!rec) return rec;
+    if (_appSettings && _appSettings.includeAttackPlanInScorecards) return rec;
+    try {
+      var clone = Object.assign({}, rec);
+      var rd = clone.researchData;
+      if (typeof rd === 'string' && rd.length > 2) {
+        var parsed = JSON.parse(rd);
+        if (parsed && typeof parsed === 'object') {
+          delete parsed.attackPlan;
+          delete parsed.attackPlans;
+          delete parsed.attackPlanActive;
+          clone.researchData = JSON.stringify(parsed);
+        }
+      } else if (rd && typeof rd === 'object') {
+        var copy = Object.assign({}, rd);
+        delete copy.attackPlan;
+        delete copy.attackPlans;
+        delete copy.attackPlanActive;
+        clone.researchData = copy;
+      }
+      return clone;
+    } catch(e) { return rec; }
   }
 
   function _showNoEmailToast() {
@@ -4507,6 +4547,8 @@
     });
     updateScoringEndFields();
     refreshScoringLabels();
+    var apCb = document.getElementById('cfg-inc-attack-plan');
+    if (apCb) apCb.checked = !!_appSettings.includeAttackPlanInScorecards;
   }
 
   function updateScoringEndFields() {
@@ -4586,6 +4628,13 @@
 
     // Persist to GAS config sheet
     gsPost({ action: 'saveConfig', config: _scoringConfig }).catch(function(){});
+
+    // Persist attack plan toggle (stored in _appSettings alongside other feature flags)
+    var apCb = document.getElementById('cfg-inc-attack-plan');
+    if (apCb) {
+      _appSettings.includeAttackPlanInScorecards = !!apCb.checked;
+      gsPost({ action: 'saveAppSettings', settings: _appSettings }).catch(function(){});
+    }
   }
 
   // ── App Settings UI ──────────────────────────────────────────
@@ -6901,7 +6950,7 @@
         });
         _renderActivityCard();
         gsPost({ action: 'updateRecord', record: rec });
-        gsPost({ action: 'emailRecord', record: rec, plainText: false });
+        gsPost({ action: 'emailRecord', record: _scrubRecordForEmail(rec), plainText: false });
         // Increment tally (auto-save skipped it)
         if (rec.rep && rec.rep !== '—') {
           gsPost({ action: 'incrementTally', rep: rec.rep });
@@ -7282,7 +7331,7 @@
       companyName:'', domain:'', employees:'', industry:'', blurb:'',
       ivState:'none', ivYourTier:'', ivYourScore:0, ivAiTier:'', ivAiScore:0,
       eventsSite:[], eventsWeb:[], observances:[], emailResearchBlock:'',
-      companyLinkedIn:'', contactLinkedIn:'', revenue:'', foundedYear:'', recentNews:[], socialMedia:{}, searchCostUSD:0, searchDuration:null, salesHooks:[], keyPeople:[], tradeShows:[], competitors:[], attackPlan:'', companyIntel:''
+      companyLinkedIn:'', contactLinkedIn:'', revenue:'', foundedYear:'', recentNews:[], socialMedia:{}, searchCostUSD:0, searchDuration:null, salesHooks:[], keyPeople:[], tradeShows:[], competitors:[], attackPlan:'', attackPlans:{}, attackPlanActive:'', companyIntel:''
     };
     _ivAccepted = false;
     var _ivBadge1 = document.getElementById('iv-ai-badge'); if (_ivBadge1) _ivBadge1.style.display = 'none';
@@ -8755,7 +8804,7 @@
     if (btnEl) { btnEl.disabled = true; btnEl.style.opacity = '0.6'; btnEl.innerHTML = '↻ Sending...'; }
     var recCopy = JSON.parse(JSON.stringify(r));
     recCopy._subjectPrefix = 'Re: ';
-    gsPost({ action: 'emailRecord', record: recCopy, plainText: false }, { fireAndForget: true });
+    gsPost({ action: 'emailRecord', record: _scrubRecordForEmail(recCopy), plainText: false }, { fireAndForget: true });
     gsPost({ action: 'incrementSent', id: r.id }, { fireAndForget: true });
     setTimeout(function() {
       if (btnEl) {
@@ -8780,7 +8829,7 @@
       var subjectPrefix = days > 0 ? 'Re: ' : '';
       var recCopy = JSON.parse(JSON.stringify(record));
       recCopy._subjectPrefix = subjectPrefix;
-      gsPost({ action: 'emailRecord', record: recCopy, plainText: false }, { fireAndForget: true });
+      gsPost({ action: 'emailRecord', record: _scrubRecordForEmail(recCopy), plainText: false }, { fireAndForget: true });
       gsPost({ action: 'incrementSent', id: record.id }, { fireAndForget: true });
       if (btnEl) {
         btnEl.disabled = false; btnEl.style.opacity = '1';
@@ -8891,7 +8940,7 @@
     btnEl._emailed = true;
     btnEl.disabled = true;
     // Fire-and-forget — don't block UI on email send
-    gsPost({ action: 'emailRecord', record: r, plainText: false }, { fireAndForget: true });
+    gsPost({ action: 'emailRecord', record: _scrubRecordForEmail(r), plainText: false }, { fireAndForget: true });
     gsPost({ action: 'incrementSent', id: r.id }, { fireAndForget: true });
     // Visual feedback
     var orig = btnEl.innerHTML;
@@ -8967,6 +9016,8 @@
       _researchData.tradeShows     = Array.isArray(rd.tradeShows) ? rd.tradeShows.filter(function(t){ return t && t.title; }) : [];
       _researchData.competitors    = Array.isArray(rd.competitors) ? rd.competitors : [];
       _researchData.attackPlan     = rd.attackPlan || '';
+      _researchData.attackPlans    = (rd.attackPlans && typeof rd.attackPlans === 'object') ? rd.attackPlans : {};
+      _researchData.attackPlanActive = rd.attackPlanActive || '';
       _researchData.companyIntel   = rd.companyIntel || '';
       _researchData.searchCostUSD  = parseFloat(rd.searchCostUSD) || 0;
       _researchData.searchDuration = rd.searchDuration || null;
@@ -9041,6 +9092,8 @@
       _researchData.tradeShows     = Array.isArray(rd.tradeShows)  ? rd.tradeShows.filter(function(t){ return t && t.title; })  : [];
       _researchData.competitors    = Array.isArray(rd.competitors) ? rd.competitors : [];
       _researchData.attackPlan     = rd.attackPlan || '';
+      _researchData.attackPlans    = (rd.attackPlans && typeof rd.attackPlans === 'object') ? rd.attackPlans : {};
+      _researchData.attackPlanActive = rd.attackPlanActive || '';
       _researchData.companyIntel   = rd.companyIntel || '';
       _researchData.companyLinkedIn= rd.companyLinkedIn || '';
       _researchData.decisionMakers = rd.decisionMakers  || null;
@@ -9100,6 +9153,8 @@
       _researchData.tradeShows     = Array.isArray(_rdRestore.tradeShows)   ? _rdRestore.tradeShows.filter(function(t){ return t && t.title; }) : [];
       _researchData.competitors    = Array.isArray(_rdRestore.competitors)  ? _rdRestore.competitors  : [];
       _researchData.attackPlan     = _rdRestore.attackPlan || '';
+      _researchData.attackPlans    = (_rdRestore.attackPlans && typeof _rdRestore.attackPlans === 'object') ? _rdRestore.attackPlans : {};
+      _researchData.attackPlanActive = _rdRestore.attackPlanActive || '';
       _researchData.companyIntel   = _rdRestore.companyIntel || '';
       _researchData.searchCostUSD  = parseFloat(_rdRestore.searchCostUSD) || 0;
       _researchData.searchDuration = _rdRestore.searchDuration || null;
@@ -9114,7 +9169,7 @@
         companyName:'', domain:'', employees:'', industry:'', blurb:'',
         ivState:'none', ivYourTier:'', ivYourScore:0, ivAiTier:'', ivAiScore:0,
         eventsSite:[], eventsWeb:[], observances:[], emailResearchBlock:'',
-        companyLinkedIn:'', contactLinkedIn:'', revenue:'', foundedYear:'', recentNews:[], socialMedia:{}, searchCostUSD:0, searchDuration:null, salesHooks:[], keyPeople:[], tradeShows:[], competitors:[], attackPlan:'', companyIntel:''
+        companyLinkedIn:'', contactLinkedIn:'', revenue:'', foundedYear:'', recentNews:[], socialMedia:{}, searchCostUSD:0, searchDuration:null, salesHooks:[], keyPeople:[], tradeShows:[], competitors:[], attackPlan:'', attackPlans:{}, attackPlanActive:'', companyIntel:''
       };
     }
     _ivAccepted = false;
@@ -9371,7 +9426,7 @@
     if (!r) return;
 
     // Send via Google Apps Script backend (same as main scorecard email)
-    gsPost({ action: 'emailRecord', record: r, plainText: false }, { fireAndForget: true });
+    gsPost({ action: 'emailRecord', record: _scrubRecordForEmail(r), plainText: false }, { fireAndForget: true });
     gsPost({ action: 'incrementSent', id: r.id }, { fireAndForget: true });
 
     // Visual feedback
@@ -11025,7 +11080,7 @@
       companyName:'', domain:'', employees:'', industry:'', blurb:'',
       ivState:'none', ivYourTier:'', ivYourScore:0, ivAiTier:'', ivAiScore:0,
       eventsSite:[], eventsWeb:[], observances:[], emailResearchBlock:'',
-      companyLinkedIn:'', contactLinkedIn:'', revenue:'', foundedYear:'', recentNews:[], socialMedia:{}, searchCostUSD:0, searchDuration:null, salesHooks:[], keyPeople:[], tradeShows:[], competitors:[], attackPlan:'', companyIntel:''
+      companyLinkedIn:'', contactLinkedIn:'', revenue:'', foundedYear:'', recentNews:[], socialMedia:{}, searchCostUSD:0, searchDuration:null, salesHooks:[], keyPeople:[], tradeShows:[], competitors:[], attackPlan:'', attackPlans:{}, attackPlanActive:'', companyIntel:''
     };
     _liveEmailIntent = 'checkin'; _liveEmailInstruction = ''; _liveEmailCoupon = ''; _liveEmailSelected = []; _liveEmailItems = [];
     // Clear AI-filled green fields
@@ -12575,7 +12630,7 @@
     // Show sending state
     if (footerResendBtn) { footerResendBtn.disabled = true; footerResendBtn.style.opacity = '0.6'; var _origFR = footerResendBtn.innerHTML; footerResendBtn.innerHTML = ico + ' Sending...'; }
     if (btn) { var origBtn = btn.innerHTML; btn.disabled = true; btn.style.opacity = '0.6'; btn.innerHTML = ico + ' Sending...'; }
-    gsPost({ action: 'emailRecord', record: r, plainText: false })
+    gsPost({ action: 'emailRecord', record: _scrubRecordForEmail(r), plainText: false })
     .then(function() {
       gsPost({ action: 'incrementSent', id: r.id });
       if (footerResendBtn) { footerResendBtn.innerHTML = ico + ' \u2713 Sent'; footerResendBtn.style.opacity = '1'; setTimeout(function(){ footerResendBtn.disabled = false; footerResendBtn.innerHTML = _origFR; footerResendBtn.style.opacity = ''; }, 1500); }
@@ -12707,7 +12762,7 @@
     };
     if (hasAI) {
       rec.aiResearch = 'YES';
-      rec.researchData = (function(){ try { var rd = _researchData; return JSON.stringify({ companyName:rd.companyName, domain:rd.domain, employees:rd.employees, industry:rd.industry, blurb:rd.blurb, revenue:rd.revenue, foundedYear:rd.foundedYear, socialMedia:rd.socialMedia, recentNews:rd.recentNews, eventsSite:rd.eventsSite, eventsWeb:rd.eventsWeb, observances:rd.observances, companyLinkedIn:rd.companyLinkedIn, contactLinkedIn:rd.contactLinkedIn, contactPerson:rd.contactPerson, decisionMakers:rd.decisionMakers, salesHooks:rd.salesHooks, keyPeople:rd.keyPeople||[], searchCostUSD:rd.searchCostUSD, searchDuration:rd.searchDuration, tradeShows:rd.tradeShows||[], competitors:rd.competitors||[], attackPlan:rd.attackPlan||'', companyIntel:rd.companyIntel||'' }); } catch(e){ return ''; } })();
+      rec.researchData = (function(){ try { var rd = _researchData; return JSON.stringify({ companyName:rd.companyName, domain:rd.domain, employees:rd.employees, industry:rd.industry, blurb:rd.blurb, revenue:rd.revenue, foundedYear:rd.foundedYear, socialMedia:rd.socialMedia, recentNews:rd.recentNews, eventsSite:rd.eventsSite, eventsWeb:rd.eventsWeb, observances:rd.observances, companyLinkedIn:rd.companyLinkedIn, contactLinkedIn:rd.contactLinkedIn, contactPerson:rd.contactPerson, decisionMakers:rd.decisionMakers, salesHooks:rd.salesHooks, keyPeople:rd.keyPeople||[], searchCostUSD:rd.searchCostUSD, searchDuration:rd.searchDuration, tradeShows:rd.tradeShows||[], competitors:rd.competitors||[], attackPlan:rd.attackPlan||'', attackPlans:rd.attackPlans||{}, attackPlanActive:rd.attackPlanActive||'', companyIntel:rd.companyIntel||'' }); } catch(e){ return ''; } })();
       rec.researchEvents = (function(){ try { return JSON.stringify({ events:(_researchData.eventsSite||[]).concat(_researchData.eventsWeb||[]), observances:_researchData.observances||[], tradeShows:_researchData.tradeShows||[] }); } catch(e){ return ''; } })();
       rec.researchNotes = typeof buildResearchBlock === 'function' ? buildResearchBlock() : '';
       rec.aiEmailHtml = (function(){ try { var el = document.getElementById('rp-email-preview-html'); return el ? (el._fullEmailDoc || el.innerHTML) : ''; } catch(e){ return ''; } })();
@@ -12919,53 +12974,41 @@
     };
     var html = '';
 
-    // ── BLOCK 1: KNOW THE COMPANY ──
+    // ══════════════════════════════════════════════
+    // 1. KNOW THE COMPANY
+    // ══════════════════════════════════════════════
     html += bHdr('1', 'Know the company', '#2563eb', '#1e40af');
+
+    // Company Intel (flowing left-border block)
     if (rd.companyIntel) {
-      html += '<div style="margin-bottom:14px;"><div class="section-title">Company Intel</div><div class="intel-box">'+rd.companyIntel+'</div></div>';
+      // Replace "SAY THIS ON THE CALL" with "TALKING POINTS" in the intel HTML
+      var cleanIntel = rd.companyIntel.replace(/SAY THIS ON THE CALL/gi, 'TALKING POINTS').replace(/Say This On The Call/gi, 'Talking Points').replace(/say this on the call/gi, 'Talking points');
+      html += '<div style="margin-bottom:14px;"><div class="section-title">Company Intel</div><div class="intel-box">'+cleanIntel+'</div></div>';
     }
-    var profInner = fRow('Industry', rd.industry||'') + fRow('Employees', rd.employees||'') + fRow('Est. Revenue', rd.revenue||'') + fRow('Founded', rd.foundedYear||'');
-    if (o.website) profInner += fRow('Website', '<a href="'+(o.website.match(/^https?:\/\//)?o.website:'https://'+o.website)+'">'+o.website.replace(/^https?:\/\//i,'')+'</a>');
-    html += fSec('Company Profile', profInner);
 
+    // Company Snapshot strip
+    var snapCells = '';
+    if (rd.industry) snapCells += '<td style="text-align:center;padding:6px 4px;border-right:1px solid #f1f5f9;"><div style="font-size:8px;color:#64748b;text-transform:uppercase;letter-spacing:0.06em;">Industry</div><div style="font-size:11px;font-weight:700;color:#1e293b;margin-top:1px;">'+rd.industry+'</div></td>';
+    if (rd.employees) snapCells += '<td style="text-align:center;padding:6px 4px;border-right:1px solid #f1f5f9;"><div style="font-size:8px;color:#64748b;text-transform:uppercase;letter-spacing:0.06em;">Employees</div><div style="font-size:11px;font-weight:700;color:#1e293b;margin-top:1px;">'+rd.employees+'</div></td>';
+    if (rd.revenue) snapCells += '<td style="text-align:center;padding:6px 4px;border-right:1px solid #f1f5f9;"><div style="font-size:8px;color:#64748b;text-transform:uppercase;letter-spacing:0.06em;">Revenue</div><div style="font-size:11px;font-weight:700;color:#1e293b;margin-top:1px;">'+rd.revenue+'</div></td>';
+    if (rd.foundedYear) snapCells += '<td style="text-align:center;padding:6px 4px;border-right:1px solid #f1f5f9;"><div style="font-size:8px;color:#64748b;text-transform:uppercase;letter-spacing:0.06em;">Founded</div><div style="font-size:11px;font-weight:700;color:#1e293b;margin-top:1px;">'+rd.foundedYear+'</div></td>';
+    // Social media summary
     var sm = rd.socialMedia || {};
-    var socialInner = '';
-    if (rd.companyLinkedIn) socialInner += fRow('LinkedIn', '<a href="'+rd.companyLinkedIn+'">'+rd.companyLinkedIn.replace('https://','')+'</a>');
-    ['facebook','instagram','twitter','tiktok','youtube','snapchat'].forEach(function(k){ if(sm[k]) socialInner += fRow(k.charAt(0).toUpperCase()+k.slice(1),'<a href="'+sm[k]+'">'+sm[k].replace('https://','')+'</a>'); });
-    if (socialInner) html += fSec('Social Media', socialInner);
-
-    // ── BLOCK 2: KNOW YOUR ANGLES ──
-    html += bHdr('2', 'Know your angles', '#d97706', '#92400e');
-
-    if (rd.salesHooks && rd.salesHooks.length) {
-      var catColors = { milestone:'#dc2626', news:'#dc2626', expansion:'#d97706', hiring:'#d97706', brand:'#2563eb', sponsorship:'#2563eb', campaign:'#2563eb', award:'#7c3aed', industry:'#7c3aed' };
-      var hookRows = rd.salesHooks.map(function(h) {
-        var dotClr = catColors[h.type] || '#64748b';
-        return '<tr>' +
-          '<td style="padding:5px 8px 5px 0;vertical-align:top;width:14px;"><div style="display:inline-block;width:7px;height:7px;border-radius:50%;background:'+dotClr+';margin-top:3px;"></div></td>' +
-          '<td style="padding:5px 0;vertical-align:top;border-bottom:1px solid #f1f5f9;">' +
-            '<div style="font-size:11px;font-weight:600;color:#1e293b;">'+(h.finding||h.hook||'')+'</div>' +
-            (h.pitch?'<div style="font-size:10px;color:#059669;margin-top:1px;">'+h.pitch+'</div>':'') +
-          '</td></tr>';
-      }).join('');
-      html += fSec('Call Cheat Sheet ('+rd.salesHooks.length+')', hookRows);
+    var socialShort = [];
+    if (rd.companyLinkedIn) socialShort.push('<a href="'+rd.companyLinkedIn+'">LI</a>');
+    if (sm.facebook) socialShort.push('<a href="'+sm.facebook+'">FB</a>');
+    if (sm.instagram) socialShort.push('<a href="'+sm.instagram+'">IG</a>');
+    if (sm.twitter) socialShort.push('<a href="'+sm.twitter+'">TW</a>');
+    if (sm.tiktok) socialShort.push('<a href="'+sm.tiktok+'">TT</a>');
+    if (sm.youtube) socialShort.push('<a href="'+sm.youtube+'">YT</a>');
+    if (socialShort.length) snapCells += '<td style="text-align:center;padding:6px 4px;"><div style="font-size:8px;color:#64748b;text-transform:uppercase;letter-spacing:0.06em;">Social</div><div style="font-size:10px;color:#60a5fa;margin-top:1px;">'+socialShort.join(' &middot; ')+'</div></td>';
+    if (snapCells) {
+      html += '<div class="section" style="margin-bottom:10px;"><div class="section-title">Company Snapshot</div><table style="width:100%;border-collapse:collapse;border:1px solid #e2e8f0;"><tr>'+snapCells+'</tr></table>';
+      if (o.website) html += '<div style="margin-top:4px;font-size:10px;color:#64748b;"><a href="'+(o.website.match(/^https?:\/\//)?o.website:'https://'+o.website)+'">'+o.website.replace(/^https?:\/\//i,'')+'</a></div>';
+      html += '</div>';
     }
 
-    var pdfTS = rd.tradeShows || [];
-    var allEvts = dh.sortByDate((rd.eventsSite||[]).concat(rd.eventsWeb||[]));
-    var obs = dh.sortByDate(rd.observances || []);
-    var eventsRows = '';
-    if (pdfTS.length) {
-      pdfTS.slice().sort(function(a,b){ var co={confirmed:0,likely:1,'industry-match':2}; var ca=co[a.confidence]!==undefined?co[a.confidence]:2,cb=co[b.confidence]!==undefined?co[b.confidence]:2; if(ca!==cb)return ca-cb; return (dh.parse(a.date)||Infinity)-(dh.parse(b.date)||Infinity); }).forEach(function(t) {
-        var confLabel = t.confidence==='confirmed'?' <span style="color:#059669;font-weight:700;font-size:9px;">[CONFIRMED]</span>':t.confidence==='likely'?' <span style="color:#d97706;font-weight:700;font-size:9px;">[LIKELY]</span>':' <span style="color:#94a3b8;font-weight:700;font-size:9px;">[INDUSTRY]</span>';
-        eventsRows += fRow((t.date||''), '<strong>'+(t.title||'')+'</strong> <span style="font-size:9px;color:#7c3aed;font-weight:700;">[TRADESHOW]</span>'+confLabel+dh.badge(t.date)+(t.venue?' &middot; '+t.venue:''));
-      });
-    }
-    if (allEvts.length) { allEvts.forEach(function(e){ eventsRows += fRow((e.date||''), '<strong>'+(e.title||'')+'</strong>'+(e.recurring?' <span style="color:#c2410c;font-size:9px;">[RECURRING]</span>':'')+dh.badge(e.date)+(e.venue?' &middot; '+e.venue:'')); }); }
-    if (obs.length) { obs.forEach(function(oo){ eventsRows += fRow((oo.date||''), (oo.title||'')+' <span style="font-size:9px;color:#64748b;">[INDUSTRY DATE]</span>'+dh.badge(oo.date)); }); }
-    var totalEvts = pdfTS.length + allEvts.length + obs.length;
-    if (eventsRows) html += fSec('Events & Dates ('+totalEvts+')', eventsRows);
-
+    // Competitors
     var comps = rd.competitors || [];
     if (comps.length) {
       var compRows = comps.map(function(c) {
@@ -12974,9 +13017,58 @@
       html += fSec('Competitors ('+comps.length+')', compRows);
     }
 
-    // ── BLOCK 3: KNOW THE PEOPLE ──
-    html += bHdr('3', 'Know the people', '#7c3aed', '#5b21b6');
+    // Recent News
+    if (rd.recentNews && rd.recentNews.length) {
+      var newsRows = rd.recentNews.map(function(n){ return fRow('<span style="color:#f59e0b;font-weight:600;">'+(n.date||'')+'</span>', (n.sourceUrl?'<a href="'+n.sourceUrl+'" style="color:#1e293b;text-decoration:underline;text-underline-offset:2px;">'+(n.headline||'')+'</a>':(n.headline||''))); }).join('');
+      html += fSec('Recent News', newsRows);
+    }
 
+    // ══════════════════════════════════════════════
+    // 2. KNOW THEIR EVENTS
+    // ══════════════════════════════════════════════
+    var pdfTS = rd.tradeShows || [];
+    var allEvts = dh.sortByDate((rd.eventsSite||[]).concat(rd.eventsWeb||[]));
+    var obs = dh.sortByDate(rd.observances || []);
+    var totalEvts = pdfTS.length + allEvts.length + obs.length;
+
+    if (totalEvts > 0) {
+      html += bHdr('2', 'Know their events', '#d97706', '#92400e');
+
+      var evtRows = '';
+      // Trade shows
+      if (pdfTS.length) {
+        pdfTS.slice().sort(function(a,b){ var co={confirmed:0,likely:1,'industry-match':2}; var ca=co[a.confidence]!==undefined?co[a.confidence]:2,cb=co[b.confidence]!==undefined?co[b.confidence]:2; if(ca!==cb)return ca-cb; return (dh.parse(a.date)||Infinity)-(dh.parse(b.date)||Infinity); }).forEach(function(t) {
+          var diff = dh.daysAway(t.date);
+          var isPast = diff !== null && diff < 0;
+          var confLabel = t.confidence==='confirmed'?' <span style="color:#059669;font-weight:700;font-size:9px;">[CONFIRMED]</span>':t.confidence==='likely'?' <span style="color:#d97706;font-weight:700;font-size:9px;">[LIKELY]</span>':'';
+          var dateShort = (function(s){ if(!s)return ''; var d=dh.parse(s); if(!d)return s; return d.toLocaleDateString('en-US',{month:'short',day:'numeric'}); })(t.date);
+          evtRows += '<tr style="border-bottom:1px solid #f1f5f9;'+(isPast?'opacity:0.45;':'')+'"><td style="padding:4px 8px 4px 0;width:60px;font-size:10px;font-weight:600;color:'+(isPast?'#94a3b8':'#059669')+';">'+dateShort+'</td><td style="padding:4px 0;"><div style="font-size:11px;font-weight:600;color:'+(isPast?'#94a3b8':'#1e293b')+';"><strong>'+(t.title||'')+'</strong> <span style="font-size:9px;color:#7c3aed;font-weight:700;">[TRADESHOW]</span>'+confLabel+dh.badge(t.date)+'</div>'+(t.venue?'<div style="font-size:10px;color:#64748b;">'+t.venue+'</div>':'')+'</td></tr>';
+        });
+      }
+      // Company events
+      if (allEvts.length) {
+        allEvts.forEach(function(e) {
+          var diff = dh.daysAway(e.date);
+          var isPast = diff !== null && diff < 0;
+          var dateShort = (function(s){ if(!s)return ''; var d=dh.parse(s); if(!d)return s; return d.toLocaleDateString('en-US',{month:'short',day:'numeric'}); })(e.date);
+          evtRows += '<tr style="border-bottom:1px solid #f1f5f9;'+(isPast?'opacity:0.45;':'')+'"><td style="padding:4px 8px 4px 0;width:60px;font-size:10px;font-weight:600;color:'+(isPast?'#94a3b8':'#059669')+';">'+dateShort+'</td><td style="padding:4px 0;"><div style="font-size:11px;font-weight:600;color:'+(isPast?'#94a3b8':'#1e293b')+';"><strong>'+(e.title||'')+'</strong>'+(e.recurring?' <span style="color:#c2410c;font-size:9px;">[RECURRING]</span>':'')+dh.badge(e.date)+'</div>'+(e.venue?'<div style="font-size:10px;color:#64748b;">'+e.venue+'</div>':'')+'</td></tr>';
+        });
+      }
+      // Industry dates
+      if (obs.length) {
+        obs.forEach(function(oo) {
+          var diff = dh.daysAway(oo.date);
+          var isPast = diff !== null && diff < 0;
+          var dateShort = (function(s){ if(!s)return ''; var d=dh.parse(s); if(!d)return s; return d.toLocaleDateString('en-US',{month:'short',day:'numeric'}); })(oo.date);
+          evtRows += '<tr style="border-bottom:1px solid #f1f5f9;'+(isPast?'opacity:0.45;':'')+'"><td style="padding:4px 8px 4px 0;width:60px;font-size:10px;font-weight:600;color:'+(isPast?'#94a3b8':'#059669')+';">'+dateShort+'</td><td style="padding:4px 0;"><div style="font-size:11px;'+(isPast?'color:#94a3b8;':'font-weight:600;color:#1e293b;')+'">'+(oo.title||'')+' <span style="font-size:9px;color:#64748b;">[INDUSTRY]</span>'+dh.badge(oo.date)+'</div></td></tr>';
+        });
+      }
+      html += fSec('Events & Dates ('+totalEvts+')', evtRows);
+    }
+
+    // ══════════════════════════════════════════════
+    // 3. WHO'S CALLING THE SHOTS
+    // ══════════════════════════════════════════════
     var dm = rd.decisionMakers || {};
     var dmRows = '';
     [{key:'ownerExec',label:'Owner / Exec'},{key:'marketing',label:'Marketing'},{key:'procurement',label:'Procurement'}].forEach(function(r){
@@ -12985,19 +13077,36 @@
     });
     var kp = rd.keyPeople || [];
     kp.forEach(function(p){ if(p.name) dmRows += fRow((p.role||'Key Person'), '<strong>'+p.name+'</strong>'+(p.title?' &mdash; '+p.title:'')+(p.linkedin?' <a href="'+p.linkedin+'">[LinkedIn]</a>':'')); });
-    if (dmRows) html += fSec('Decision Makers & Key People', dmRows);
-
-    if (rd.recentNews && rd.recentNews.length) {
-      var newsRows = rd.recentNews.map(function(n){ return fRow((n.date||''), (n.sourceUrl?'<a href="'+n.sourceUrl+'" style="color:#1e293b;text-decoration:underline;text-underline-offset:2px;">'+(n.headline||'')+'</a>':(n.headline||''))); }).join('');
-      html += fSec('Recent News', newsRows);
+    if (dmRows) {
+      html += bHdr('3', "Who\u2019s calling the shots", '#7c3aed', '#5b21b6');
+      html += fSec('Decision Makers & Key People', dmRows);
     }
 
-    if (rd.attackPlan) {
-      var cleanAtk = rd.attackPlan.replace(/<button[^>]*>[\s\S]*?<\/button>/gi, '').replace(/Regenerate/g, '');
-      html += '<div style="margin-bottom:14px;"><div class="section-title">Attack Plan</div><div class="atk-box">'+cleanAtk+'</div></div>';
+    // ══════════════════════════════════════════════
+    // 4. HOW WE CAN HELP
+    // ══════════════════════════════════════════════
+    html += bHdr('4', 'How we can help', '#059669', '#166534');
+
+    // Hooks with type badges
+    if (rd.salesHooks && rd.salesHooks.length) {
+      var hookColors = { milestone:'#92400e', news:'#991b1b', expansion:'#991b1b', hiring:'#991b1b', brand:'#1e40af', sponsorship:'#1e40af', campaign:'#1e40af', award:'#5b21b6', industry:'#5b21b6' };
+      var hookBgs = { milestone:'#fffbeb', news:'#fef2f2', expansion:'#fef2f2', hiring:'#fef2f2', brand:'#eff6ff', sponsorship:'#eff6ff', campaign:'#eff6ff', award:'#f5f3ff', industry:'#f5f3ff' };
+      var hookBorders = { milestone:'#fde68a', news:'#fecaca', expansion:'#fecaca', hiring:'#fecaca', brand:'#bfdbfe', sponsorship:'#bfdbfe', campaign:'#bfdbfe', award:'#ddd6fe', industry:'#ddd6fe' };
+      var hookRows = rd.salesHooks.map(function(h) {
+        var t = (h.type||'').toLowerCase();
+        var tc = hookColors[t] || '#64748b';
+        var bg = hookBgs[t] || '#f8fafc';
+        var bd = hookBorders[t] || '#e2e8f0';
+        return '<tr><td colspan="2" style="padding:5px 0;border-bottom:1px solid #f1f5f9;">' +
+          '<div style="margin-bottom:2px;"><span style="font-size:8px;font-weight:700;padding:2px 6px;background:'+bg+';border:1px solid '+bd+';color:'+tc+';text-transform:uppercase;letter-spacing:0.06em;">'+(h.type||'hook')+'</span></div>' +
+          '<div style="font-size:11px;font-weight:600;color:#1e293b;">'+(h.finding||h.hook||'')+'</div>' +
+          (h.pitch?'<div style="font-size:10px;color:#059669;margin-top:1px;">'+h.pitch+'</div>':'') +
+        '</td></tr>';
+      }).join('');
+      html += fSec('Call Cheat Sheet ('+rd.salesHooks.length+')', hookRows);
     }
 
-    // ── SCORING BREAKDOWN (SC only) ──
+    // Scoring Breakdown (SC only)
     if (!o.isRO) {
       html += '<div class="section"><div class="section-title">Scoring Breakdown</div>' +
         '<table class="score-grid"><tr>' +
@@ -13013,7 +13122,7 @@
         '</tr></table></div>';
     }
 
-    // ── CONTACT & DETAILS ──
+    // Contact & Details
     var contactInner = fRow('Customer Name', o.name) +
       fRow('Phone', o.phone?(o.phone!=='\u2014'?'<a href="tel:'+o.phone.replace(/\D/g,'')+'" style="color:#1e293b;text-decoration:none;">'+o.phone+'</a>':''):'') +
       fRow('Email', o.email?(o.email!=='\u2014'?'<a href="mailto:'+o.email+'">'+o.email+'</a>':''):'') +
@@ -15457,20 +15566,17 @@
     var _lbPv = _ar ? (_ar.pvLabel || '') : labels.pv;
     var _lbAv = _ar ? (_ar.avLabel || '') : labels.av;
     var _arOverride = _ar ? (_ar.assignOverride || null) : _assignOverride;
-    var _allSig3 = _scIv !== null && _scPv !== null && _scAv !== null;
-    var _emailV3 = (_ar ? (_ar.email || '') : document.getElementById('f-email').value).trim();
-    var _emailOk3 = _emailV3 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(_emailV3);
-    var _contact3 = !!((_ar ? (_ar.phone || '') : document.getElementById('f-phone').value).trim() || _emailOk3);
     var name    = (_ar ? (_ar.name || '') : document.getElementById('f-name').value).trim() || '\u2014';
     var company = (_ar ? (_ar.company || '') : document.getElementById('f-company').value).trim() || '\u2014';
     var phone   = (_ar ? (_ar.phone || '') : document.getElementById('f-phone').value).trim() || '\u2014';
-    var emailVal= _emailV3 || '\u2014';
+    var _emailV = (_ar ? (_ar.email || '') : document.getElementById('f-email').value).trim();
+    var emailVal= _emailV || '\u2014';
     var cid     = (_ar ? (_ar.cid || '') : document.getElementById('f-cid').value).trim() || '\u2014';
     var budgetAmt = _ar ? (_ar.budget || '') : document.getElementById('f-budget').value.trim();
     var budgetFmt = budgetAmt ? '$' + Number(budgetAmt).toLocaleString() : '';
     var notes   = (_ar ? ((_ar.notes && _ar.notes !== '\u2014') ? _ar.notes : '') : document.getElementById('f-notes').value).trim();
     var allScored = _scIv !== null && _scIv > 0 && _scPv !== null && _scPv > 0 && _scAv !== null && _scAv > 0;
-    var emailValid2 = _emailV3 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(_emailV3);
+    var emailValid2 = _emailV && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(_emailV);
     var contactReady = !!((_ar ? (_ar.phone || '') : document.getElementById('f-phone').value).trim() || emailValid2);
     var formComplete = allScored && !!(_ar ? (_ar.name || '') : document.getElementById('f-name').value).trim() && contactReady && !!(_ar ? (_ar.budgetType || window._budgetType) : window._budgetType) && !!(_ar ? (_ar.customerType || window._customerType) : window._customerType);
     var total   = formComplete ? (_scIv||0) + (_scPv||0) + (_scAv||0) : 0;
@@ -15479,194 +15585,146 @@
     var _formTd = _formPc ? _tierDisplay(_arOverride || _formPc) : { name:'\u2014', priority:'\u2014' };
     var owner   = formComplete ? _formTd.name : '\u2014';
     var priority= formComplete ? _formTd.priority : '\u2014';
-    var pillClass = formComplete ? (_arOverride ? _arOverride : (total >= 7 ? 'ag' : total >= 4 ? 'cp' : 'asst')) : '';
     var stars   = formComplete ? (total >= 7 ? '\u2605\u2605\u2605\u2605\u2605' : total >= 4 ? '\u2605\u2605\u2605' : '\u2605') : '';
     var rd = _researchData || {};
     var dm = rd.decisionMakers || {};
     var sm = rd.socialMedia || {};
     var website = (_ar ? (_ar.website || '') : (document.getElementById('f-website')||{}).value || '').trim() || rd.domain || '';
-
-    // Detect research-only
     var _rdJsonCheck = (function(){ try { return (rd.industry||rd.blurb||(rd.eventsSite&&rd.eventsSite.length)||(rd.salesHooks&&rd.salesHooks.length)) ? JSON.stringify(rd) : ''; } catch(e){ return ''; } })();
     var isResearch = _classifyStatus(_rdJsonCheck, _scIv, _scPv, _scAv) === 'research';
+    var pc, tc, scoreNum, scoreMax;
+    if (isResearch) { var rIv=_scIv||0; pc=rIv>=3?'ag':rIv>=2?'cp':'asst'; scoreNum=rIv; scoreMax='3'; }
+    else if (formComplete) { pc=_arOverride||_formPc; scoreNum=total; scoreMax='9'; }
+    else { pc=''; scoreNum=0; scoreMax='9'; }
+    tc = pc ? _pdfTierCalc(pc) : { bg:'#0f172a', blockBg:'#1e293b', clr:'#94a3b8', bdr:'rgba(148,163,184,0.3)' };
+    var tierTd = pc ? _tierDisplay(pc) : { name:'\u2014', priority:'\u2014' };
+    var rep = window._currentRep || '\u2014';
 
     function prow(label, value) {
       if (!value || value === '\u2014') return '';
-      return '<tr><td style="padding:4px 14px 4px 0;font-size:12px;color:#64748b;white-space:nowrap;vertical-align:top;width:120px;">' + label + '</td>' +
-             '<td style="padding:4px 0;font-size:12px;color:#1e293b;font-weight:500;">' + value + '</td></tr>';
-    }
-    function esec(num, title, color, textColor) {
-      return '<tr><td colspan="2" style="padding:18px 0 6px;">' +
-        '<div style="border-top:2px solid '+color+';padding-top:10px;">' +
-        '<table style="width:100%" cellpadding="0" cellspacing="0"><tr>' +
-        '<td style="width:28px;vertical-align:middle;"><div style="width:24px;height:24px;border-radius:50%;background:'+color+';color:#fff;font-size:11px;font-weight:700;text-align:center;line-height:24px;">'+num+'</div></td>' +
-        '<td style="padding-left:8px;font-size:10px;font-weight:700;color:'+(textColor||color)+';letter-spacing:0.1em;text-transform:uppercase;vertical-align:middle;">'+title+'</td>' +
-        '</tr></table></div></td></tr>';
+      return '<tr><td style="padding:3px 10px 3px 0;font-size:11px;color:#64748b;white-space:nowrap;vertical-align:top;width:110px;">'+label+'</td><td style="padding:3px 0;font-size:11px;color:#1e293b;font-weight:500;">'+value+'</td></tr>';
     }
     function ssec(title) {
-      return '<tr><td colspan="2" style="padding:12px 0 6px;"><p style="margin:0;font-size:9px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.1em;border-bottom:1px solid #e2e8f0;padding-bottom:4px;">' + title + '</p></td></tr>';
+      return '<tr><td colspan="2" style="padding:10px 0 5px;"><p style="margin:0;font-size:8px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.12em;border-bottom:1px solid #e2e8f0;padding-bottom:4px;">'+title+'</p></td></tr>';
     }
-
-    // Tier colors
-    var pc, tc, tierTd, bannerBg, scoreNum, scoreMax;
-    if (isResearch) {
-      var rIv = _scIv || 0;
-      pc = rIv>=3?'ag':rIv>=2?'cp':'asst';
-      scoreNum = rIv; scoreMax = '3';
-    } else if (formComplete) {
-      pc = _arOverride || _formPc;
-      scoreNum = total; scoreMax = '9';
-    } else {
-      pc = ''; scoreNum = 0; scoreMax = '9';
+    function ebHdr(num, title, color, textColor) {
+      return '<tr><td colspan="2" style="padding:16px 0 6px;"><div style="border-top:2px solid '+color+';padding-top:8px;"><table style="width:100%" cellpadding="0" cellspacing="0"><tr><td style="width:28px;vertical-align:middle;"><div style="width:24px;height:24px;border-radius:50%;background:'+color+';color:#fff;font-size:11px;font-weight:700;text-align:center;line-height:24px;">'+num+'</div></td><td style="padding-left:8px;font-size:10px;font-weight:700;color:'+(textColor||color)+';letter-spacing:0.1em;text-transform:uppercase;vertical-align:middle;">'+title+'</td></tr></table></div></td></tr>';
     }
-    tc = pc ? _pdfTierCalc(pc) : { bg:'#0f172a', blockBg:'#1e293b', clr:'#94a3b8', bdr:'rgba(148,163,184,0.3)' };
-    tierTd = pc ? _tierDisplay(pc) : { name:'\u2014', priority:'\u2014' };
+    var dh = _pdfDateHelpers();
 
-    // ── BUILD A2 HEADER ──
-    var pillHtml = '<td style="padding:3px 6px;border-radius:4px;background:rgba(255,255,255,0.12);text-align:center;"><div style="font-size:8px;color:rgba(255,255,255,0.5);text-transform:uppercase;">IV</div><div style="font-size:12px;font-weight:700;color:#fff;">'+(_scIv||0)+'/3</div></td>' +
-      '<td style="padding:3px 6px;border-radius:4px;background:rgba(255,255,255,0.12);text-align:center;"><div style="font-size:8px;color:rgba(255,255,255,0.5);text-transform:uppercase;">PV</div><div style="font-size:12px;font-weight:700;color:'+(isResearch?'rgba(255,255,255,0.35)':'#fff')+';">'+(isResearch?'--':(_scPv||0)+'/3')+'</div></td>' +
-      '<td style="padding:3px 6px;border-radius:4px;background:rgba(255,255,255,0.12);text-align:center;"><div style="font-size:8px;color:rgba(255,255,255,0.5);text-transform:uppercase;">AV</div><div style="font-size:12px;font-weight:700;color:'+(isResearch?'rgba(255,255,255,0.35)':'#fff')+';">'+(isResearch?'--':(_scAv||0)+'/3')+'</div></td>';
+    // A2 Header
+    var pillHtml =
+      '<span style="display:inline-block;padding:3px 8px;background:rgba(255,255,255,0.12);font-size:11px;font-weight:700;color:#fff;margin-right:2px;">IV '+(_scIv||0)+'</span>' +
+      '<span style="display:inline-block;padding:3px 8px;background:rgba(255,255,255,0.12);font-size:11px;font-weight:700;color:'+(isResearch?'rgba(255,255,255,0.3)':'#fff')+';margin-right:2px;">PV '+(isResearch?'--':(_scPv||0))+'</span>' +
+      '<span style="display:inline-block;padding:3px 8px;background:rgba(255,255,255,0.12);font-size:11px;font-weight:700;color:'+(isResearch?'rgba(255,255,255,0.3)':'#fff')+';margin-right:6px;">AV '+(isResearch?'--':(_scAv||0))+'</span>' +
+      '<span style="display:inline-block;padding:4px 8px;background:'+tc.blockBg+';border:1px solid '+tc.bdr+';"><span style="font-size:13px;font-weight:700;color:#fff;">'+(isResearch?'RO':(formComplete?owner:'\u2014'))+'</span> <span style="font-size:8px;color:'+tc.clr+';font-weight:600;">'+(isResearch?'RESEARCH ONLY':(formComplete?priority:''))+'</span></span>';
 
     var headerHtml =
-      (isHot ? '<div style="background:#dc2626;padding:6px 20px;text-align:center;"><span style="font-size:11px;font-weight:700;color:#fff;letter-spacing:0.08em;text-transform:uppercase;">HOT \u2014 Needs Immediate Attention</span></div>' : '') +
+      (isHot ? '<div style="background:#dc2626;padding:6px 18px;text-align:center;"><span style="font-size:11px;font-weight:700;color:#fff;letter-spacing:0.08em;text-transform:uppercase;">HOT \u2014 Needs Immediate Attention</span></div>' : '') +
       '<table style="width:100%;border-collapse:collapse;background:'+tc.bg+';" cellpadding="0" cellspacing="0"><tr>' +
-        '<td style="padding:14px 16px;vertical-align:middle;width:55px;text-align:center;">' +
-          '<div style="font-size:30px;font-weight:700;color:#fff;line-height:1;">'+scoreNum+'<span style="font-size:14px;font-weight:400;color:rgba(255,255,255,0.5);">/'+scoreMax+'</span></div>' +
-          (isResearch ? '<div style="font-size:10px;color:rgba(255,255,255,0.5);margin-top:2px;">IV only</div>' : (stars ? '<div style="font-size:10px;color:rgba(255,255,255,0.7);margin-top:2px;">'+stars+'</div>' : '')) +
-        '</td>' +
-        '<td style="width:1px;padding:8px 0;vertical-align:middle;"><div style="width:1px;height:36px;background:rgba(255,255,255,0.15);"></div></td>' +
-        '<td style="padding:14px 12px;vertical-align:middle;">' +
-          '<div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:2px;">'+company+(rd.industry?' <span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;background:rgba(255,255,255,0.18);">'+rd.industry+'</span>':'')+'</div>' +
-          '<div style="font-size:11px;color:rgba(255,255,255,0.55);">'+(website||'')+(rd.employees?' &middot; '+rd.employees+' employees':'')+(rd.foundedYear?' &middot; Est. '+rd.foundedYear:'')+'</div>' +
-        '</td>' +
-        '<td style="padding:8px 8px;vertical-align:middle;"><table style="border-collapse:separate;border-spacing:2px;" cellpadding="0"><tr>'+pillHtml+'</tr></table></td>' +
-        '<td style="padding:14px 16px 14px 8px;vertical-align:middle;">' +
-          '<div style="text-align:center;padding:5px 12px;border-radius:8px;background:'+tc.blockBg+';border:1px solid '+tc.bdr+';">' +
-            '<div style="font-size:15px;font-weight:700;color:#fff;letter-spacing:0.03em;">'+(isResearch?'RO':(formComplete?owner:'\u2014'))+'</div>' +
-            '<div style="font-size:8px;color:'+tc.clr+';font-weight:600;letter-spacing:0.04em;margin-top:1px;">'+(isResearch?'RESEARCH ONLY':(formComplete?priority:'INCOMPLETE'))+'</div>' +
-          '</div>' +
-        '</td>' +
+        '<td style="padding:12px 14px;vertical-align:middle;width:55px;text-align:center;"><div style="font-size:28px;font-weight:700;color:#fff;line-height:1;">'+scoreNum+'<span style="font-size:12px;color:rgba(255,255,255,0.5);">/'+scoreMax+'</span></div>'+(isResearch?'<div style="font-size:9px;color:rgba(255,255,255,0.5);margin-top:2px;">IV only</div>':(stars?'<div style="font-size:10px;color:rgba(255,255,255,0.7);margin-top:2px;">'+stars+'</div>':''))+'</td>' +
+        '<td style="width:1px;padding:8px 0;"><div style="width:1px;height:30px;background:rgba(255,255,255,0.15);"></div></td>' +
+        '<td style="padding:10px 12px;"><div style="font-size:13px;font-weight:700;color:#fff;">'+company+(rd.industry?' <span style="font-size:9px;padding:1px 6px;background:rgba(255,255,255,0.18);">'+rd.industry+'</span>':'')+'</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">'+(website?website.replace(/^https?:\/\//i,''):'')+' &middot; '+(rd.employees||'')+' employees'+(rd.foundedYear?' &middot; Est. '+rd.foundedYear:'')+'</div></td>' +
+        '<td style="padding:10px 14px;text-align:right;white-space:nowrap;">'+pillHtml+'</td>' +
       '</tr></table>';
 
-    // Blurb + info bar
-    var blurbHtml = rd.blurb ? '<div style="padding:8px 18px;font-size:11px;color:#475569;line-height:1.6;border-bottom:1px solid #e2e8f0;background:#f8fafc;">'+rd.blurb+'</div>' : '';
-    var rep = window._currentRep || '\u2014';
+    var blurbHtml = rd.blurb ? '<div style="padding:6px 18px;font-size:10px;color:#475569;line-height:1.5;border-bottom:1px solid #e2e8f0;">'+rd.blurb+'</div>' : '';
     var ipaNum = window._lastSavedRecordNum || '';
     var dateNow = new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
-    var infoBar = '<div style="display:flex;justify-content:space-between;padding:6px 18px;font-size:10px;color:#94a3b8;border-bottom:1px solid #e2e8f0;">' +
-      '<span>'+(ipaNum?ipaNum+' &middot; ':'')+'Entered by '+rep+' &middot; '+dateNow+'</span>' +
-      '<span>'+name+(emailVal!=='\u2014'?' &middot; '+emailVal:'')+(phone!=='\u2014'?' &middot; '+phone:'')+'</span></div>';
+    var infoBar = '<div style="padding:5px 18px;font-size:9px;color:#94a3b8;border-bottom:1px solid #e2e8f0;">'+
+      (ipaNum?ipaNum+' &middot; ':'')+' Entered by '+rep+' &middot; '+dateNow+'</div>';
 
-    // ── THREE CONTENT BLOCKS ──
-    var dh = _pdfDateHelpers();
+    // Body
     var bodyHtml = '<div style="padding:14px 18px;"><table style="width:100%;border-collapse:collapse;">';
 
-    // TO DO banner (SC only)
+    // TO DO banners
+    var pillClass = formComplete ? (_arOverride ? _arOverride : _formPc) : '';
     if (!isResearch && formComplete) {
-      if (pillClass === 'asst') bodyHtml += '<tr><td colspan="2" style="padding:8px 12px;background:#fef2f2;border-left:4px solid #ef4444;border-radius:0 4px 4px 0;margin-bottom:8px;"><p style="margin:0;font-size:12px;font-weight:700;color:#dc2626;">TO DO: Kill future tasks in Insights.</p></td></tr>';
-      else if (total >= 6 && (window._customerType||'') === 'Existing Customer') bodyHtml += '<tr><td colspan="2" style="padding:8px 12px;background:#f0fdf4;border-left:4px solid #16a34a;border-radius:0 4px 4px 0;margin-bottom:8px;"><p style="margin:0;font-size:12px;font-weight:700;color:#16a34a;">TO DO: Enable tasks in Insights for this customer.</p></td></tr>';
+      if (pillClass === 'asst') bodyHtml += '<tr><td colspan="2" style="padding:8px 12px;background:#fef2f2;border-left:4px solid #ef4444;margin-bottom:8px;"><p style="margin:0;font-size:12px;font-weight:700;color:#dc2626;">TO DO: Kill future tasks in Insights.</p></td></tr>';
+      else if (total >= 6 && (window._customerType||'') === 'Existing Customer') bodyHtml += '<tr><td colspan="2" style="padding:8px 12px;background:#f0fdf4;border-left:4px solid #16a34a;margin-bottom:8px;"><p style="margin:0;font-size:12px;font-weight:700;color:#16a34a;">TO DO: Enable tasks in Insights for this customer.</p></td></tr>';
     }
 
-    // BLOCK 1: Know the company
-    bodyHtml += esec('1', 'Know the company', '#2563eb', '#1e40af');
-    if (rd.companyIntel) bodyHtml += '<tr><td colspan="2" style="padding:6px 0;"><div style="border-left:3px solid #60a5fa;padding-left:12px;font-size:11px;color:#334155;line-height:1.7;">'+rd.companyIntel+'</div></td></tr>';
-    bodyHtml += ssec('Company Profile');
+    // 1. Know the company
+    bodyHtml += ebHdr('1', 'Know the company', '#2563eb', '#1e40af');
+    if (rd.companyIntel) {
+      var cleanIntel = rd.companyIntel.replace(/SAY THIS ON THE CALL/gi, 'TALKING POINTS').replace(/Say This On The Call/gi, 'Talking Points');
+      bodyHtml += '<tr><td colspan="2" style="padding:6px 0;"><div style="border-left:3px solid #60a5fa;padding:6px 0 6px 12px;font-size:10px;color:#334155;line-height:1.6;">'+cleanIntel+'</div></td></tr>';
+    }
+    bodyHtml += ssec('Company Snapshot');
     bodyHtml += prow('Industry', rd.industry||'') + prow('Employees', rd.employees||'') + prow('Est. Revenue', rd.revenue||'') + prow('Founded', rd.foundedYear||'');
     if (website) bodyHtml += prow('Website', '<a href="'+(website.match(/^https?:\/\//)?website:'https://'+website)+'" style="color:#1D9E75;">'+website.replace(/^https?:\/\//i,'')+'</a>');
-    // Social Media
     var socialLinks = [];
-    if (rd.companyLinkedIn) socialLinks.push('<a href="'+rd.companyLinkedIn+'" style="color:#60a5fa;text-decoration:none;">LinkedIn</a>');
-    ['facebook','instagram','twitter','tiktok','youtube','snapchat'].forEach(function(k){ if(sm[k]) socialLinks.push('<a href="'+sm[k]+'" style="color:#60a5fa;text-decoration:none;">'+k.charAt(0).toUpperCase()+k.slice(1)+'</a>'); });
-    if (socialLinks.length) bodyHtml += prow('Social Media', socialLinks.join(' &middot; '));
-
-    // BLOCK 2: Know your angles
-    bodyHtml += esec('2', 'Know your angles', '#d97706', '#92400e');
-    if (rd.salesHooks && rd.salesHooks.length) {
-      bodyHtml += ssec('Call Cheat Sheet ('+rd.salesHooks.length+')');
-      var catColors = { milestone:'#dc2626', news:'#dc2626', expansion:'#d97706', hiring:'#d97706', brand:'#2563eb', award:'#7c3aed', industry:'#7c3aed' };
-      rd.salesHooks.forEach(function(h) {
-        var dotClr = catColors[h.type] || '#64748b';
-        bodyHtml += '<tr><td style="padding:5px 8px 5px 0;vertical-align:top;width:12px;"><div style="width:7px;height:7px;border-radius:50%;background:'+dotClr+';margin-top:4px;"></div></td>' +
-          '<td style="padding:5px 0;vertical-align:top;border-bottom:1px solid #f1f5f9;">' +
-            '<div style="font-size:12px;font-weight:600;color:#1e293b;">'+(h.finding||h.hook||'')+'</div>' +
-            (h.pitch?'<div style="font-size:11px;color:#059669;margin-top:2px;">'+h.pitch+'</div>':'') +
-          '</td></tr>';
-      });
+    if (rd.companyLinkedIn) socialLinks.push('<a href="'+rd.companyLinkedIn+'" style="color:#60a5fa;">LinkedIn</a>');
+    ['facebook','instagram','twitter','tiktok','youtube'].forEach(function(k){ if(sm[k]) socialLinks.push('<a href="'+sm[k]+'" style="color:#60a5fa;">'+k.charAt(0).toUpperCase()+k.slice(1)+'</a>'); });
+    if (socialLinks.length) bodyHtml += prow('Social', socialLinks.join(' &middot; '));
+    var comps = rd.competitors || [];
+    if (comps.length) {
+      bodyHtml += ssec('Competitors ('+comps.length+')');
+      comps.forEach(function(c){ bodyHtml += prow((c.name||''), (c.overlap||'')+(c.differentiator?' <span style="color:#dc2626;font-style:italic;font-size:10px;">'+c.differentiator+'</span>':'')+(c.website?' <a href="'+c.website+'" style="font-size:10px;color:#1D9E75;">'+c.website.replace(/^https?:\/\/(www\.)?/,'').replace(/\/.*$/,'')+'</a>':'')); });
     }
-    // Events & Dates
+    if (rd.recentNews && rd.recentNews.length) {
+      bodyHtml += ssec('Recent News');
+      rd.recentNews.forEach(function(n){ bodyHtml += prow('<span style="color:#f59e0b;font-weight:600;">'+(n.date||'')+'</span>', (n.sourceUrl?'<a href="'+n.sourceUrl+'" style="color:#1e293b;text-decoration:underline;">'+(n.headline||'')+'</a>':(n.headline||''))); });
+    }
+
+    // 2. Know their events
     var pdfTS = rd.tradeShows || [];
     var allEvts = dh.sortByDate((rd.eventsSite||[]).concat(rd.eventsWeb||[]));
     var obs = dh.sortByDate(rd.observances || []);
     var totalEvts = pdfTS.length + allEvts.length + obs.length;
     if (totalEvts) {
+      bodyHtml += ebHdr('2', 'Know their events', '#d97706', '#92400e');
       bodyHtml += ssec('Events & Dates ('+totalEvts+')');
-      if (pdfTS.length) {
-        pdfTS.forEach(function(t) {
-          var confLabel = t.confidence==='confirmed'?' [CONFIRMED]':t.confidence==='likely'?' [LIKELY]':' [INDUSTRY]';
-          bodyHtml += prow((t.date||''), '<strong>'+(t.title||'')+'</strong> <span style="color:#7c3aed;font-size:9px;font-weight:700;">[TRADESHOW]</span><span style="font-size:9px;font-weight:700;color:#059669;">'+confLabel+'</span>'+dh.badge(t.date)+(t.venue?' &middot; '+t.venue:''));
-        });
+      function addEvtRow(date, title, extra, isPast) {
+        var dateShort = (function(s){ if(!s)return ''; var d=dh.parse(s); if(!d)return s; return d.toLocaleDateString('en-US',{month:'short',day:'numeric'}); })(date);
+        bodyHtml += '<tr style="'+(isPast?'opacity:0.45;':'')+'"><td style="padding:4px 8px 4px 0;width:60px;font-size:10px;font-weight:600;color:'+(isPast?'#94a3b8':'#059669')+';">'+dateShort+'</td><td style="padding:4px 0;font-size:11px;'+(isPast?'color:#94a3b8;':'font-weight:600;color:#1e293b;')+'">'+title+extra+'</td></tr>';
       }
-      allEvts.forEach(function(e){ bodyHtml += prow((e.date||''), '<strong>'+(e.title||'')+'</strong>'+(e.recurring?' <span style="color:#c2410c;font-size:9px;">[RECURRING]</span>':'')+dh.badge(e.date)+(e.venue?' &middot; '+e.venue:'')); });
-      obs.forEach(function(o){ bodyHtml += prow((o.date||''), (o.title||'')+' <span style="color:#64748b;font-size:9px;">[INDUSTRY DATE]</span>'+dh.badge(o.date)); });
-    }
-    // Competitors
-    var comps = rd.competitors || [];
-    if (comps.length) {
-      bodyHtml += ssec('Competitors ('+comps.length+')');
-      comps.forEach(function(c) { bodyHtml += prow((c.name||''), (c.overlap||'')+(c.differentiator?' <span style="color:#dc2626;font-style:italic;font-size:10px;">'+c.differentiator+'</span>':'')+(c.website?' <a href="'+c.website+'" style="color:#1D9E75;font-size:10px;">'+c.website.replace(/^https?:\/\/(www\.)?/,'').replace(/\/.*$/,'')+'</a>':'')); });
+      pdfTS.forEach(function(t){ var diff=dh.daysAway(t.date); addEvtRow(t.date, '<strong>'+(t.title||'')+'</strong> <span style="font-size:9px;color:#7c3aed;font-weight:700;">[TRADESHOW]</span>', dh.badge(t.date), diff!==null&&diff<0); });
+      allEvts.forEach(function(e){ var diff=dh.daysAway(e.date); addEvtRow(e.date, '<strong>'+(e.title||'')+'</strong>'+(e.recurring?' <span style="color:#c2410c;font-size:9px;">[RECURRING]</span>':''), dh.badge(e.date), diff!==null&&diff<0); });
+      obs.forEach(function(oo){ var diff=dh.daysAway(oo.date); addEvtRow(oo.date, (oo.title||'')+' <span style="font-size:9px;color:#64748b;">[INDUSTRY]</span>', dh.badge(oo.date), diff!==null&&diff<0); });
     }
 
-    // BLOCK 3: Know the people
-    bodyHtml += esec('3', 'Know the people', '#7c3aed', '#5b21b6');
-    var dmRows = '';
+    // 3. Who's calling the shots
+    var dmRows2 = '';
     [{key:'ownerExec',label:'Owner / Exec'},{key:'marketing',label:'Marketing'},{key:'procurement',label:'Procurement'}].forEach(function(r){
       var p = dm[r.key]; if(!p||!p.name) return;
-      dmRows += prow(r.label, '<strong>'+p.name+'</strong>'+(p.title?' \u2014 '+p.title:'')+(p.linkedin?' <a href="'+p.linkedin+'" style="color:#60a5fa;font-size:10px;">[LinkedIn]</a>':''));
+      dmRows2 += prow(r.label, '<strong>'+p.name+'</strong>'+(p.title?' \u2014 '+p.title:'')+(p.linkedin?' <a href="'+p.linkedin+'" style="color:#60a5fa;">[LinkedIn]</a>':''));
     });
     var kp = rd.keyPeople || [];
-    kp.forEach(function(p){ if(p.name) dmRows += prow((p.role||'Key Person'), '<strong>'+p.name+'</strong>'+(p.title?' \u2014 '+p.title:'')+(p.linkedin?' <a href="'+p.linkedin+'" style="color:#60a5fa;font-size:10px;">[LinkedIn]</a>':'')); });
-    if (dmRows) { bodyHtml += ssec('Decision Makers & Key People'); bodyHtml += dmRows; }
-    if (rd.recentNews && rd.recentNews.length) {
-      bodyHtml += ssec('Recent News');
-      rd.recentNews.forEach(function(n){ bodyHtml += prow((n.date||''), (n.sourceUrl?'<a href="'+n.sourceUrl+'" style="color:#1e293b;text-decoration:underline;text-underline-offset:2px;">'+(n.headline||'')+'</a>':(n.headline||''))); });
-    }
-    if (rd.attackPlan) {
-      var cleanAtkEmail = rd.attackPlan.replace(/<button[^>]*>[\s\S]*?<\/button>/gi, '').replace(/Regenerate/g, '');
-      bodyHtml += ssec('Attack Plan');
-      bodyHtml += '<tr><td colspan="2" style="padding:6px 0;"><div style="border-left:3px solid #f59e0b;padding-left:12px;font-size:11px;color:#334155;line-height:1.6;">'+cleanAtkEmail+'</div></td></tr>';
+    kp.forEach(function(p){ if(p.name) dmRows2 += prow((p.role||'Key Person'), '<strong>'+p.name+'</strong>'+(p.title?' \u2014 '+p.title:'')+(p.linkedin?' <a href="'+p.linkedin+'" style="color:#60a5fa;">[LinkedIn]</a>':'')); });
+    if (dmRows2) {
+      bodyHtml += ebHdr('3', "Who\u2019s calling the shots", '#7c3aed', '#5b21b6');
+      bodyHtml += ssec('Decision Makers & Key People');
+      bodyHtml += dmRows2;
     }
 
-    // Scoring breakdown (SC only)
+    // 4. How we can help
+    bodyHtml += ebHdr('4', 'How we can help', '#059669', '#166534');
+    if (rd.salesHooks && rd.salesHooks.length) {
+      var hookColors = { milestone:'#92400e', news:'#991b1b', expansion:'#991b1b', hiring:'#991b1b', brand:'#1e40af', award:'#5b21b6', industry:'#5b21b6' };
+      var hookBgs = { milestone:'#fffbeb', news:'#fef2f2', expansion:'#fef2f2', hiring:'#fef2f2', brand:'#eff6ff', award:'#f5f3ff', industry:'#f5f3ff' };
+      var hookBorders = { milestone:'#fde68a', news:'#fecaca', expansion:'#fecaca', hiring:'#fecaca', brand:'#bfdbfe', award:'#ddd6fe', industry:'#ddd6fe' };
+      bodyHtml += ssec('Call Cheat Sheet ('+rd.salesHooks.length+')');
+      rd.salesHooks.forEach(function(h) {
+        var t = (h.type||'').toLowerCase();
+        bodyHtml += '<tr><td colspan="2" style="padding:5px 0;border-bottom:1px solid #f1f5f9;"><div style="margin-bottom:2px;"><span style="font-size:8px;font-weight:700;padding:2px 6px;background:'+(hookBgs[t]||'#f8fafc')+';border:1px solid '+(hookBorders[t]||'#e2e8f0')+';color:'+(hookColors[t]||'#64748b')+';text-transform:uppercase;letter-spacing:0.06em;">'+(h.type||'hook')+'</span></div><div style="font-size:11px;font-weight:600;color:#1e293b;">'+(h.finding||h.hook||'')+'</div>'+(h.pitch?'<div style="font-size:10px;color:#059669;margin-top:1px;">'+h.pitch+'</div>':'')+'</td></tr>';
+      });
+    }
+
+    // Scoring (SC only)
     if (!isResearch && formComplete) {
       bodyHtml += ssec('Scoring Breakdown');
       bodyHtml += '<tr><td colspan="2" style="padding:6px 0;"><table style="width:100%;border-collapse:separate;border-spacing:6px 0;"><tr>' +
-        '<td style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:8px 10px;text-align:center;width:33%;"><div style="font-size:9px;color:#64748b;text-transform:uppercase;">IV</div><div style="font-size:18px;font-weight:700;color:'+(_scIv>=3?'#059669':_scIv>=2?'#d97706':'#ef4444')+';">'+(_scIv||0)+'/3</div><div style="font-size:9px;color:#94a3b8;">'+(_lbIv||'')+'</div></td>' +
-        '<td style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:8px 10px;text-align:center;width:33%;"><div style="font-size:9px;color:#64748b;text-transform:uppercase;">PV</div><div style="font-size:18px;font-weight:700;color:'+(_scPv>=3?'#059669':_scPv>=2?'#d97706':'#ef4444')+';">'+(_scPv||0)+'/3</div><div style="font-size:9px;color:#94a3b8;">'+(_lbPv||'')+((budgetFmt)?' &middot; '+budgetFmt:'')+'</div></td>' +
-        '<td style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:8px 10px;text-align:center;width:33%;"><div style="font-size:9px;color:#64748b;text-transform:uppercase;">AV</div><div style="font-size:18px;font-weight:700;color:'+(_scAv>=3?'#059669':_scAv>=2?'#d97706':'#ef4444')+';">'+(_scAv||0)+'/3</div><div style="font-size:9px;color:#94a3b8;">'+(_lbAv||'')+'</div></td>' +
+        '<td style="background:#f8fafc;border:1px solid #e2e8f0;padding:8px 10px;text-align:center;width:33%;"><div style="font-size:9px;color:#64748b;text-transform:uppercase;">IV</div><div style="font-size:18px;font-weight:700;color:'+(_scIv>=3?'#059669':_scIv>=2?'#d97706':'#ef4444')+';">'+(_scIv||0)+'/3</div><div style="font-size:9px;color:#94a3b8;">'+(_lbIv||'')+'</div></td>' +
+        '<td style="background:#f8fafc;border:1px solid #e2e8f0;padding:8px 10px;text-align:center;width:33%;"><div style="font-size:9px;color:#64748b;text-transform:uppercase;">PV</div><div style="font-size:18px;font-weight:700;color:'+(_scPv>=3?'#059669':_scPv>=2?'#d97706':'#ef4444')+';">'+(_scPv||0)+'/3</div><div style="font-size:9px;color:#94a3b8;">'+(_lbPv||'')+((budgetFmt)?' &middot; '+budgetFmt:'')+'</div></td>' +
+        '<td style="background:#f8fafc;border:1px solid #e2e8f0;padding:8px 10px;text-align:center;width:33%;"><div style="font-size:9px;color:#64748b;text-transform:uppercase;">AV</div><div style="font-size:18px;font-weight:700;color:'+(_scAv>=3?'#059669':_scAv>=2?'#d97706':'#ef4444')+';">'+(_scAv||0)+'/3</div><div style="font-size:9px;color:#94a3b8;">'+(_lbAv||'')+'</div></td>' +
         '</tr></table></td></tr>';
     }
 
-    // Contact & Details
+    // Contact
     bodyHtml += ssec('Contact & Details');
     bodyHtml += prow('Customer Name', name) + prow('Phone', phone!=='\u2014'?phone:'') + prow('Email', emailVal!=='\u2014'?emailVal:'') + prow('CID', cid!=='\u2014'?cid:'') + prow('Company', company!=='\u2014'?company:'');
-    // Address with provenance
-    var _snap = _aiAddressSnapshot || {};
-    var _addrParts = [
-      (_ar ? '' : document.getElementById('f-street').value.trim()) || _snap.street || '',
-      (_ar ? '' : document.getElementById('f-suite').value.trim())  || _snap.suite  || '',
-      (_ar ? '' : document.getElementById('f-city').value.trim())   || _snap.city   || '',
-      (_ar ? '' : document.getElementById('f-state').value.trim())  || _snap.state  || '',
-      (_ar ? '' : document.getElementById('f-zip').value.trim())    || _snap.zip    || ''
-    ].filter(Boolean);
-    if (_addrParts.length) {
-      var _addrStr = _addrParts.join(', ');
-      var _src = _aiAddressSource || 'user';
-      var _badge = '';
-      if (_src === 'ai' || _src === 'ai-modified') _badge = ' <span style="font-size:9px;font-weight:700;color:#92400e;background:#fef3c7;padding:2px 6px;border-radius:4px;border:1px solid #fcd34d;">AI Generated</span>';
-      else if (_src === 'rejected') _badge = ' <span style="font-size:9px;font-weight:700;color:#b91c1c;background:#fef2f2;padding:2px 6px;border-radius:4px;border:1px solid #fca5a5;">AI Rejected</span>';
-      else if (_src === 'ai-edited') _badge = ' <span style="font-size:9px;font-weight:700;color:#166534;background:#f0fdf4;padding:2px 6px;border-radius:4px;border:1px solid #86efac;">AI Edited</span>';
-      bodyHtml += prow('Address', _addrStr + _badge);
-    }
+    if (website) bodyHtml += prow('Website', '<a href="'+(website.match(/^https?:\/\//)?website:'https://'+website)+'" style="color:#1D9E75;">'+website.replace(/^https?:\/\//i,'')+'</a>');
     if (!isResearch && formComplete) {
       bodyHtml += prow('Budget', (window._budgetType||'')+(budgetFmt?' &middot; '+budgetFmt:''));
       bodyHtml += prow('Customer Type', window._customerType||'');
@@ -15674,18 +15732,13 @@
     }
     bodyHtml += prow('Rep', rep);
     if (notes) bodyHtml += prow('Notes', notes);
-
     bodyHtml += '</table></div>';
 
-    // ── ASSEMBLE ──
-    var emailInner = '<div style="font-family:Arial,sans-serif;width:100%;background:#fff;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;">' +
+    // Assemble
+    var emailInner = '<div style="font-family:Arial,sans-serif;width:100%;background:#fff;border:1px solid #e2e8f0;overflow:hidden;">' +
       headerHtml + blurbHtml + infoBar + bodyHtml +
-      '<div style="background:#f8fafc;border-top:1px solid #e2e8f0;padding:10px 18px;text-align:center;">' +
-        '<p style="margin:0;font-size:11px;color:#64748b;">AG\'s IPA Report Card &middot; '+(isResearch?'Company Research':'Scorecard')+' &middot; Entered by '+rep+'</p>' +
-      '</div></div>';
-
+      '<div style="background:#f8fafc;border-top:1px solid #e2e8f0;padding:10px 18px;text-align:center;"><p style="margin:0;font-size:11px;color:#64748b;">AG\'s IPA Report Card &middot; '+(isResearch?'Company Research':'Scorecard')+' &middot; Entered by '+rep+'</p></div></div>';
     var emailDoc = '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;padding:16px;background:#f1f5f9;font-family:Arial,sans-serif;}a{color:inherit;}</style></head><body>' + emailInner + '</body></html>';
-
     el.innerHTML = emailInner;
     el._fullEmailDoc = emailDoc;
   }
@@ -16250,7 +16303,7 @@
       html += '<div style="margin-bottom:12px;padding:14px 16px;background:rgba(29,158,117,0.04);border:1px solid rgba(29,158,117,0.2);border-radius:10px;">' +
         '<div style="display:flex;align-items:center;gap:7px;margin-bottom:10px;">' +
           '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5DCAA5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>' +
-          '<span style="font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#5DCAA5;">Say this on the call</span>' +
+          '<span style="font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#5DCAA5;">Talking Points</span>' +
         '</div>';
       ci.talkingPoints.forEach(function(tp, i) {
         html += '<div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:8px;">' +
@@ -16345,56 +16398,152 @@
   }
 
   // ── Attack Plan ─────────────────────────────────────────────────
+  // Play definitions: each represents a distinct sales situation
+  var _attackPlanTypes = {
+    outreach: {
+      label: 'General Outreach',
+      short: 'Cold first touch',
+      desc: 'No prior contact. Get on their radar with something specific and memorable.',
+      color: '#60a5fa', bg: 'rgba(96,165,250,0.10)', bdr: 'rgba(96,165,250,0.3)',
+      iconSvg: '<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>',
+      role: 'Plan a COLD FIRST-TOUCH outreach sequence for a prospect the rep has never spoken with.',
+      taskGuide: 'Produce 4-6 sequenced tasks over Day 1 to Day 14 mixing channels (email, LinkedIn, phone, in-person at events when applicable). Each task must reference specific intel from above.'
+    },
+    followup: {
+      label: 'Targeted Follow-Up',
+      short: 'Advance the conversation',
+      desc: 'Had contact already. Move them toward a decision, proposal, or next meeting.',
+      color: '#f59e0b', bg: 'rgba(245,158,11,0.10)', bdr: 'rgba(245,158,11,0.3)',
+      iconSvg: '<path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>',
+      role: 'Plan a TARGETED FOLLOW-UP for a prospect the rep has already contacted at least once.',
+      taskGuide: 'Produce 3-5 sequenced tasks. Reference concrete advance moves (send quote, ship sample, schedule demo, deliver proposal). Each task should address a likely objection or close a decision gap.'
+    },
+    referral: {
+      label: 'Referrals',
+      short: 'Warm intro leverage',
+      desc: 'Earn a warm introduction through an existing customer or mutual connection.',
+      color: '#a78bfa', bg: 'rgba(167,139,250,0.10)', bdr: 'rgba(167,139,250,0.3)',
+      iconSvg: '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+      role: 'Plan a REFERRAL STRATEGY where the rep earns a warm introduction rather than cold outreach.',
+      taskGuide: 'Produce 3-5 tasks: identify likely mutual connections in rep\'s network, craft the intro-request script, practice the handoff ask, follow through once the intro is made. Be specific about who to ask and what to say.'
+    },
+    warmlead: {
+      label: 'Warm Lead Callback',
+      short: 'Close the gap',
+      desc: 'They showed interest (inquiry, sample, quote, event). Understand the gap and move to commit.',
+      color: '#5DCAA5', bg: 'rgba(93,202,165,0.10)', bdr: 'rgba(93,202,165,0.3)',
+      iconSvg: '<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>',
+      role: 'Plan a WARM LEAD CALLBACK where the prospect has already signaled interest.',
+      taskGuide: 'Produce 3-5 tasks focused on diagnosing the hold-up (price, timing, scope, approval), a specific closing question to ask, and the next concrete commitment (call time, sample send, signed proposal). Include timing relative to their last known signal.'
+    }
+  };
+
   function populateAttackPlanPanel() {
-    var content = document.getElementById('rp-attackplan-content');
-    var empty = document.getElementById('rp-attackplan-empty');
-    var plan = _researchData.attackPlan || '';
-    if (plan) {
-      if (content) { content.innerHTML = plan; content.style.display = 'block'; }
-      if (empty) empty.style.display = 'none';
+    var body = document.getElementById('rp-attackplan-body');
+    if (!body) return;
+    var plans = _researchData.attackPlans || {};
+    var active = _researchData.attackPlanActive || '';
+    var legacy = _researchData.attackPlan || '';
+    var generatedKeys = Object.keys(plans).filter(function(k){ return !!plans[k]; });
+
+    if (generatedKeys.length) {
+      if (!active || !plans[active]) active = generatedKeys[0];
+      _researchData.attackPlanActive = active;
+      body.innerHTML = _renderAttackPlanTabs(plans, active) +
+        '<div style="padding-top:14px;">' + plans[active] + '</div>';
+    } else if (legacy) {
+      body.innerHTML =
+        '<div style="padding:10px 12px;margin-bottom:10px;background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);border-radius:8px;font-size:11px;color:var(--text-muted);line-height:1.5;">Legacy plan from an earlier version. Pick a play below to regenerate with the new format.</div>' +
+        _renderAttackPlanTabs(plans, '') +
+        '<div style="padding-top:14px;">' + legacy + '</div>';
     } else {
-      if (content) { content.innerHTML = ''; content.style.display = 'none'; }
-      if (empty) empty.style.display = 'flex';
+      body.innerHTML = _renderAttackPlanEmptyState();
     }
   }
 
-  function generateAttackPlan() {
-    var btn = document.getElementById('rp-attackplan-btn');
-    var content = document.getElementById('rp-attackplan-content');
-    var empty = document.getElementById('rp-attackplan-empty');
-    var _apStart = Date.now();
-    if (btn) { btn.disabled = true; btn.innerHTML = 'Analyzing 0s'; }
-    var _apTimer = setInterval(function() {
-      var s = Math.round((Date.now()-_apStart)/1000);
-      if (btn && btn.disabled) btn.innerHTML = 'Analyzing ' + s + 's';
-    }, 1000);
-    if (empty) empty.style.display = 'none';
-    if (content) { content.style.display = 'block'; content.innerHTML = '<div style="padding:32px;text-align:center;"><div style="display:inline-block;width:16px;height:16px;border:2px solid rgba(245,158,11,0.3);border-top-color:#f59e0b;border-radius:50%;animation:spin 0.8s linear infinite;margin-right:8px;vertical-align:middle;"></div><span style="font-size:12px;color:var(--text-muted);">Building your attack plan...</span></div>'; }
+  function _renderAttackPlanTabs(plans, active) {
+    var types = _attackPlanTypes;
+    var html = '<div style="display:flex;gap:6px;border-bottom:1px solid rgba(255,255,255,0.06);padding-bottom:10px;overflow-x:auto;flex-wrap:wrap;">';
+    Object.keys(types).forEach(function(key) {
+      var t = types[key];
+      var generated = !!plans[key];
+      var isActive = active === key;
+      var bg = isActive ? t.bg : 'transparent';
+      var border = isActive ? t.bdr : (generated ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.06)');
+      var color = isActive ? t.color : (generated ? t.color : 'var(--text-muted)');
+      var dot = generated ? '<span style="width:6px;height:6px;border-radius:50%;background:'+t.color+';flex-shrink:0;"></span>' : '<span style="width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.15);flex-shrink:0;"></span>';
+      var title = generated ? 'View ' + t.label : 'Generate ' + t.label;
+      html += '<button onclick="switchAttackPlan(\''+key+'\')" title="'+title+'" style="display:flex;align-items:center;gap:6px;height:30px;padding:0 12px;border-radius:7px;border:1px solid '+border+';background:'+bg+';color:'+color+';font-size:10px;font-weight:700;cursor:pointer;letter-spacing:0.04em;text-transform:uppercase;white-space:nowrap;">'+dot+t.label+'</button>';
+    });
+    html += '</div>';
+    return html;
+  }
 
-    var rd = _researchData || {};
-    var company = rd.companyName || document.getElementById('f-company').value.trim() || '';
-    var industry = rd.industry || '';
-    var blurb = rd.blurb || '';
+  function _renderAttackPlanEmptyState() {
+    var types = _attackPlanTypes;
+    var html = '<div style="padding:8px 0 18px;text-align:center;">'+
+      '<div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px;">Pick a play</div>'+
+      '<div style="font-size:11px;color:var(--text-muted);">Each play generates a tailored strategy and actionable task list.</div></div>';
+    html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">';
+    Object.keys(types).forEach(function(key) {
+      var t = types[key];
+      html += '<button onclick="generateAttackPlan(\''+key+'\')" style="text-align:left;padding:14px;border-radius:10px;border:1px solid '+t.bdr+';background:'+t.bg+';cursor:pointer;color:var(--text);display:flex;flex-direction:column;gap:6px;font-family:inherit;">'+
+        '<div style="display:flex;align-items:center;gap:8px;">'+
+          '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="'+t.color+'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+t.iconSvg+'</svg>'+
+          '<span style="font-size:12px;font-weight:700;color:'+t.color+';letter-spacing:0.03em;">'+t.label+'</span>'+
+        '</div>'+
+        '<div style="font-size:11px;color:var(--text);font-weight:600;">'+t.short+'</div>'+
+        '<div style="font-size:11px;color:var(--text-muted);line-height:1.5;">'+t.desc+'</div>'+
+        '</button>';
+    });
+    html += '</div>';
+    return html;
+  }
+
+  function switchAttackPlan(playType) {
+    var def = _attackPlanTypes[playType];
+    if (!def) return;
+    var plans = _researchData.attackPlans || {};
+    if (plans[playType]) {
+      _researchData.attackPlanActive = playType;
+      _researchData.attackPlan = plans[playType];
+      populateAttackPlanPanel();
+    } else {
+      generateAttackPlan(playType);
+    }
+  }
+
+  function _buildAttackPlanPrompt(playType, rd) {
+    var def = _attackPlanTypes[playType];
+    var company   = rd.companyName || document.getElementById('f-company').value.trim() || '';
+    var industry  = rd.industry || '';
+    var blurb     = rd.blurb || '';
     var employees = rd.employees || '';
-    var revenue = rd.revenue || '';
+    var revenue   = rd.revenue || '';
+    var customerType = window._customerType || '';
+    var notes     = (document.getElementById('f-notes') || {}).value || '';
 
-    // Gather all intel
     var events = (rd.eventsSite||[]).concat(rd.eventsWeb||[]).filter(function(e){
       var d = _daysUntilEvt(e.date); return d !== null && d >= 0;
     }).map(function(e){ var d = _daysUntilEvt(e.date); return (e.title||'') + ' (' + (e.date||'') + ', ' + d + ' days away)'; });
     var observances = (rd.observances||[]).map(function(o){ var d = _daysUntilEvt(o.date); return (o.title||'') + (d !== null && d >= 0 ? ' (' + d + ' days away)' : ''); });
     var hooks = (rd.salesHooks||[]).map(function(h){ return '[' + (h.type||'hook').toUpperCase() + '] ' + (h.finding||'') + (h.pitch ? ' | Swag angle: ' + h.pitch : ''); });
-    var people = (rd.keyPeople||[]).map(function(p){ return (p.name||'') + (p.title ? ' (' + p.title + ')' : '') + (p.linkedin ? ' [LinkedIn]' : ''); });
+    var people = (rd.keyPeople||[]).map(function(p){ return (p.name||'') + (p.title ? ' (' + p.title + ')' : '') + (p.linkedin ? ' [LinkedIn available]' : ''); });
     var competitors = (rd.competitors||[]).map(function(c){ return (c.name||'') + (c.overlap ? ' — ' + c.overlap : ''); });
     var news = (rd.recentNews||[]).map(function(n){ return (n.date||'') + ': ' + (n.headline||''); });
     var tradeShows = (rd.tradeShows||[]).map(function(t){ return (t.title||'') + (t.date ? ' (' + t.date + ')' : ''); });
-    var socialMedia = rd.socialMedia || {};
-    var socialList = Object.keys(socialMedia).filter(function(k){ return socialMedia[k]; }).join(', ');
     var dm = rd.decisionMakers || {};
     var dmList = ['ownerExec','marketing','procurement'].filter(function(k){ return dm[k] && dm[k].name; }).map(function(k){ return dm[k].name + ' (' + k.replace('ownerExec','Owner/Exec') + ')'; });
 
-    var prompt = [
-      'You are a senior sales strategist for a promotional products company (Quality Logo Products). Analyze ALL of the following intelligence about a prospect and produce a structured ATTACK PLAN.',
+    var lines = [
+      'You are a senior sales strategist for a promotional products company (Quality Logo Products).',
+      def.role,
+      '',
+      '=== PLAY CONTEXT ===',
+      'Play: ' + def.label,
+      'Situation: ' + def.short,
+      customerType ? 'Customer relationship: ' + customerType : '',
+      notes ? 'Rep notes: ' + notes : '',
       '',
       '=== COMPANY ===',
       'Name: ' + company,
@@ -16402,10 +16551,9 @@
       blurb ? 'About: ' + blurb : '',
       employees ? 'Employees: ' + employees : '',
       revenue ? 'Revenue: ' + revenue : '',
-      socialList ? 'Social presence: ' + socialList : '',
       '',
-      events.length ? '=== UPCOMING EVENTS (' + events.length + ') ===\n' + events.join('\n') : '=== EVENTS === None found',
-      observances.length ? '=== OBSERVANCES ===\n' + observances.join('\n') : '',
+      events.length ? '=== UPCOMING EVENTS (' + events.length + ') ===\n' + events.join('\n') : '',
+      observances.length ? '=== INDUSTRY OBSERVANCES ===\n' + observances.join('\n') : '',
       tradeShows.length ? '=== TRADE SHOWS ===\n' + tradeShows.join('\n') : '',
       hooks.length ? '=== SALES HOOKS (' + hooks.length + ') ===\n' + hooks.join('\n') : '',
       people.length ? '=== KEY PEOPLE ===\n' + people.join('\n') : '',
@@ -16413,29 +16561,56 @@
       competitors.length ? '=== COMPETITORS ===\n' + competitors.join('\n') : '',
       news.length ? '=== RECENT NEWS ===\n' + news.join('\n') : '',
       '',
-      'Return ONLY valid JSON with this structure (no markdown, no backticks):',
+      'Return ONLY valid JSON with this exact structure (no markdown, no backticks):',
       '{',
-      '  "opener": "1-2 sentence opening line for the call. Reference something specific and timely.",',
-      '  "timing_angles": ["Array of 2-3 time-sensitive opportunities with urgency level and days until action needed"],',
-      '  "talking_points": ["Array of 3-5 specific conversation starters tied to real findings. Each should feel like insider knowledge."],',
-      '  "product_recs": [{"product":"Product name","reason":"Why this fits their specific situation","tie_in":"Which event/hook/news this connects to"}],',
-      '  "avoid": ["1-2 things NOT to say or lead with, based on their profile"],',
-      '  "best_contact": "Name and title of the person most likely to be the promo buyer, with reasoning",',
-      '  "competitive_edge": "One sentence on how to position against their likely current vendor"',
+      '  "situation_read": "One sentence explaining why this play fits this prospect given the intel. If the intel contradicts the play choice, say so briefly.",',
+      '  "strategy": "2-3 sentences laying out the overall approach and what success looks like for this specific play.",',
+      '  "tasks": [',
+      '    {"when":"Day 1","action":"Specific action referencing real intel","channel":"email|phone|linkedin|in-person|other"},',
+      '    ...',
+      '  ],',
+      '  "talking_points": ["2-3 conversation starters grounded in real findings"],',
+      '  "avoid": ["1-2 things NOT to do or say for this specific play"],',
+      '  "product_recs": [{"product":"Product category","reason":"Why this fits their situation","tie_in":"Which event/hook/news this connects to"}]',
       '}',
       '',
       'Rules:',
-      '- Every point must reference SPECIFIC data from above, not generic advice',
-      '- Product recommendations must be real promotional product categories (water bottles, pens, tote bags, apparel, tech accessories, drinkware, signage, etc.)',
-      '- Timing angles must include actual dates or "X days away" urgency',
-      '- If key people are available, identify the most likely promo buyer by title',
-      '- If competitors are listed, suggest how to use that knowledge',
-      '- Be direct and actionable, no filler'
-    ].filter(Boolean).join('\n');
+      '- ' + def.taskGuide,
+      '- Every task, talking point, and product rec MUST reference specific data from above, never generic advice.',
+      '- Task channels must be one of: email, phone, linkedin, in-person, other.',
+      '- Product recommendations must be real promotional product categories (water bottles, pens, tote bags, apparel, tech accessories, drinkware, signage, etc.). Limit to 2-3.',
+      '- Be direct and actionable. No filler.',
+      '- Do NOT use em dashes or hyphens as sentence connectors in any output field.'
+    ];
+    return lines.filter(Boolean).join('\n');
+  }
+
+  function generateAttackPlan(playType) {
+    var def = _attackPlanTypes[playType];
+    if (!def) { console.warn('[VRC] Unknown play type:', playType); return; }
+
+    var body = document.getElementById('rp-attackplan-body');
+    if (!body) return;
+
+    var _apStart = Date.now();
+    var loadingHtml = '<div style="padding:40px 20px;text-align:center;">' +
+      '<div style="display:inline-block;width:18px;height:18px;border:2px solid '+def.bdr+';border-top-color:'+def.color+';border-radius:50%;animation:spin 0.8s linear infinite;margin-bottom:10px;"></div>' +
+      '<div style="font-size:12px;font-weight:700;color:'+def.color+';letter-spacing:0.04em;text-transform:uppercase;margin-bottom:4px;">'+def.label+'</div>' +
+      '<div id="rp-ap-loading-sub" style="font-size:11px;color:var(--text-muted);">Analyzing 0s</div>' +
+    '</div>';
+    body.innerHTML = loadingHtml;
+
+    var _apTimer = setInterval(function() {
+      var sub = document.getElementById('rp-ap-loading-sub');
+      if (sub) sub.textContent = 'Analyzing ' + Math.round((Date.now()-_apStart)/1000) + 's';
+    }, 1000);
+
+    var prompt = _buildAttackPlanPrompt(playType, _researchData);
 
     fetch(GS_URL, { method:'POST', body: JSON.stringify({ action:'runResearch', prompt:prompt, rep:window._currentRep||'', noSearch:false }) })
     .then(function(r){ return r.text(); })
     .then(function(raw) {
+      clearInterval(_apTimer);
       var data; try { data = JSON.parse(raw); } catch(e) { data = null; }
       if (data) _updateCostBadge(data);
       var result = null;
@@ -16445,50 +16620,83 @@
         if (jsonMatch) { try { result = JSON.parse(jsonMatch[0]); } catch(e) {} }
       }
       if (result) {
-        var html = _renderAttackPlan(result);
-        _researchData.attackPlan = html;
-        if (content) { content.innerHTML = html; content.style.display = 'block'; }
-        if (empty) empty.style.display = 'none';
+        var html = _renderAttackPlan(result, playType);
+        _researchData.attackPlans = _researchData.attackPlans || {};
+        _researchData.attackPlans[playType] = html;
+        _researchData.attackPlanActive = playType;
+        _researchData.attackPlan = html; // legacy field kept in sync for backend compat
+        populateAttackPlanPanel();
+        try { if (_savedRecordId) {
+          var rec = _buildCurrentRecord(); rec.id = _savedRecordId;
+          gsPost({ action: 'updateRecord', record: rec });
+        }} catch(e) {}
       } else {
-        if (content) content.innerHTML = '<div style="padding:20px;text-align:center;font-size:12px;color:#f87171;">Could not generate attack plan. Try running AI research first.</div>';
+        body.innerHTML = '<div style="padding:20px;text-align:center;font-size:12px;color:#f87171;">Could not generate '+def.label+'. Try running AI research first, then retry.</div>' +
+          '<div style="text-align:center;margin-top:10px;"><button onclick="populateAttackPlanPanel()" style="height:28px;padding:0 14px;border-radius:6px;border:1px solid rgba(255,255,255,0.15);background:transparent;color:var(--text-muted);font-size:10px;font-weight:600;cursor:pointer;">Back to plays</button></div>';
       }
-      if (btn) { btn.disabled = false; btn.innerHTML = 'GENERATE ATTACK PLAN'; }
-      clearInterval(_apTimer);
-      // Auto-save
-      try { if (_savedRecordId) {
-        var rec = _buildCurrentRecord(); rec.id = _savedRecordId;
-        gsPost({ action: 'updateRecord', record: rec });
-      }} catch(e) {}
     })
     .catch(function(err) {
-      console.warn('[VRC] Attack plan failed:', err);
       clearInterval(_apTimer);
-      if (btn) { btn.disabled = false; btn.innerHTML = 'GENERATE ATTACK PLAN'; }
-      if (content) content.innerHTML = '<div style="padding:20px;text-align:center;font-size:12px;color:#f87171;">Generation failed. Try again.</div>';
+      console.warn('[VRC] Attack plan failed:', err);
+      body.innerHTML = '<div style="padding:20px;text-align:center;font-size:12px;color:#f87171;">Generation failed. Try again.</div>' +
+        '<div style="text-align:center;margin-top:10px;"><button onclick="populateAttackPlanPanel()" style="height:28px;padding:0 14px;border-radius:6px;border:1px solid rgba(255,255,255,0.15);background:transparent;color:var(--text-muted);font-size:10px;font-weight:600;cursor:pointer;">Back to plays</button></div>';
     });
   }
 
-  function _renderAttackPlan(plan) {
+  function _renderAttackPlan(plan, playType) {
+    var def = _attackPlanTypes[playType] || { label:'Attack Plan', color:'#f59e0b', bg:'rgba(245,158,11,0.05)', bdr:'rgba(245,158,11,0.25)' };
     var secStyle = 'margin-bottom:16px;';
-    var secHead = 'font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#f59e0b;margin-bottom:8px;display:flex;align-items:center;gap:6px;';
+    var secHead = 'font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:'+def.color+';margin-bottom:8px;display:flex;align-items:center;gap:6px;';
     var cardStyle = 'background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:10px 14px;margin-bottom:6px;';
+
+    var channelIcon = {
+      email:     '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>',
+      phone:     '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
+      linkedin:  '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>',
+      'in-person':'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+      other:     '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>'
+    };
 
     var html = '';
 
-    // Opener
-    if (plan.opener) {
+    // Play header badge
+    html += '<div style="display:inline-flex;align-items:center;gap:7px;padding:5px 10px;border-radius:6px;background:'+def.bg+';border:1px solid '+def.bdr+';margin-bottom:14px;">' +
+      '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="'+def.color+'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+(def.iconSvg||'')+'</svg>' +
+      '<span style="font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:'+def.color+';">'+def.label+'</span>' +
+    '</div>';
+
+    // Situation read
+    if (plan.situation_read) {
       html += '<div style="' + secStyle + '">' +
-        '<div style="' + secHead + '"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Open with</div>' +
-        '<div style="' + cardStyle + 'border-color:rgba(245,158,11,0.25);background:rgba(245,158,11,0.05);font-size:13px;color:var(--text);line-height:1.6;font-style:italic;">"' + plan.opener + '"</div>' +
+        '<div style="' + secHead + '"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg> Situation read</div>' +
+        '<div style="' + cardStyle + 'font-size:12px;color:var(--text);line-height:1.6;">' + plan.situation_read + '</div>' +
       '</div>';
     }
 
-    // Timing angles
-    if (plan.timing_angles && plan.timing_angles.length) {
+    // Strategy
+    if (plan.strategy) {
       html += '<div style="' + secStyle + '">' +
-        '<div style="' + secHead + '"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Timing angles</div>';
-      plan.timing_angles.forEach(function(t) {
-        html += '<div style="' + cardStyle + 'font-size:12px;color:var(--text);line-height:1.5;">' + t + '</div>';
+        '<div style="' + secHead + '"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Strategy</div>' +
+        '<div style="' + cardStyle + 'border-color:'+def.bdr+';background:'+def.bg+';font-size:13px;color:var(--text);line-height:1.6;">' + plan.strategy + '</div>' +
+      '</div>';
+    }
+
+    // Tasks (the actionable sequence)
+    if (plan.tasks && plan.tasks.length) {
+      html += '<div style="' + secStyle + '">' +
+        '<div style="' + secHead + '"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> Actionable tasks</div>';
+      plan.tasks.forEach(function(task, idx) {
+        var t = (typeof task === 'string') ? { when:'', action:task, channel:'other' } : task;
+        var ch = (t.channel || 'other').toLowerCase();
+        var ico = channelIcon[ch] || channelIcon.other;
+        html += '<div style="' + cardStyle + 'display:flex;gap:12px;align-items:flex-start;">' +
+          '<div style="flex-shrink:0;width:22px;height:22px;border-radius:50%;background:'+def.bg+';border:1px solid '+def.bdr+';color:'+def.color+';font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;">' + (idx+1) + '</div>' +
+          '<div style="flex:1;min-width:0;">' +
+            (t.when ? '<div style="font-size:10px;font-weight:700;color:'+def.color+';letter-spacing:0.04em;text-transform:uppercase;margin-bottom:3px;">'+t.when+'</div>' : '') +
+            '<div style="font-size:12px;color:var(--text);line-height:1.5;">'+ (t.action||'') +'</div>' +
+          '</div>' +
+          '<div style="flex-shrink:0;color:var(--text-muted);margin-top:2px;" title="'+ch+'">'+ico+'</div>' +
+        '</div>';
       });
       html += '</div>';
     }
@@ -16496,10 +16704,10 @@
     // Talking points
     if (plan.talking_points && plan.talking_points.length) {
       html += '<div style="' + secStyle + '">' +
-        '<div style="' + secHead + '"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Talking points</div>';
+        '<div style="' + secHead + '"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Talking points</div>';
       plan.talking_points.forEach(function(tp, idx) {
         html += '<div style="' + cardStyle + 'display:flex;gap:10px;align-items:flex-start;">' +
-          '<span style="font-size:11px;font-weight:700;color:#f59e0b;flex-shrink:0;min-width:16px;">' + (idx+1) + '</span>' +
+          '<span style="font-size:11px;font-weight:700;color:'+def.color+';flex-shrink:0;min-width:16px;">' + (idx+1) + '</span>' +
           '<span style="font-size:12px;color:var(--text);line-height:1.5;">' + tp + '</span>' +
         '</div>';
       });
@@ -16509,47 +16717,31 @@
     // Product recommendations
     if (plan.product_recs && plan.product_recs.length) {
       html += '<div style="' + secStyle + '">' +
-        '<div style="' + secHead + '"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg> Product recommendations</div>';
+        '<div style="' + secHead + '"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg> Product recommendations</div>';
       plan.product_recs.forEach(function(pr) {
         var p = typeof pr === 'string' ? { product: pr, reason: '', tie_in: '' } : pr;
         html += '<div style="' + cardStyle + '">' +
           '<div style="font-size:12px;font-weight:600;color:#5DCAA5;">' + (p.product||'') + '</div>' +
           (p.reason ? '<div style="font-size:11px;color:var(--text-muted);margin-top:3px;line-height:1.5;">' + p.reason + '</div>' : '') +
-          (p.tie_in ? '<div style="font-size:10px;color:#f59e0b;margin-top:4px;font-style:italic;">Ties to: ' + p.tie_in + '</div>' : '') +
+          (p.tie_in ? '<div style="font-size:10px;color:'+def.color+';margin-top:4px;font-style:italic;">Ties to: ' + p.tie_in + '</div>' : '') +
         '</div>';
       });
       html += '</div>';
     }
 
-    // Best contact
-    if (plan.best_contact) {
-      html += '<div style="' + secStyle + '">' +
-        '<div style="' + secHead + '"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Best contact</div>' +
-        '<div style="' + cardStyle + 'font-size:12px;color:var(--text);line-height:1.5;">' + plan.best_contact + '</div>' +
-      '</div>';
-    }
-
-    // Competitive edge
-    if (plan.competitive_edge) {
-      html += '<div style="' + secStyle + '">' +
-        '<div style="' + secHead + 'color:#5DCAA5;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg> Competitive edge</div>' +
-        '<div style="' + cardStyle + 'border-color:rgba(29,158,117,0.25);background:rgba(29,158,117,0.05);font-size:12px;color:var(--text);line-height:1.5;">' + plan.competitive_edge + '</div>' +
-      '</div>';
-    }
-
     // Avoid
     if (plan.avoid && plan.avoid.length) {
       html += '<div style="' + secStyle + '">' +
-        '<div style="' + secHead + 'color:#f87171;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> Avoid</div>';
+        '<div style="' + secHead + 'color:#f87171;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> Avoid</div>';
       plan.avoid.forEach(function(a) {
         html += '<div style="' + cardStyle + 'border-color:rgba(248,113,113,0.2);font-size:12px;color:var(--text-muted);line-height:1.5;">' + a + '</div>';
       });
       html += '</div>';
     }
 
-    // Rerun button at bottom
-    html += '<div style="text-align:center;padding:8px 0 4px;">' +
-      '<button onclick="generateAttackPlan()" style="height:28px;padding:0 14px;border-radius:6px;border:1px solid rgba(245,158,11,0.3);background:transparent;color:#f59e0b;font-size:10px;font-weight:600;cursor:pointer;letter-spacing:0.04em;">Regenerate</button>' +
+    // Regenerate button at bottom
+    html += '<div style="text-align:center;padding:10px 0 4px;border-top:1px solid rgba(255,255,255,0.05);margin-top:10px;">' +
+      '<button onclick="generateAttackPlan(\''+playType+'\')" style="height:28px;padding:0 14px;border-radius:6px;border:1px solid '+def.bdr+';background:transparent;color:'+def.color+';font-size:10px;font-weight:600;cursor:pointer;letter-spacing:0.04em;text-transform:uppercase;">Regenerate '+def.label+'</button>' +
     '</div>';
 
     return html;
@@ -16708,7 +16900,7 @@
         recToSave.id = _savedRecordId;
         recToSave.recordNum = window._lastSavedRecordNum || '';
         gsPost({ action: 'updateRecord', record: recToSave });
-        gsPost({ action: 'emailRecord', record: recToSave, plainText: false });
+        gsPost({ action: 'emailRecord', record: _scrubRecordForEmail(recToSave), plainText: false });
         if (recToSave.rep && recToSave.rep !== '—') {
           gsPost({ action: 'incrementTally', rep: recToSave.rep });
           _tallyCache[recToSave.rep] = (_tallyCache[recToSave.rep] || 0) + 1;
@@ -17327,17 +17519,7 @@
 
       <!-- Attack Plan panel -->
       <div class="research-panel" id="rpanel-attackplan" style="padding:0;">
-        <div id="rp-attackplan-content" style="display:none;padding:14px 20px 16px;"></div>
-        <div id="rp-attackplan-empty" style="padding:48px 24px;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;">
-          <div style="width:40px;height:40px;border-radius:50%;background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-          </div>
-          <div>
-            <p style="margin:0 0 4px;font-size:13px;font-weight:600;color:var(--text);">Generate attack plan</p>
-            <p style="margin:0;font-size:12px;color:#717378;max-width:300px;line-height:1.6;">Synthesize all research into a ready to use call strategy with talking points, product recommendations, and timing angles.</p>
-          </div>
-          <button id="rp-attackplan-btn" onclick="generateAttackPlan()" style="margin-top:6px;height:34px;padding:0 20px;border-radius:8px;border:1px solid rgba(245,158,11,0.5);background:rgba(245,158,11,0.15);color:#f59e0b;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:0.05em;display:inline-flex;align-items:center;gap:6px;">GENERATE ATTACK PLAN</button>
-        </div>
+        <div id="rp-attackplan-body" style="padding:20px;"></div>
       </div>
 
     </div><!-- end .research-popup-scroll -->
