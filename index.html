@@ -12918,12 +12918,38 @@
     var scoreNum = o.isRO ? (o.ivScore||0) : (o.totalScore||0);
     var scoreMax = o.isRO ? '3' : '9';
     var starsLine = o.isRO ? '<div style="font-size:10px;color:rgba(255,255,255,0.5);margin-top:2px;">IV only</div>' : (o.stars ? '<div style="font-size:11px;color:rgba(255,255,255,0.7);letter-spacing:0.5px;margin-top:2px;">'+o.stars+'</div>' : '');
+
+    // Meta line: match popup format — www.domain · NN employees · Est. YYYY (XX yrs)
     var metaParts = [];
-    var cleanWebsite = (o.website||'').replace(/^https?:\/\//i,'');
-    if (cleanWebsite) metaParts.push(cleanWebsite);
+    var rawSite = (o.website||'').replace(/^https?:\/\//i,'').replace(/\/$/,'');
+    if (rawSite) {
+      var withWww = /^www\./i.test(rawSite) ? rawSite : 'www.' + rawSite;
+      metaParts.push(withWww);
+    }
     if (o.employees) metaParts.push(o.employees + ' employees');
-    if (o.foundedYear) metaParts.push('Est. ' + o.foundedYear);
-    if (o.searchCost) metaParts.push(o.searchCost);
+    if (o.foundedYear) {
+      var fy = parseInt(String(o.foundedYear).replace(/\D/g,'').slice(0,4));
+      var age = (!isNaN(fy) && fy > 1700) ? (new Date().getFullYear() - fy) : null;
+      metaParts.push('Est. ' + o.foundedYear + (age !== null && age >= 0 && age < 250 ? ' (' + age + ' yrs)' : ''));
+    }
+
+    // Separate cost chip styled like popup's rp-search-cost (purple/indigo pill)
+    var costChip = o.searchCost ? '<span style="display:inline-block;margin-left:8px;padding:1px 7px;border-radius:999px;background:rgba(99,102,241,0.18);color:rgba(199,202,255,0.95);border:1px solid rgba(139,143,168,0.35);font-size:10px;font-weight:500;vertical-align:middle;white-space:nowrap;">'+o.searchCost+' / search</span>' : '';
+
+    // Stacked IV/PV/AV pills matching popup (label on top, X/3 below)
+    var pillStyle = 'display:inline-block;padding:4px 8px;border-radius:5px;background:rgba(255,255,255,0.12);text-align:center;vertical-align:middle;margin-right:4px;min-width:32px;';
+    var pillDimStyle = 'display:inline-block;padding:4px 8px;border-radius:5px;background:rgba(255,255,255,0.07);text-align:center;vertical-align:middle;margin-right:4px;min-width:32px;';
+    var labelStyle = 'display:block;font-size:8px;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:0.06em;line-height:1.1;';
+    var labelDimStyle = 'display:block;font-size:8px;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:0.06em;line-height:1.1;';
+    var valStyle = 'display:block;font-size:12px;font-weight:700;color:#fff;line-height:1.2;margin-top:1px;';
+    var valDimStyle = 'display:block;font-size:12px;font-weight:700;color:rgba(255,255,255,0.3);line-height:1.2;margin-top:1px;';
+    var ivPill = '<span style="'+pillStyle+'"><span style="'+labelStyle+'">IV</span><span style="'+valStyle+'">'+(o.ivScore||0)+'/3</span></span>';
+    var pvPill = o.isRO
+      ? '<span style="'+pillDimStyle+'"><span style="'+labelDimStyle+'">PV</span><span style="'+valDimStyle+'">&mdash;</span></span>'
+      : '<span style="'+pillStyle+'"><span style="'+labelStyle+'">PV</span><span style="'+valStyle+'">'+(o.pvScore||0)+'/3</span></span>';
+    var avPill = o.isRO
+      ? '<span style="'+pillDimStyle+'"><span style="'+labelDimStyle+'">AV</span><span style="'+valDimStyle+'">&mdash;</span></span>'
+      : '<span style="'+pillStyle+'"><span style="'+labelStyle+'">AV</span><span style="'+valStyle+'">'+(o.avScore||0)+'/3</span></span>';
 
     // Row 1: Score + Company info + Tier block (3 columns only)
     var row1 =
@@ -12934,16 +12960,14 @@
         '</td>' +
         '<td style="width:1px;padding:10px 0;vertical-align:middle;"><div style="width:1px;height:34px;background:rgba(255,255,255,0.15);"></div></td>' +
         '<td style="padding:10px 14px;vertical-align:middle;">' +
-          '<div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:2px;">'+(o.isHot?'&#128293; ':'')+o.company+(o.industry?' <span style="font-size:9px;font-weight:600;padding:1px 6px;background:rgba(255,255,255,0.18);color:#fff;">'+o.industry+'</span>':'')+'</div>' +
-          '<div style="font-size:10px;color:rgba(255,255,255,0.55);">'+metaParts.join(' &middot; ')+'</div>' +
+          '<div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:2px;">'+(o.isHot?'&#128293; ':'')+o.company+(o.industry?' <span style="font-size:9px;font-weight:600;padding:1px 6px;background:rgba(255,255,255,0.18);color:#fff;border-radius:999px;">'+o.industry+'</span>':'')+'</div>' +
+          '<div style="font-size:10px;color:rgba(255,255,255,0.6);">'+metaParts.join(' &middot; ')+costChip+'</div>' +
         '</td>' +
         '<td style="padding:10px 14px;vertical-align:middle;text-align:right;white-space:nowrap;">' +
-          '<span style="display:inline-block;padding:3px 8px;background:rgba(255,255,255,0.12);font-size:11px;font-weight:700;color:#fff;margin-right:3px;">IV '+(o.ivScore||0)+'</span>' +
-          '<span style="display:inline-block;padding:3px 8px;background:rgba(255,255,255,0.12);font-size:11px;font-weight:700;color:'+(o.isRO?'rgba(255,255,255,0.3)':'#fff')+';margin-right:3px;">PV '+(o.isRO?'--':(o.pvScore||0))+'</span>' +
-          '<span style="display:inline-block;padding:3px 8px;background:rgba(255,255,255,0.12);font-size:11px;font-weight:700;color:'+(o.isRO?'rgba(255,255,255,0.3)':'#fff')+';margin-right:8px;">AV '+(o.isRO?'--':(o.avScore||0))+'</span>' +
-          '<span style="display:inline-block;padding:4px 10px;background:'+o.tierBlockBg+';border:1px solid '+o.tierBdr+';text-align:center;">' +
-            '<span style="font-size:14px;font-weight:700;color:#fff;letter-spacing:0.03em;">'+(o.isRO?'RO':o.tierName)+'</span> ' +
-            '<span style="font-size:8px;color:'+o.tierClr+';font-weight:600;letter-spacing:0.04em;">'+(o.isRO?'RESEARCH ONLY':(o.priority||'SCORED'))+'</span>' +
+          ivPill + pvPill + avPill +
+          '<span style="display:inline-block;padding:5px 12px;background:'+o.tierBlockBg+';border:1px solid '+o.tierBdr+';border-radius:5px;text-align:center;vertical-align:middle;margin-left:4px;">' +
+            '<span style="display:block;font-size:14px;font-weight:700;color:#fff;letter-spacing:0.03em;line-height:1.1;">'+(o.isRO?'AG':o.tierName)+'</span>' +
+            '<span style="display:block;font-size:8px;color:'+o.tierClr+';font-weight:600;letter-spacing:0.04em;line-height:1.2;margin-top:1px;">'+(o.isRO?'RESEARCH ONLY':(o.priority||'SCORED'))+'</span>' +
           '</span>' +
         '</td>' +
       '</tr></table>';
