@@ -12981,6 +12981,42 @@
     // ══════════════════════════════════════════════
     html += bHdr('1', 'Know the company', '#2563eb', '#1e40af');
 
+    // Scoring Breakdown (SC only) — shown up top so the rep sees the deal shape first
+    if (!o.isRO) {
+      html += '<div class="section"><div class="section-title">Scoring Breakdown</div>' +
+        '<table class="score-grid"><tr>' +
+          '<td><div style="font-size:9px;color:#64748b;text-transform:uppercase;">Implied Value</div>' +
+            '<div style="font-size:20px;font-weight:700;color:'+(o.ivScore>=3?'#059669':o.ivScore>=2?'#d97706':'#ef4444')+';margin:2px 0;">'+(o.ivScore||0)+'/3</div>' +
+            '<div style="font-size:9px;color:#94a3b8;">'+(o.ivLabel||'')+'</div></td>' +
+          '<td><div style="font-size:9px;color:#64748b;text-transform:uppercase;">Potential Value</div>' +
+            '<div style="font-size:20px;font-weight:700;color:'+(o.pvScore>=3?'#059669':o.pvScore>=2?'#d97706':'#ef4444')+';margin:2px 0;">'+(o.pvScore||0)+'/3</div>' +
+            '<div style="font-size:9px;color:#94a3b8;">'+(o.pvLabel||'')+'</div></td>' +
+          '<td><div style="font-size:9px;color:#64748b;text-transform:uppercase;">Actual Value</div>' +
+            '<div style="font-size:20px;font-weight:700;color:'+(o.avScore>=3?'#059669':o.avScore>=2?'#d97706':'#ef4444')+';margin:2px 0;">'+(o.avScore||0)+'/3</div>' +
+            '<div style="font-size:9px;color:#94a3b8;">'+(o.avLabel||'')+'</div></td>' +
+        '</tr></table></div>';
+    }
+
+    // Contact & Details
+    var contactInner = fRow('Customer Name', o.name) +
+      fRow('Phone', o.phone?(o.phone!=='\u2014'?'<a href="tel:'+o.phone.replace(/\D/g,'')+'" style="color:#1e293b;text-decoration:none;">'+o.phone+'</a>':''):'') +
+      fRow('Email', o.email?(o.email!=='\u2014'?'<a href="mailto:'+o.email+'">'+o.email+'</a>':''):'') +
+      fRow('CID', o.cid) + fRow('Company', o.company) + fRow('Address', o.address) +
+      (o.website ? fRow('Website', '<a href="'+(o.website.match(/^https?:\/\//)?o.website:'https://'+o.website)+'">'+o.website.replace(/^https?:\/\//i,'')+'</a>') : '') +
+      (rd.employees ? fRow('Employees', rd.employees) : '');
+    if (!o.isRO) {
+      contactInner += fRow('Budget Type', o.budgetType) +
+        (o.budgetAmount?fRow('Budget Amount','$'+Number(o.budgetAmount).toLocaleString()):'') +
+        fRow('Customer Type', o.customerType) +
+        (o.avAmount?fRow('Lifetime Spend','$'+Number(o.avAmount).toLocaleString()):'');
+    }
+    contactInner += fRow('Assigned To', o.owner+(o.overrideNote||'')) + fRow('Rep', o.rep);
+    html += fSec('Contact & Details', contactInner);
+
+    if (o.notes && o.notes !== '\u2014') {
+      html += '<div class="section"><div class="section-title">Notes</div><div style="font-size:11px;white-space:pre-wrap;color:#1e293b;line-height:1.5;">'+o.notes+'</div></div>';
+    }
+
     // Company Intel (flowing left-border block)
     if (rd.companyIntel) {
       // Replace "SAY THIS ON THE CALL" with "TALKING POINTS" in the intel HTML
@@ -13108,40 +13144,6 @@
       html += fSec('Call Cheat Sheet ('+rd.salesHooks.length+')', hookRows);
     }
 
-    // Scoring Breakdown (SC only)
-    if (!o.isRO) {
-      html += '<div class="section"><div class="section-title">Scoring Breakdown</div>' +
-        '<table class="score-grid"><tr>' +
-          '<td><div style="font-size:9px;color:#64748b;text-transform:uppercase;">Implied Value</div>' +
-            '<div style="font-size:20px;font-weight:700;color:'+(o.ivScore>=3?'#059669':o.ivScore>=2?'#d97706':'#ef4444')+';margin:2px 0;">'+(o.ivScore||0)+'/3</div>' +
-            '<div style="font-size:9px;color:#94a3b8;">'+(o.ivLabel||'')+'</div></td>' +
-          '<td><div style="font-size:9px;color:#64748b;text-transform:uppercase;">Potential Value</div>' +
-            '<div style="font-size:20px;font-weight:700;color:'+(o.pvScore>=3?'#059669':o.pvScore>=2?'#d97706':'#ef4444')+';margin:2px 0;">'+(o.pvScore||0)+'/3</div>' +
-            '<div style="font-size:9px;color:#94a3b8;">'+(o.pvLabel||'')+'</div></td>' +
-          '<td><div style="font-size:9px;color:#64748b;text-transform:uppercase;">Actual Value</div>' +
-            '<div style="font-size:20px;font-weight:700;color:'+(o.avScore>=3?'#059669':o.avScore>=2?'#d97706':'#ef4444')+';margin:2px 0;">'+(o.avScore||0)+'/3</div>' +
-            '<div style="font-size:9px;color:#94a3b8;">'+(o.avLabel||'')+'</div></td>' +
-        '</tr></table></div>';
-    }
-
-    // Contact & Details
-    var contactInner = fRow('Customer Name', o.name) +
-      fRow('Phone', o.phone?(o.phone!=='\u2014'?'<a href="tel:'+o.phone.replace(/\D/g,'')+'" style="color:#1e293b;text-decoration:none;">'+o.phone+'</a>':''):'') +
-      fRow('Email', o.email?(o.email!=='\u2014'?'<a href="mailto:'+o.email+'">'+o.email+'</a>':''):'') +
-      fRow('CID', o.cid) + fRow('Company', o.company) + fRow('Address', o.address) +
-      (o.website ? fRow('Website', '<a href="'+(o.website.match(/^https?:\/\//)?o.website:'https://'+o.website)+'">'+o.website.replace(/^https?:\/\//i,'')+'</a>') : '');
-    if (!o.isRO) {
-      contactInner += fRow('Budget Type', o.budgetType) +
-        (o.budgetAmount?fRow('Budget Amount','$'+Number(o.budgetAmount).toLocaleString()):'') +
-        fRow('Customer Type', o.customerType) +
-        (o.avAmount?fRow('Lifetime Spend','$'+Number(o.avAmount).toLocaleString()):'');
-    }
-    contactInner += fRow('Assigned To', o.owner+(o.overrideNote||'')) + fRow('Rep', o.rep);
-    html += fSec('Contact & Details', contactInner);
-
-    if (o.notes && o.notes !== '\u2014') {
-      html += '<div class="section"><div class="section-title">Notes</div><div style="font-size:11px;white-space:pre-wrap;color:#1e293b;line-height:1.5;">'+o.notes+'</div></div>';
-    }
     return html;
   }
 
@@ -15891,6 +15893,7 @@
     bodyHtml += ssec('Contact & Details');
     bodyHtml += prow('Customer Name', name) + prow('Phone', phone!=='\u2014'?phone:'') + prow('Email', emailVal!=='\u2014'?emailVal:'') + prow('CID', cid!=='\u2014'?cid:'') + prow('Company', company!=='\u2014'?company:'');
     if (website) bodyHtml += prow('Website', '<a href="'+(website.match(/^https?:\/\//)?website:'https://'+website)+'" style="color:#1D9E75;">'+website.replace(/^https?:\/\//i,'')+'</a>');
+    if (rd.employees) bodyHtml += prow('Employees', rd.employees);
     if (!isResearch && formComplete) {
       bodyHtml += prow('Budget', (window._budgetType||'')+(budgetFmt?' &middot; '+budgetFmt:''));
       bodyHtml += prow('Customer Type', window._customerType||'');
