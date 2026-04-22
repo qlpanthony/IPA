@@ -7803,6 +7803,8 @@
   var _liveEmailSelected    = [];
   var _liveEmailItems       = [];
   var _liveEmailHistory     = { checkin:[], headsup:[], pitch:[], congrats:[], reengage:[] };
+  var _liveEmailFeedback    = { checkin:[], headsup:[], pitch:[], congrats:[], reengage:[] };
+  var _liveEmailLastRating  = ''; // 'up' | 'down' | ''
   var _liveStyleBank = [
     'Open with a question about how their week is going.',
     'Lead with something seasonal or weather related for their area.',
@@ -14093,7 +14095,19 @@
       '--- STYLE DIRECTIVE (follow this for the opener) ---',
       _liveStyleBank[Math.floor(Math.random() * _liveStyleBank.length)],
       '',
-      _liveEmailInstruction ? 'Rep note (weave in naturally, fix any typos): ' + _liveEmailInstruction : '',
+      _liveEmailInstruction ? [
+        '--- REP\'S BRIEF ---',
+        'This is a raw note from the rep about what to convey. It is NOT email copy. Treat it like a message you got on Slack from a colleague telling you what to write. Rewrite the intent in your own natural voice.',
+        '',
+        'Brief: ' + _liveEmailInstruction,
+        '',
+        'HANDLING THE BRIEF (mandatory):',
+        '- Extract the intent and facts. Express them in your own prose.',
+        '- Do NOT quote, paraphrase sentence-by-sentence, or echo the rep\'s phrasing.',
+        '- Ignore typos, shorthand, and grammar in the brief. Rewrite the ideas cleanly in natural English.',
+        '- If the brief contains a greeting, use that exact greeting as the opener. Do not add a second one.',
+        '- Example: Brief "saw they got funded want to mention and sample our new totes" should weave the idea in as something like "Saw the funding news hit last week, huge. Also been meaning to get some of our new totes in your hands." NOT: "I wanted to mention you got funded and sample our new totes."'
+      ].join('\n') : '',
       _liveEmailCoupon ? (function() {
         var couponDesc = '';
         (_appSettings.couponCodes || []).forEach(function(c) { if (c.code === _liveEmailCoupon) couponDesc = c.desc || ''; });
@@ -14106,15 +14120,30 @@
       '- If events are provided, weave them into the body naturally. Do NOT append them as a bullet list at the end.',
       '- If sales hooks are provided, use the finding as a conversation angle and the swag angle as a product suggestion. Weave naturally, do not list them.',
       '- Use the "days away" number to create urgency when the event is soon (under 14 days).',
-      '- For product suggestions, pick categories that make sense for the company\'s industry (tech company = chargers, laptop stickers, desk accessories; safety industry = hard hat stickers, hi-vis gear; fitness = water bottles, gym bags).',
+      '- In the email body, reference relevant promo product CATEGORIES that fit this prospect\'s industry and the sales hooks above (tech company = laptop stickers, chargers, desk accessories; safety industry = hard hat stickers, hi-vis gear; fitness = water bottles, gym bags; brewery = pint glasses, koozies). Be specific about WHAT KIND of promo would land for them. Do not drop to vague filler like "some fun stuff on the promo side".',
+      '- Do not name specific SKUs, product model numbers, or paste product URLs into the body. Those go in the product_links JSON field and get appended below the body as clickable links.',
       '- Sound like a real human texting a friendly business acquaintance. Casual and warm.',
-      '- ALWAYS end with genuine appreciation. Something like "I appreciate you" or thanking them for their time. Keep it natural, not corporate. Vary the phrasing.',
+      '- ALWAYS end with genuine appreciation. Something like "I appreciate you" or thanking them for their time. Keep it natural, not corporate. Vary the phrasing every time so no two emails close the same way.',
       '- No sign-off block. No "Best regards". No company name. End naturally after the appreciation.',
       '- No corporate phrases: "I wanted to reach out", "leverage", "promotional products", "branded merchandise", "drive engagement", "don\'t hesitate", "boost your brand", "I\'d love to".',
       '- NEVER use dashes or hyphens (-) anywhere in the email. Rewrite any sentence that would need one.',
-      _liveEmailInstruction ? '- If the rep note has a greeting, use THAT as the greeting. Do not add a second one.' : '',
       '',
       toneExample,
+      '',
+      // Layer 0: Rep feedback on earlier drafts for this intent (thumbs-down loop)
+      (function() {
+        var fb = _liveEmailFeedback[_liveEmailIntent] || [];
+        if (!fb.length) return '';
+        var lines = ['--- REP FEEDBACK ON EARLIER DRAFTS (the rep flagged these patterns as not working — avoid them) ---'];
+        fb.slice(-3).forEach(function(f, i) {
+          var parts = [];
+          if (f.badSample) parts.push('Flagged phrasing: "' + f.badSample.slice(0, 200) + '"');
+          if (f.note) parts.push('Rep note: "' + f.note + '"');
+          lines.push((i+1) + '. ' + parts.join(' | '));
+        });
+        lines.push('Take a clearly different angle, vocabulary, and sentence structure than what was flagged. Do not repeat or paraphrase the flagged phrasing.');
+        return lines.join('\n');
+      })(),
       '',
       // Layer 1: Anti-repetition history
       (function() {
@@ -14124,32 +14153,75 @@
           hist.map(function(e, i) { return 'Previous #' + (i+1) + ': "' + e.slice(0, 200) + (e.length > 200 ? '...' : '') + '"'; }).join('\n');
       })(),
       '',
-      'Return ONLY valid JSON: {"email":"your message here"}'
+      // Product link lookup from OUR company website (skip if admin hasn't set a website)
+      (function() {
+        var ourSite = (_appSettings.companyWebsite || '').replace(/^https?:\/\//i,'').replace(/\/$/,'').trim();
+        if (!ourSite) return '';
+        var industry = rd.industry || '';
+        var hookPitches = (rd.salesHooks || []).map(function(h){ return h.pitch || h.finding || ''; }).filter(Boolean).slice(0,3);
+        var lines = [
+          '--- PRODUCT LINK LOOKUP (required) ---',
+          'Our company website: ' + ourSite,
+          'Use web search with "site:' + ourSite + '" plus relevant keywords to find 2-3 REAL product pages that would resonate with this prospect.',
+          industry ? 'Prospect industry: ' + industry : '',
+          hookPitches.length ? 'Swag angles from hooks to guide search: ' + hookPitches.join(' | ') : '',
+          'Return the found products in the product_links array as {title, url} pairs. Use the actual product page title and the full URL as returned by search.',
+          'If search returns no good matches, return an empty product_links array rather than inventing URLs.'
+        ].filter(Boolean);
+        return lines.join('\n');
+      })(),
+      '',
+      'Return ONLY valid JSON: {"email":"your message here","links_intro":"one short casual lead-in sentence for the products below (e.g. \'Here are a few ideas worth a look:\'). Vary the phrasing.","product_links":[{"title":"Product name from the page","url":"https://full-url"}]}'
     ].filter(function(s){ return s !== undefined && s !== null; }).join('\n');
 
     if (loading) loading.style.display = '';
     textarea.style.opacity = '0.3';
     textarea.value = '';
-    fetch(GS_URL, { method:'POST', body: JSON.stringify({ action:'runResearch', prompt:prompt, rep:rep, noSearch:true }) })
+    _hideLiveEmailFeedbackBar();
+    fetch(GS_URL, { method:'POST', body: JSON.stringify({ action:'runResearch', prompt:prompt, rep:rep, noSearch:false }) })
     .then(function(res){ return res.text(); })
     .then(function(raw) {
       var emailText = '';
+      var linksIntro = '';
+      var productLinks = [];
       try {
         var data = JSON.parse(raw);
         var result = data.result || data.text || '';
-        if (typeof result === 'object') result = result.email || result.text || result.content || result.email_body || result.body || result.message || JSON.stringify(result);
-        emailText = String(result).replace(/```[a-z]*/g,'').replace(/```/g,'').trim();
-        if (emailText.charAt(0) === '{') {
-          try {
-            var parsed = JSON.parse(emailText);
-            emailText = parsed.email || parsed.email_body || parsed.body || parsed.text || parsed.message || emailText;
-          } catch(je){}
+        if (typeof result === 'object') {
+          emailText = result.email || result.text || result.content || result.email_body || result.body || result.message || '';
+          if (Array.isArray(result.product_links)) productLinks = result.product_links;
+          if (typeof result.links_intro === 'string') linksIntro = result.links_intro;
+          if (!emailText) emailText = JSON.stringify(result);
+        } else {
+          emailText = String(result).replace(/```[a-z]*/g,'').replace(/```/g,'').trim();
+          if (emailText.charAt(0) === '{') {
+            try {
+              var parsed = JSON.parse(emailText);
+              emailText = parsed.email || parsed.email_body || parsed.body || parsed.text || parsed.message || emailText;
+              if (Array.isArray(parsed.product_links)) productLinks = parsed.product_links;
+              if (typeof parsed.links_intro === 'string') linksIntro = parsed.links_intro;
+            } catch(je){}
+          }
         }
-        emailText = emailText.replace(/\\n/g, '\n').replace(/^["']|["']$/g, '').trim();
+        emailText = String(emailText).replace(/\\n/g, '\n').replace(/^["']|["']$/g, '').trim();
         // Strip dashes: em dash, en dash, and standalone hyphens
         emailText = emailText.replace(/\s*[—–]\s*/g, ', ').replace(/\s+-\s+/g, ', ');
         if (data.costUSD !== undefined) { try { _updateCostBadge(data, 'live-email-' + Date.now()); } catch(ce){} }
       } catch(e) { emailText = raw.trim(); }
+
+      // Append product links section below the body if we got any
+      if (productLinks && productLinks.length) {
+        var validLinks = productLinks.filter(function(p){ return p && p.url && /^https?:\/\//i.test(p.url); }).slice(0,3);
+        if (validLinks.length) {
+          var intro = (linksIntro || 'Here are a few ideas worth a look:').replace(/\s*[—–]\s*/g, ', ').replace(/\s+-\s+/g, ', ').trim();
+          var linkLines = validLinks.map(function(p) {
+            var title = (p.title || 'Check this out').replace(/\s*[—–]\s*/g, ', ').replace(/\s+-\s+/g, ', ').trim();
+            return title + ': ' + p.url;
+          }).join('\n');
+          emailText = emailText.replace(/\s+$/,'') + '\n\n' + intro + '\n' + linkLines;
+        }
+      }
+
       return emailText;
     })
     .then(function(finalText) {
@@ -14169,6 +14241,7 @@
         var now = new Date();
         ts.textContent = 'Generated ' + now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',hour12:true});
       }
+      _showLiveEmailFeedbackBar();
       if (genBtn) { genBtn.textContent = '\u2713 Generated'; genBtn.style.background = '#5DCAA5'; genBtn.style.color = '#0a2a1f'; genBtn.style.opacity = '1'; setTimeout(function(){ genBtn._busy = false; genBtn.textContent = 'Generate Email'; genBtn.style.background = '#0F6E56'; genBtn.style.color = '#fff'; }, 1500); }
     })
     .catch(function() {
@@ -14177,6 +14250,99 @@
       textarea.value = 'Error generating email. Please try again.';
       if (genBtn) { genBtn._busy = false; genBtn.textContent = 'Generate Email'; genBtn.style.background = '#0F6E56'; genBtn.style.color = '#fff'; genBtn.style.opacity = '1'; }
     });
+  }
+
+  function _showLiveEmailFeedbackBar() {
+    var bar = document.getElementById('live-evtemail-feedback-bar');
+    if (bar) bar.style.display = 'inline-flex';
+    // Reset any prior rating visuals (defaults match the Copy button styling)
+    _liveEmailLastRating = '';
+    var up = document.getElementById('live-fb-up');
+    var dn = document.getElementById('live-fb-down');
+    if (up) { up.style.background = 'rgba(255,255,255,0.06)'; up.style.color = '#999'; up.style.borderColor = 'rgba(255,255,255,0.1)'; }
+    if (dn) { dn.style.background = 'rgba(255,255,255,0.06)'; dn.style.color = '#999'; dn.style.borderColor = 'rgba(255,255,255,0.1)'; }
+    // Hide any open feedback panel
+    var panel = document.getElementById('live-evtemail-fb-panel');
+    if (panel) panel.style.display = 'none';
+  }
+
+  function _hideLiveEmailFeedbackBar() {
+    var bar = document.getElementById('live-evtemail-feedback-bar');
+    if (bar) bar.style.display = 'none';
+    var panel = document.getElementById('live-evtemail-fb-panel');
+    if (panel) panel.style.display = 'none';
+  }
+
+  function liveEmailFeedback(rating) {
+    if (rating === 'up') {
+      _liveEmailLastRating = 'up';
+      var up = document.getElementById('live-fb-up');
+      var dn = document.getElementById('live-fb-down');
+      if (up) { up.style.background = 'rgba(93,202,165,0.18)'; up.style.color = '#5DCAA5'; up.style.borderColor = 'rgba(93,202,165,0.4)'; }
+      if (dn) { dn.style.background = 'rgba(255,255,255,0.06)'; dn.style.color = '#999'; dn.style.borderColor = 'rgba(255,255,255,0.1)'; }
+      // Hide any open feedback panel
+      var panel = document.getElementById('live-evtemail-fb-panel');
+      if (panel) panel.style.display = 'none';
+      return;
+    }
+    if (rating === 'down') {
+      _liveEmailLastRating = 'down';
+      var up2 = document.getElementById('live-fb-up');
+      var dn2 = document.getElementById('live-fb-down');
+      if (up2) { up2.style.background = 'rgba(255,255,255,0.06)'; up2.style.color = '#999'; up2.style.borderColor = 'rgba(255,255,255,0.1)'; }
+      if (dn2) { dn2.style.background = 'rgba(248,113,113,0.18)'; dn2.style.color = '#f87171'; dn2.style.borderColor = 'rgba(248,113,113,0.4)'; }
+      // Capture current textarea selection if any
+      var ta = document.getElementById('live-evtemail-text');
+      var hrow = document.getElementById('live-fb-highlight-row');
+      if (ta && hrow) {
+        var start = ta.selectionStart, end = ta.selectionEnd;
+        if (start != null && end != null && start !== end) {
+          var selected = ta.value.substring(start, end).trim();
+          if (selected) {
+            hrow.textContent = 'Flagged phrase: "' + selected.slice(0, 140) + (selected.length > 140 ? '...' : '') + '"';
+            hrow.dataset.sample = selected;
+          } else {
+            hrow.textContent = 'No text highlighted. Select a phrase in the email above, or just add a note below.';
+            hrow.dataset.sample = '';
+          }
+        } else {
+          hrow.textContent = 'No text highlighted. Select a phrase in the email above, or just add a note below.';
+          hrow.dataset.sample = '';
+        }
+      }
+      var panel2 = document.getElementById('live-evtemail-fb-panel');
+      if (panel2) panel2.style.display = 'block';
+      var noteEl = document.getElementById('live-fb-note');
+      if (noteEl) setTimeout(function(){ noteEl.focus(); }, 50);
+    }
+  }
+
+  function submitLiveEmailFeedback() {
+    var hrow = document.getElementById('live-fb-highlight-row');
+    var noteEl = document.getElementById('live-fb-note');
+    var sample = (hrow && hrow.dataset.sample) || '';
+    var note = (noteEl && noteEl.value || '').trim();
+    if (!sample && !note) {
+      if (noteEl) noteEl.focus();
+      return;
+    }
+    var intent = _liveEmailIntent || 'checkin';
+    if (!_liveEmailFeedback[intent]) _liveEmailFeedback[intent] = [];
+    _liveEmailFeedback[intent].push({ badSample: sample, note: note, ts: Date.now() });
+    if (_liveEmailFeedback[intent].length > 5) {
+      _liveEmailFeedback[intent] = _liveEmailFeedback[intent].slice(-5);
+    }
+    cancelLiveEmailFeedback();
+    generateLiveEmail();
+  }
+
+  function cancelLiveEmailFeedback() {
+    var panel = document.getElementById('live-evtemail-fb-panel');
+    if (panel) panel.style.display = 'none';
+    var noteEl = document.getElementById('live-fb-note');
+    if (noteEl) noteEl.value = '';
+    var hrow = document.getElementById('live-fb-highlight-row');
+    if (hrow) { hrow.textContent = ''; hrow.dataset.sample = ''; }
   }
 
   function copyLiveEmail() {
@@ -17475,6 +17641,10 @@
               <div style="width:1px;height:18px;background:rgba(255,255,255,0.15);margin:0 2px;flex-shrink:0;"></div>
               <button id="live-evtemail-gen-btn" onclick="generateLiveEmail()" style="height:26px;padding:0 14px;border-radius:14px;border:none;background:#0F6E56;color:#fff;font-size:10px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all 0.15s;" onmouseenter="if(!this._busy)this.style.background='#0d8a6a';" onmouseleave="if(!this._busy)this.style.background='#0F6E56';">Generate Email</button>
               <button id="live-evtemail-copy-btn" onclick="copyLiveEmail()" style="height:26px;padding:0 14px;border-radius:14px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.06);color:#999;font-size:10px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all 0.15s;" onmouseenter="this.style.background='rgba(255,255,255,0.14)';this.style.color='#e8eaed';this.style.borderColor='rgba(255,255,255,0.25)';" onmouseleave="if(!this._copied){this.style.background='rgba(255,255,255,0.06)';this.style.color='#999';this.style.borderColor='rgba(255,255,255,0.1)';}">Copy</button>
+              <div id="live-evtemail-feedback-bar" style="display:none;align-items:center;gap:4px;flex-shrink:0;">
+                <button id="live-fb-up" onclick="liveEmailFeedback('up')" title="Good draft" style="width:28px;height:26px;border-radius:14px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.06);color:#999;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;padding:0;transition:all 0.15s;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg></button>
+                <button id="live-fb-down" onclick="liveEmailFeedback('down')" title="Needs rework" style="width:28px;height:26px;border-radius:14px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.06);color:#999;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;padding:0;transition:all 0.15s;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/></svg></button>
+              </div>
             </div>
             <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px;">
               <input id="live-evtemail-instr" type="text" placeholder="Add a personal note or angle..." oninput="_liveEmailInstruction=this.value" style="flex:1;height:28px;padding:0 10px;border-radius:8px;border:0.5px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:var(--text-dim, #b0b2b6);font-size:11px;font-family:'Inter',sans-serif;outline:none;box-sizing:border-box;min-width:0;">
@@ -17494,6 +17664,15 @@
             </div>
             <textarea id="live-evtemail-text" readonly placeholder="Select events, pick an intent, and hit Generate Email." style="width:100%;flex:1;min-height:100px;padding:10px 12px;font-size:12px;line-height:1.7;font-family:'Inter',sans-serif;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:7px;color:var(--text);resize:none;outline:none;box-sizing:border-box;margin-bottom:6px;overflow-y:auto;"></textarea>
             <span id="live-evtemail-timestamp" style="font-size:10px;color:var(--text-muted);"></span>
+            <div id="live-evtemail-fb-panel" style="display:none;margin-top:8px;padding:10px 12px;background:rgba(248,113,113,0.06);border:1px solid rgba(248,113,113,0.22);border-radius:7px;">
+              <div style="font-size:10px;color:#f87171;margin-bottom:6px;font-weight:600;letter-spacing:0.03em;">Tell me what didn't land. Highlight text above first to flag a specific phrase, or add a note.</div>
+              <div id="live-fb-highlight-row" style="font-size:10px;color:var(--text-muted);margin-bottom:6px;min-height:14px;font-style:italic;"></div>
+              <input id="live-fb-note" type="text" placeholder="Note (e.g. 'too stiff', 'wrong angle', 'too long')" style="width:100%;height:28px;padding:0 10px;border-radius:6px;border:0.5px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:var(--text);font-size:11px;font-family:'Inter',sans-serif;outline:none;box-sizing:border-box;margin-bottom:8px;">
+              <div style="display:flex;gap:6px;">
+                <button onclick="submitLiveEmailFeedback()" style="height:26px;padding:0 12px;border-radius:6px;border:1px solid rgba(248,113,113,0.4);background:rgba(248,113,113,0.15);color:#f87171;font-size:10px;font-weight:600;cursor:pointer;letter-spacing:0.03em;">Regenerate with feedback</button>
+                <button onclick="cancelLiveEmailFeedback()" style="height:26px;padding:0 12px;border-radius:6px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:var(--text-muted);font-size:10px;font-weight:600;cursor:pointer;">Cancel</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
