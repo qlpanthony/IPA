@@ -3918,6 +3918,10 @@
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             Update Record
           </button>
+          <button id="resubmit-ro-btn" onclick="onResubmitROClick()" style="display:none;flex:1;height:38px;border-radius:8px;border:1px solid rgba(139,143,168,0.45);background:rgba(139,143,168,0.12);color:#B8BBCC;font-family:'Inter',sans-serif;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:0.04em;align-items:center;justify-content:center;gap:5px;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Update Research
+          </button>
           <button class="action-btn-copy disabled" id="pdf-btn" onclick="onPDFClick()" disabled style="flex:1;">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
             Generate PDF
@@ -6716,6 +6720,8 @@
     if (editBtn && _savedRecordId) { editBtn.style.display = 'inline-flex'; }
     var resubBtn = document.getElementById('resubmit-btn');
     if (resubBtn) { resubBtn.style.display = 'none'; }
+    var resubROBtn = document.getElementById('resubmit-ro-btn');
+    if (resubROBtn) { resubROBtn.style.display = 'none'; }
     var ctrlBtn = document.getElementById('research-ctrl-btn');
     if (ctrlBtn) { ctrlBtn.style.pointerEvents = 'none'; ctrlBtn.style.opacity = '0.35'; }
     var srchBtn = document.getElementById('research-search-btn');
@@ -6752,6 +6758,8 @@
     if (editBtn) { editBtn.style.display = 'none'; }
     var resubBtn = document.getElementById('resubmit-btn');
     if (resubBtn) { resubBtn.style.display = 'none'; }
+    var resubROBtn = document.getElementById('resubmit-ro-btn');
+    if (resubROBtn) { resubROBtn.style.display = 'none'; }
     // Unlock research buttons
     var ctrlBtn = document.getElementById('research-ctrl-btn');
     if (ctrlBtn) { ctrlBtn.style.pointerEvents = ''; ctrlBtn.style.opacity = ''; }
@@ -9400,6 +9408,17 @@
         resubBtnR.style.background = 'rgba(29,158,117,0.12)';
         resubBtnR.style.borderColor = 'rgba(29,158,117,0.45)';
         resubBtnR.style.color = '#5DCAA5';
+      }
+    } else if (_savedRecordId && (r.status === 'research' || r.status === 'incomplete')) {
+      // Research-only or incomplete record — show "Update Research" button instead
+      var emailBtnRO = document.getElementById('email-btn');
+      if (emailBtnRO) { emailBtnRO.style.display = 'none'; emailBtnRO.disabled = true; emailBtnRO.style.pointerEvents = 'none'; }
+      var editBtnRO = document.getElementById('edit-record-btn');
+      if (editBtnRO) editBtnRO.style.display = 'none';
+      var resubROBtnR = document.getElementById('resubmit-ro-btn');
+      if (resubROBtnR) {
+        resubROBtnR.style.display = 'inline-flex';
+        resubROBtnR.disabled = false;
       }
     }
 
@@ -12842,6 +12861,72 @@
         resubBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Update Record';
         alert('Network error. Please try again.');
       });
+    });
+  }
+
+  // ── Update Research click ─────────────────────────────────────────
+  // Lighter counterpart to onResubmitClick for research-only / incomplete records.
+  // Skips the full 9-point validator since RO records don't require scoring.
+  function onResubmitROClick() {
+    var btn = document.getElementById('resubmit-ro-btn');
+    if (!btn || !_savedRecordId) return;
+
+    // Minimal sanity check: must have a company name (website or company field).
+    // Everything else is optional on RO records.
+    var company = (document.getElementById('f-company')||{}).value.trim();
+    var website = (document.getElementById('f-website')||{}).value.trim();
+    if (!company && !website) {
+      alert('Add a company name or website before saving research.');
+      return;
+    }
+
+    var origHtml = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Update Research';
+    var rec = _buildCurrentRecord();
+    rec.id = _savedRecordId;
+    btn.disabled = true;
+    btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Updating...';
+    btn.style.opacity = '0.7';
+
+    gsPost({ action: 'updateRecord', record: rec })
+    .then(function(res) {
+      if (!res || res.error) {
+        btn.disabled = false;
+        btn.innerHTML = origHtml;
+        btn.style.opacity = '';
+        alert('Update failed. Please try again.');
+        return;
+      }
+      // Sync local caches
+      [_recordsCache, _archiveCache].forEach(function(cache) {
+        if (!cache) return;
+        for (var i = 0; i < cache.length; i++) {
+          if (String(cache[i].id) === String(_savedRecordId)) {
+            cache[i] = rec;
+            break;
+          }
+        }
+      });
+      try { updateTabCounts(); } catch(e) {}
+      // Flash success, then re-lock form
+      btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Updated';
+      btn.style.background = 'rgba(29,158,117,0.2)';
+      btn.style.borderColor = 'rgba(29,158,117,0.6)';
+      btn.style.color = '#5DCAA5';
+      btn.style.opacity = '1';
+      setTimeout(function() {
+        btn.disabled = false;
+        btn.innerHTML = origHtml;
+        btn.style.background = '';
+        btn.style.borderColor = '';
+        btn.style.color = '';
+        try { lockForm(); } catch(e) {}
+      }, 1500);
+    })
+    .catch(function() {
+      btn.disabled = false;
+      btn.innerHTML = origHtml;
+      btn.style.opacity = '';
+      alert('Network error. Please try again.');
     });
   }
 
