@@ -13307,7 +13307,7 @@
       dateStr  = now.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
       timeStr  = now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',hour12:true});
     }
-    var pc = ivScore>=3?'ag':ivScore>=2?'cp':'asst';
+    var pc = _assignOverride || (ivScore>=3?'ag':ivScore>=2?'cp':'asst');
     var tc = _pdfTierCalc(pc);
     var tierTd = _tierDisplay(pc);
     var headerHtml = _pdfA2Header({
@@ -14641,7 +14641,7 @@
     } else if (scores.iv !== null) {
       // State 2: IV-only / research
       var ivScore = scores.iv || 0;
-      var ivPc = ivScore >= 3 ? 'ag' : ivScore >= 2 ? 'cp' : 'asst';
+      var ivPc = _assignOverride || (ivScore >= 3 ? 'ag' : ivScore >= 2 ? 'cp' : 'asst');
       var _bannerBg  = ivPc==='ag'?'#0F6E56':ivPc==='cp'?'#854F0B':'#3C3489';
       var _tierBg    = ivPc==='ag'?'rgba(4,52,44,0.7)':ivPc==='cp'?'rgba(65,36,2,0.7)':'rgba(38,33,92,0.7)';
       var _tierClr   = ivPc==='ag'?'#9FE1CB':ivPc==='cp'?'#FAC775':'#AFA9EC';
@@ -14660,7 +14660,7 @@
           '<div style="padding:4px 7px;border-radius:5px;background:rgba(255,255,255,0.07);text-align:center;"><div style="font-size:9px;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:0.04em;">AV</div><div style="font-size:13px;font-weight:600;color:rgba(255,255,255,0.3);">\u2014</div></div>';
         a2Pills.style.display = 'flex';
       }
-      if (scorePill) scorePill.textContent = ivTierName;
+      if (scorePill) scorePill.textContent = _assignOverride ? ivTierName + ' (Override)' : ivTierName;
       if (a2Priority) { a2Priority.textContent = 'RESEARCH ONLY'; a2Priority.style.color = _tierClr; }
       if (a2Tier) { a2Tier.style.display = 'block'; a2Tier.style.background = _tierBg; a2Tier.style.border = '1px solid ' + _tierBdr; }
       if (scoreRow) scoreRow.style.display = 'none';
@@ -15803,7 +15803,7 @@
     var _rdJsonCheck = (function(){ try { return (rd.industry||rd.blurb||(rd.eventsSite&&rd.eventsSite.length)||(rd.salesHooks&&rd.salesHooks.length)) ? JSON.stringify(rd) : ''; } catch(e){ return ''; } })();
     var isResearch = _classifyStatus(_rdJsonCheck, _scIv, _scPv, _scAv) === 'research';
     var pc, tc, scoreNum, scoreMax;
-    if (isResearch) { var rIv=_scIv||0; pc=rIv>=3?'ag':rIv>=2?'cp':'asst'; scoreNum=rIv; scoreMax='3'; }
+    if (isResearch) { var rIv=_scIv||0; pc=_arOverride||(rIv>=3?'ag':rIv>=2?'cp':'asst'); scoreNum=rIv; scoreMax='3'; }
     else if (formComplete) { pc=_arOverride||_formPc; scoreNum=total; scoreMax='9'; }
     else { pc=''; scoreNum=0; scoreMax='9'; }
     tc = pc ? _pdfTierCalc(pc) : { bg:'#0f172a', blockBg:'#1e293b', clr:'#94a3b8', bdr:'rgba(148,163,184,0.3)' };
