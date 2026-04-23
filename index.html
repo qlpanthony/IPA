@@ -7331,7 +7331,7 @@
       companyName:'', domain:'', employees:'', industry:'', blurb:'',
       ivState:'none', ivYourTier:'', ivYourScore:0, ivAiTier:'', ivAiScore:0,
       eventsSite:[], eventsWeb:[], observances:[], emailResearchBlock:'',
-      companyLinkedIn:'', contactLinkedIn:'', revenue:'', foundedYear:'', recentNews:[], socialMedia:{}, searchCostUSD:0, searchDuration:null, salesHooks:[], keyPeople:[], tradeShows:[], competitors:[], attackPlan:'', attackPlans:{}, attackPlanActive:'', companyIntel:''
+      companyLinkedIn:'', contactLinkedIn:'', revenue:'', foundedYear:'', recentNews:[], socialMedia:{}, searchCostUSD:0, searchDuration:null, salesHooks:[], keyPeople:[], tradeShows:[], competitors:[], attackPlan:'', attackPlans:{}, attackPlanActive:'', companyIntel:'', companyTalkingPoints:[]
     };
     _ivAccepted = false;
     var _ivBadge1 = document.getElementById('iv-ai-badge'); if (_ivBadge1) _ivBadge1.style.display = 'none';
@@ -9021,6 +9021,7 @@
       _researchData.attackPlans    = (rd.attackPlans && typeof rd.attackPlans === 'object') ? rd.attackPlans : {};
       _researchData.attackPlanActive = rd.attackPlanActive || '';
       _researchData.companyIntel   = rd.companyIntel || '';
+      _researchData.companyTalkingPoints = Array.isArray(rd.companyTalkingPoints) ? rd.companyTalkingPoints : [];
       _researchData.searchCostUSD  = parseFloat(rd.searchCostUSD) || 0;
       _researchData.searchDuration = rd.searchDuration || null;
       _researchData.ivState = 'none';
@@ -9097,6 +9098,7 @@
       _researchData.attackPlans    = (rd.attackPlans && typeof rd.attackPlans === 'object') ? rd.attackPlans : {};
       _researchData.attackPlanActive = rd.attackPlanActive || '';
       _researchData.companyIntel   = rd.companyIntel || '';
+      _researchData.companyTalkingPoints = Array.isArray(rd.companyTalkingPoints) ? rd.companyTalkingPoints : [];
       _researchData.companyLinkedIn= rd.companyLinkedIn || '';
       _researchData.decisionMakers = rd.decisionMakers  || null;
       // IV check state is transient — reset
@@ -9158,6 +9160,7 @@
       _researchData.attackPlans    = (_rdRestore.attackPlans && typeof _rdRestore.attackPlans === 'object') ? _rdRestore.attackPlans : {};
       _researchData.attackPlanActive = _rdRestore.attackPlanActive || '';
       _researchData.companyIntel   = _rdRestore.companyIntel || '';
+      _researchData.companyTalkingPoints = Array.isArray(_rdRestore.companyTalkingPoints) ? _rdRestore.companyTalkingPoints : [];
       _researchData.searchCostUSD  = parseFloat(_rdRestore.searchCostUSD) || 0;
       _researchData.searchDuration = _rdRestore.searchDuration || null;
       // IV check state is transient (not persisted) — reset to prevent stale mismatch display
@@ -9171,7 +9174,7 @@
         companyName:'', domain:'', employees:'', industry:'', blurb:'',
         ivState:'none', ivYourTier:'', ivYourScore:0, ivAiTier:'', ivAiScore:0,
         eventsSite:[], eventsWeb:[], observances:[], emailResearchBlock:'',
-        companyLinkedIn:'', contactLinkedIn:'', revenue:'', foundedYear:'', recentNews:[], socialMedia:{}, searchCostUSD:0, searchDuration:null, salesHooks:[], keyPeople:[], tradeShows:[], competitors:[], attackPlan:'', attackPlans:{}, attackPlanActive:'', companyIntel:''
+        companyLinkedIn:'', contactLinkedIn:'', revenue:'', foundedYear:'', recentNews:[], socialMedia:{}, searchCostUSD:0, searchDuration:null, salesHooks:[], keyPeople:[], tradeShows:[], competitors:[], attackPlan:'', attackPlans:{}, attackPlanActive:'', companyIntel:'', companyTalkingPoints:[]
       };
     }
     _ivAccepted = false;
@@ -11082,7 +11085,7 @@
       companyName:'', domain:'', employees:'', industry:'', blurb:'',
       ivState:'none', ivYourTier:'', ivYourScore:0, ivAiTier:'', ivAiScore:0,
       eventsSite:[], eventsWeb:[], observances:[], emailResearchBlock:'',
-      companyLinkedIn:'', contactLinkedIn:'', revenue:'', foundedYear:'', recentNews:[], socialMedia:{}, searchCostUSD:0, searchDuration:null, salesHooks:[], keyPeople:[], tradeShows:[], competitors:[], attackPlan:'', attackPlans:{}, attackPlanActive:'', companyIntel:''
+      companyLinkedIn:'', contactLinkedIn:'', revenue:'', foundedYear:'', recentNews:[], socialMedia:{}, searchCostUSD:0, searchDuration:null, salesHooks:[], keyPeople:[], tradeShows:[], competitors:[], attackPlan:'', attackPlans:{}, attackPlanActive:'', companyIntel:'', companyTalkingPoints:[]
     };
     _liveEmailIntent = 'checkin'; _liveEmailInstruction = ''; _liveEmailCoupon = ''; _liveEmailSelected = []; _liveEmailItems = [];
     // Clear AI-filled green fields
@@ -12306,6 +12309,7 @@
                 if (ciObj) {
                   console.log('[CI] Success: structured intel received');
                   _researchData.companyIntel = _renderCompanyIntelHtml(ciObj);
+                  _researchData.companyTalkingPoints = Array.isArray(ciObj.talkingPoints) ? ciObj.talkingPoints : [];
                   try { var ov = document.getElementById('research-overlay'); if (ov && ov.classList.contains('open')) populateCompanyIntel(); } catch(e) {}
                   try { if (_savedRecordId) { var rec = _buildCurrentRecord(); rec.id = _savedRecordId; gsPost({ action: 'updateRecord', record: rec }); } } catch(e) {}
                 } else {
@@ -12764,7 +12768,7 @@
     };
     if (hasAI) {
       rec.aiResearch = 'YES';
-      rec.researchData = (function(){ try { var rd = _researchData; return JSON.stringify({ companyName:rd.companyName, domain:rd.domain, employees:rd.employees, industry:rd.industry, blurb:rd.blurb, revenue:rd.revenue, foundedYear:rd.foundedYear, socialMedia:rd.socialMedia, recentNews:rd.recentNews, eventsSite:rd.eventsSite, eventsWeb:rd.eventsWeb, observances:rd.observances, companyLinkedIn:rd.companyLinkedIn, contactLinkedIn:rd.contactLinkedIn, contactPerson:rd.contactPerson, decisionMakers:rd.decisionMakers, salesHooks:rd.salesHooks, keyPeople:rd.keyPeople||[], searchCostUSD:rd.searchCostUSD, searchDuration:rd.searchDuration, tradeShows:rd.tradeShows||[], competitors:rd.competitors||[], attackPlan:rd.attackPlan||'', attackPlans:rd.attackPlans||{}, attackPlanActive:rd.attackPlanActive||'', companyIntel:rd.companyIntel||'' }); } catch(e){ return ''; } })();
+      rec.researchData = (function(){ try { var rd = _researchData; return JSON.stringify({ companyName:rd.companyName, domain:rd.domain, employees:rd.employees, industry:rd.industry, blurb:rd.blurb, revenue:rd.revenue, foundedYear:rd.foundedYear, socialMedia:rd.socialMedia, recentNews:rd.recentNews, eventsSite:rd.eventsSite, eventsWeb:rd.eventsWeb, observances:rd.observances, companyLinkedIn:rd.companyLinkedIn, contactLinkedIn:rd.contactLinkedIn, contactPerson:rd.contactPerson, decisionMakers:rd.decisionMakers, salesHooks:rd.salesHooks, keyPeople:rd.keyPeople||[], searchCostUSD:rd.searchCostUSD, searchDuration:rd.searchDuration, tradeShows:rd.tradeShows||[], competitors:rd.competitors||[], attackPlan:rd.attackPlan||'', attackPlans:rd.attackPlans||{}, attackPlanActive:rd.attackPlanActive||'', companyIntel:rd.companyIntel||'', companyTalkingPoints:rd.companyTalkingPoints||[] }); } catch(e){ return ''; } })();
       rec.researchEvents = (function(){ try { return JSON.stringify({ events:(_researchData.eventsSite||[]).concat(_researchData.eventsWeb||[]), observances:_researchData.observances||[], tradeShows:_researchData.tradeShows||[] }); } catch(e){ return ''; } })();
       rec.researchNotes = typeof buildResearchBlock === 'function' ? buildResearchBlock() : '';
       rec.aiEmailHtml = (function(){ try { var el = document.getElementById('rp-email-preview-html'); return el ? (el._fullEmailDoc || el.innerHTML) : ''; } catch(e){ return ''; } })();
@@ -12901,8 +12905,9 @@
       '.section-title{font-size:8px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.12em;border-bottom:1px solid #e2e8f0;padding-bottom:4px;margin-bottom:6px;}' +
       'td.lbl{padding:3px 12px 3px 0;font-size:11px;color:#64748b;white-space:nowrap;width:130px;vertical-align:top;}' +
       'td.val{padding:3px 0;font-size:11px;color:#1e293b;font-weight:500;vertical-align:top;word-wrap:break-word;word-break:break-word;}' +
-      '.block-hdr{margin:18px 0 12px;border-top:2px solid #e2e8f0;padding-top:10px;page-break-after:avoid;}' +
-      '.intel-box{border-left:3px solid #60a5fa;padding:8px 0 8px 14px;font-size:11px;color:#334155;line-height:1.65;margin-bottom:14px;}' +
+      '.block-wrap{border-radius:6px 0 0 0;padding:12px 14px 14px 14px;margin-bottom:16px;page-break-inside:avoid;}' +
+      '.block-hdr{margin:0 0 12px;padding-top:0;page-break-after:avoid;}' +
+      '.intel-box{padding:4px 0 8px 0;font-size:11px;color:#334155;line-height:1.65;margin-bottom:14px;}' +
       '.atk-box{border-left:3px solid #f59e0b;padding:8px 0 8px 14px;font-size:11px;color:#334155;line-height:1.55;}' +
       '.pdf-footer{border-top:1px solid #e2e8f0;padding:8px 0 0;margin-top:24px;font-size:8px;color:#94a3b8;}' +
       '.pdf-footer table{width:100%;border-collapse:collapse;table-layout:auto;}' +
@@ -12992,42 +12997,51 @@
     var fSec = function(title,inner){ if(!inner)return ''; return '<div class="section"><div class="section-title">'+title+'</div><table><tbody>'+inner+'</tbody></table></div>'; };
     var dh = _pdfDateHelpers();
     var bHdr = function(num, title, color, textColor) {
-      return '<div class="block-hdr" style="border-top-color:'+color+';">' +
+      return '<div class="block-hdr">' +
         '<table style="width:100%" cellpadding="0" cellspacing="0"><tr>' +
         '<td style="width:28px;vertical-align:middle;"><div style="width:24px;height:24px;border-radius:50%;background:'+color+';color:#fff;font-size:11px;font-weight:700;text-align:center;line-height:24px;">'+num+'</div></td>' +
         '<td style="padding-left:8px;font-size:10px;font-weight:700;color:'+textColor+';letter-spacing:0.1em;text-transform:uppercase;vertical-align:middle;">'+title+'</td>' +
         '</tr></table></div>';
     };
+    // L-shape wrapper: 3px top + 3px left border in block color, with very faint color-tinted bg
+    var bWrap = function(color, tintRgba) {
+      return '<div class="block-wrap" style="border-top:3px solid '+color+';border-left:3px solid '+color+';background:'+tintRgba+';">';
+    };
+    var bWrapEnd = '</div>';
     var html = '';
 
     // ══════════════════════════════════════════════
     // 1. KNOW THE COMPANY
     // ══════════════════════════════════════════════
+    html += bWrap('#2563eb', 'rgba(37,99,235,0.03)');
     html += bHdr('1', 'Know the company', '#2563eb', '#1e40af');
 
-    // Scoring Breakdown (SC only) — shown up top so the rep sees the deal shape first
-    if (!o.isRO) {
-      html += '<div class="section"><div class="section-title">Scoring Breakdown</div>' +
-        '<table class="score-grid"><tr>' +
-          '<td><div style="font-size:9px;color:#64748b;text-transform:uppercase;">Implied Value</div>' +
-            '<div style="font-size:20px;font-weight:700;color:'+(o.ivScore>=3?'#059669':o.ivScore>=2?'#d97706':'#ef4444')+';margin:2px 0;">'+(o.ivScore||0)+'/3</div>' +
-            '<div style="font-size:9px;color:#94a3b8;">'+(o.ivLabel||'')+'</div></td>' +
-          '<td><div style="font-size:9px;color:#64748b;text-transform:uppercase;">Potential Value</div>' +
-            '<div style="font-size:20px;font-weight:700;color:'+(o.pvScore>=3?'#059669':o.pvScore>=2?'#d97706':'#ef4444')+';margin:2px 0;">'+(o.pvScore||0)+'/3</div>' +
-            '<div style="font-size:9px;color:#94a3b8;">'+(o.pvLabel||'')+'</div></td>' +
-          '<td><div style="font-size:9px;color:#64748b;text-transform:uppercase;">Actual Value</div>' +
-            '<div style="font-size:20px;font-weight:700;color:'+(o.avScore>=3?'#059669':o.avScore>=2?'#d97706':'#ef4444')+';margin:2px 0;">'+(o.avScore||0)+'/3</div>' +
-            '<div style="font-size:9px;color:#94a3b8;">'+(o.avLabel||'')+'</div></td>' +
-        '</tr></table></div>';
-    }
+    // Build the Company Snapshot grid as a variable — it will render INSIDE the merged Contact & Details section.
+    // Grid shows: Industry, Employees, Revenue, Founded, Social. Website shows as a row in the contact table.
+    var snapCells = '';
+    if (rd.industry) snapCells += '<td style="text-align:center;padding:6px 4px;border-right:1px solid #f1f5f9;"><div style="font-size:8px;color:#64748b;text-transform:uppercase;letter-spacing:0.06em;">Industry</div><div style="font-size:11px;font-weight:700;color:#1e293b;margin-top:1px;">'+rd.industry+'</div></td>';
+    if (rd.employees) snapCells += '<td style="text-align:center;padding:6px 4px;border-right:1px solid #f1f5f9;"><div style="font-size:8px;color:#64748b;text-transform:uppercase;letter-spacing:0.06em;">Employees</div><div style="font-size:11px;font-weight:700;color:#1e293b;margin-top:1px;">'+rd.employees+'</div></td>';
+    if (rd.revenue) snapCells += '<td style="text-align:center;padding:6px 4px;border-right:1px solid #f1f5f9;"><div style="font-size:8px;color:#64748b;text-transform:uppercase;letter-spacing:0.06em;">Revenue</div><div style="font-size:11px;font-weight:700;color:#1e293b;margin-top:1px;">'+rd.revenue+'</div></td>';
+    if (rd.foundedYear) snapCells += '<td style="text-align:center;padding:6px 4px;border-right:1px solid #f1f5f9;"><div style="font-size:8px;color:#64748b;text-transform:uppercase;letter-spacing:0.06em;">Founded</div><div style="font-size:11px;font-weight:700;color:#1e293b;margin-top:1px;">'+rd.foundedYear+'</div></td>';
+    var sm = rd.socialMedia || {};
+    var socialShort = [];
+    if (rd.companyLinkedIn) socialShort.push('<a href="'+rd.companyLinkedIn+'">LI</a>');
+    if (sm.facebook) socialShort.push('<a href="'+sm.facebook+'">FB</a>');
+    if (sm.instagram) socialShort.push('<a href="'+sm.instagram+'">IG</a>');
+    if (sm.twitter) socialShort.push('<a href="'+sm.twitter+'">TW</a>');
+    if (sm.tiktok) socialShort.push('<a href="'+sm.tiktok+'">TT</a>');
+    if (sm.youtube) socialShort.push('<a href="'+sm.youtube+'">YT</a>');
+    if (socialShort.length) snapCells += '<td style="text-align:center;padding:6px 4px;"><div style="font-size:8px;color:#64748b;text-transform:uppercase;letter-spacing:0.06em;">Social</div><div style="font-size:10px;color:#60a5fa;margin-top:1px;">'+socialShort.join(' &middot; ')+'</div></td>';
+    var snapshotGridHtml = snapCells
+      ? '<table style="width:100%;border-collapse:collapse;border:1px solid #e2e8f0;margin-bottom:10px;"><tr>'+snapCells+'</tr></table>'
+      : '';
 
-    // Contact & Details
+    // Contact & Details rows — Employees moves into grid above; Website stays as a clickable row.
     var contactInner = fRow('Customer Name', o.name) +
       fRow('Phone', o.phone?(o.phone!=='\u2014'?'<a href="tel:'+o.phone.replace(/\D/g,'')+'" style="color:#1e293b;text-decoration:none;">'+o.phone+'</a>':''):'') +
       fRow('Email', o.email?(o.email!=='\u2014'?'<a href="mailto:'+o.email+'">'+o.email+'</a>':''):'') +
       fRow('CID', o.cid) + fRow('Company', o.company) + fRow('Address', o.address) +
-      (o.website ? fRow('Website', '<a href="'+(o.website.match(/^https?:\/\//)?o.website:'https://'+o.website)+'">'+o.website.replace(/^https?:\/\//i,'')+'</a>') : '') +
-      (rd.employees ? fRow('Employees', rd.employees) : '');
+      (o.website ? fRow('Website', '<a href="'+(o.website.match(/^https?:\/\//)?o.website:'https://'+o.website)+'">'+o.website.replace(/^https?:\/\//i,'')+'</a>') : '');
     if (!o.isRO) {
       contactInner += fRow('Budget Type', o.budgetType) +
         (o.budgetAmount?fRow('Budget Amount','$'+Number(o.budgetAmount).toLocaleString()):'') +
@@ -13035,7 +13049,12 @@
         (o.avAmount?fRow('Lifetime Spend','$'+Number(o.avAmount).toLocaleString()):'');
     }
     contactInner += fRow('Assigned To', o.owner+(o.overrideNote||'')) + fRow('Rep', o.rep);
-    html += fSec('Contact & Details', contactInner);
+
+    // Render merged Contact & Details: section title + snapshot grid + contact rows table.
+    html += '<div class="section"><div class="section-title">Contact &amp; Details</div>' +
+      snapshotGridHtml +
+      '<table><tbody>'+contactInner+'</tbody></table>' +
+    '</div>';
 
     if (o.notes && o.notes !== '\u2014') {
       html += '<div class="section"><div class="section-title">Notes</div><div style="font-size:11px;white-space:pre-wrap;color:#1e293b;line-height:1.5;">'+o.notes+'</div></div>';
@@ -13046,28 +13065,6 @@
       // Replace "SAY THIS ON THE CALL" with "TALKING POINTS" in the intel HTML
       var cleanIntel = rd.companyIntel.replace(/SAY THIS ON THE CALL/gi, 'TALKING POINTS').replace(/Say This On The Call/gi, 'Talking Points').replace(/say this on the call/gi, 'Talking points');
       html += '<div style="margin-bottom:14px;"><div class="section-title">Company Intel</div><div class="intel-box">'+cleanIntel+'</div></div>';
-    }
-
-    // Company Snapshot strip
-    var snapCells = '';
-    if (rd.industry) snapCells += '<td style="text-align:center;padding:6px 4px;border-right:1px solid #f1f5f9;"><div style="font-size:8px;color:#64748b;text-transform:uppercase;letter-spacing:0.06em;">Industry</div><div style="font-size:11px;font-weight:700;color:#1e293b;margin-top:1px;">'+rd.industry+'</div></td>';
-    if (rd.employees) snapCells += '<td style="text-align:center;padding:6px 4px;border-right:1px solid #f1f5f9;"><div style="font-size:8px;color:#64748b;text-transform:uppercase;letter-spacing:0.06em;">Employees</div><div style="font-size:11px;font-weight:700;color:#1e293b;margin-top:1px;">'+rd.employees+'</div></td>';
-    if (rd.revenue) snapCells += '<td style="text-align:center;padding:6px 4px;border-right:1px solid #f1f5f9;"><div style="font-size:8px;color:#64748b;text-transform:uppercase;letter-spacing:0.06em;">Revenue</div><div style="font-size:11px;font-weight:700;color:#1e293b;margin-top:1px;">'+rd.revenue+'</div></td>';
-    if (rd.foundedYear) snapCells += '<td style="text-align:center;padding:6px 4px;border-right:1px solid #f1f5f9;"><div style="font-size:8px;color:#64748b;text-transform:uppercase;letter-spacing:0.06em;">Founded</div><div style="font-size:11px;font-weight:700;color:#1e293b;margin-top:1px;">'+rd.foundedYear+'</div></td>';
-    // Social media summary
-    var sm = rd.socialMedia || {};
-    var socialShort = [];
-    if (rd.companyLinkedIn) socialShort.push('<a href="'+rd.companyLinkedIn+'">LI</a>');
-    if (sm.facebook) socialShort.push('<a href="'+sm.facebook+'">FB</a>');
-    if (sm.instagram) socialShort.push('<a href="'+sm.instagram+'">IG</a>');
-    if (sm.twitter) socialShort.push('<a href="'+sm.twitter+'">TW</a>');
-    if (sm.tiktok) socialShort.push('<a href="'+sm.tiktok+'">TT</a>');
-    if (sm.youtube) socialShort.push('<a href="'+sm.youtube+'">YT</a>');
-    if (socialShort.length) snapCells += '<td style="text-align:center;padding:6px 4px;"><div style="font-size:8px;color:#64748b;text-transform:uppercase;letter-spacing:0.06em;">Social</div><div style="font-size:10px;color:#60a5fa;margin-top:1px;">'+socialShort.join(' &middot; ')+'</div></td>';
-    if (snapCells) {
-      html += '<div class="section" style="margin-bottom:10px;"><div class="section-title">Company Snapshot</div><table style="width:100%;border-collapse:collapse;border:1px solid #e2e8f0;"><tr>'+snapCells+'</tr></table>';
-      if (o.website) html += '<div style="margin-top:4px;font-size:10px;color:#64748b;"><a href="'+(o.website.match(/^https?:\/\//)?o.website:'https://'+o.website)+'">'+o.website.replace(/^https?:\/\//i,'')+'</a></div>';
-      html += '</div>';
     }
 
     // Competitors
@@ -13088,12 +13085,14 @@
     // ══════════════════════════════════════════════
     // 2. KNOW THEIR EVENTS
     // ══════════════════════════════════════════════
+    html += bWrapEnd; // close block 1
     var pdfTS = rd.tradeShows || [];
     var allEvts = dh.sortByDate((rd.eventsSite||[]).concat(rd.eventsWeb||[]));
     var obs = dh.sortByDate(rd.observances || []);
     var totalEvts = pdfTS.length + allEvts.length + obs.length;
 
     if (totalEvts > 0) {
+      html += bWrap('#d97706', 'rgba(217,119,6,0.03)');
       html += bHdr('2', 'Know their events', '#d97706', '#92400e');
 
       var evtRows = '';
@@ -13126,6 +13125,7 @@
         });
       }
       html += fSec('Events & Dates ('+totalEvts+')', evtRows);
+      html += bWrapEnd; // close block 2
     }
 
     // ══════════════════════════════════════════════
@@ -13140,14 +13140,31 @@
     var kp = rd.keyPeople || [];
     kp.forEach(function(p){ if(p.name) dmRows += fRow((p.role||'Key Person'), '<strong>'+p.name+'</strong>'+(p.title?' &mdash; '+p.title:'')+(p.linkedin?' <a href="'+p.linkedin+'">[LinkedIn]</a>':'')); });
     if (dmRows) {
+      html += bWrap('#7c3aed', 'rgba(124,58,237,0.03)');
       html += bHdr('3', "Who\u2019s calling the shots", '#7c3aed', '#5b21b6');
       html += fSec('Decision Makers & Key People', dmRows);
+      html += bWrapEnd; // close block 3
     }
 
     // ══════════════════════════════════════════════
     // 4. HOW WE CAN HELP
     // ══════════════════════════════════════════════
+    html += bWrap('#059669', 'rgba(5,150,105,0.03)');
     html += bHdr('4', 'How we can help', '#059669', '#166534');
+
+    // Talking Points (moved here from Company Intel — these are what to say to land the call)
+    var ctp = rd.companyTalkingPoints || [];
+    if (ctp.length) {
+      var tpRows = ctp.map(function(tp, i) {
+        return '<tr><td colspan="2" style="padding:5px 0;border-bottom:1px solid #f1f5f9;">' +
+          '<div style="display:flex;gap:10px;align-items:flex-start;">' +
+            '<span style="font-size:11px;font-weight:700;color:#059669;flex-shrink:0;min-width:16px;">' + (i+1) + '</span>' +
+            '<span style="font-size:11px;color:#1e293b;line-height:1.5;">' + tp + '</span>' +
+          '</div>' +
+        '</td></tr>';
+      }).join('');
+      html += fSec('Talking Points', tpRows);
+    }
 
     // Hooks with type badges
     if (rd.salesHooks && rd.salesHooks.length) {
@@ -13167,6 +13184,7 @@
       }).join('');
       html += fSec('Call Cheat Sheet ('+rd.salesHooks.length+')', hookRows);
     }
+    html += bWrapEnd; // close block 4
 
     return html;
   }
@@ -15892,6 +15910,18 @@
 
     // 4. How we can help
     bodyHtml += ebHdr('4', 'How we can help', '#059669', '#166534');
+    var emCtp = rd.companyTalkingPoints || [];
+    if (emCtp.length) {
+      bodyHtml += ssec('Talking Points');
+      emCtp.forEach(function(tp, i) {
+        bodyHtml += '<tr><td colspan="2" style="padding:5px 0;border-bottom:1px solid #f1f5f9;">' +
+          '<div style="display:flex;gap:10px;align-items:flex-start;">' +
+            '<span style="font-size:11px;font-weight:700;color:#059669;flex-shrink:0;min-width:16px;">' + (i+1) + '</span>' +
+            '<span style="font-size:11px;color:#1e293b;line-height:1.5;">' + tp + '</span>' +
+          '</div>' +
+        '</td></tr>';
+      });
+    }
     if (rd.salesHooks && rd.salesHooks.length) {
       var hookColors = { milestone:'#92400e', news:'#991b1b', expansion:'#991b1b', hiring:'#991b1b', brand:'#1e40af', award:'#5b21b6', industry:'#5b21b6' };
       var hookBgs = { milestone:'#fffbeb', news:'#fef2f2', expansion:'#fef2f2', hiring:'#fef2f2', brand:'#eff6ff', award:'#f5f3ff', industry:'#f5f3ff' };
@@ -16493,18 +16523,8 @@
       '</div>';
     });
     if (ci.talkingPoints && ci.talkingPoints.length) {
-      html += '<div style="margin-bottom:12px;padding:14px 16px;background:rgba(29,158,117,0.04);border:1px solid rgba(29,158,117,0.2);border-radius:10px;">' +
-        '<div style="display:flex;align-items:center;gap:7px;margin-bottom:10px;">' +
-          '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5DCAA5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>' +
-          '<span style="font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#5DCAA5;">Talking Points</span>' +
-        '</div>';
-      ci.talkingPoints.forEach(function(tp, i) {
-        html += '<div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:8px;">' +
-          '<span style="font-size:11px;font-weight:700;color:#5DCAA5;flex-shrink:0;min-width:16px;">' + (i+1) + '</span>' +
-          '<span style="font-size:12px;color:var(--text);line-height:1.6;">' + tp + '</span>' +
-        '</div>';
-      });
-      html += '</div>';
+      // Talking Points are stored separately on _researchData.companyTalkingPoints and rendered
+      // in the "How We Can Help" block in PDFs/emails. Intentionally not rendered here.
     }
     return html;
   }
@@ -16572,6 +16592,7 @@
       if (ciObj) {
         var formatted = _renderCompanyIntelHtml(ciObj);
         _researchData.companyIntel = formatted;
+        _researchData.companyTalkingPoints = Array.isArray(ciObj.talkingPoints) ? ciObj.talkingPoints : [];
         if (content) { content.innerHTML = formatted; content.style.display = 'block'; }
         if (empty) empty.style.display = 'none';
         try { if (_savedRecordId) {
