@@ -13041,6 +13041,16 @@
       ? '<span style="'+pillDimStyle+'"><span style="'+labelDimStyle+'">AV</span><span style="'+valDimStyle+'">&mdash;</span></span>'
       : '<span style="'+pillStyle+'"><span style="'+labelStyle+'">AV</span><span style="'+valStyle+'">'+(o.avScore||0)+'/3</span></span>';
 
+    // HOT flame — PDFs use inline flame in company name; email mode omits it here since the caller prepends a full-width banner
+    var isEmail = o.mode === 'email';
+    var inlineFlame = (o.isHot && !isEmail) ? '&#128293; ' : '';
+
+    // Company name — wrapped in link if o.companyLink provided (website, fallback companyLinkedIn)
+    var companyInner = inlineFlame + o.company + (o.industry?' <span style="font-size:9px;font-weight:600;padding:1px 6px;background:rgba(255,255,255,0.18);color:#fff;border-radius:999px;">'+o.industry+'</span>':'');
+    var companyHtml = o.companyLink
+      ? '<a href="'+(o.companyLink.match(/^https?:\/\//)?o.companyLink:'https://'+o.companyLink)+'" style="color:#fff;text-decoration:none;">'+companyInner+'</a>'
+      : companyInner;
+
     // Row 1: Score + Company info + Tier block (3 columns only)
     var row1 =
       '<table style="width:100%;border-collapse:collapse;table-layout:auto;background:'+o.tierBg+';" cellpadding="0" cellspacing="0"><tr>' +
@@ -13050,7 +13060,7 @@
         '</td>' +
         '<td style="width:1px;padding:10px 0;vertical-align:middle;"><div style="width:1px;height:34px;background:rgba(255,255,255,0.15);"></div></td>' +
         '<td style="padding:10px 14px;vertical-align:middle;">' +
-          '<div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:2px;">'+(o.isHot?'&#128293; ':'')+o.company+(o.industry?' <span style="font-size:9px;font-weight:600;padding:1px 6px;background:rgba(255,255,255,0.18);color:#fff;border-radius:999px;">'+o.industry+'</span>':'')+'</div>' +
+          '<div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:2px;">'+companyHtml+'</div>' +
           '<div style="font-size:10px;color:rgba(255,255,255,0.6);">'+metaParts.join(' &middot; ')+costChip+'</div>' +
         '</td>' +
         '<td style="padding:10px 14px;vertical-align:middle;text-align:right;white-space:nowrap;">' +
@@ -13065,10 +13075,10 @@
     // Blurb
     var blurbHtml = o.blurb ? '<div style="font-size:10px;color:#475569;line-height:1.5;padding:6px 2px 4px;border-bottom:1px solid #e2e8f0;">'+o.blurb+'</div>' : '';
 
-    // Info bar
+    // Info bar — email/phone wrapped in mailto:/tel: links
     var rightInfo = o.name || '';
-    if (o.email && o.email !== '\u2014') rightInfo += (rightInfo ? ' &middot; ' : '') + o.email;
-    if (o.phone && o.phone !== '\u2014') rightInfo += (rightInfo ? ' &middot; ' : '') + o.phone;
+    if (o.email && o.email !== '\u2014') rightInfo += (rightInfo ? ' &middot; ' : '') + '<a href="mailto:'+o.email+'" style="color:inherit;text-decoration:none;">'+o.email+'</a>';
+    if (o.phone && o.phone !== '\u2014') rightInfo += (rightInfo ? ' &middot; ' : '') + '<a href="tel:'+o.phone.replace(/\D/g,'')+'" style="color:inherit;text-decoration:none;">'+o.phone+'</a>';
     var infoBar = '<div class="info-bar"><table><tr>' +
       '<td style="text-align:left;">'+(o.ipaNum?o.ipaNum+' &middot; ':'')+'Entered by '+(o.rep||'\u2014')+' &middot; '+o.dateStr+(o.timeStr?' &middot; '+o.timeStr:'')+'</td>' +
       '<td style="text-align:right;">'+rightInfo+'</td>' +
@@ -13093,7 +13103,17 @@
       return '<div class="block-wrap" style="border-top:3px solid '+color+';border-left:3px solid '+color+';background:'+tintRgba+';">';
     };
     var bWrapEnd = '</div>';
+    var isEmailMode = o.mode === 'email';
     var html = '';
+
+    // TO DO banners (email mode only, scored records only)
+    if (isEmailMode && !o.isRO) {
+      if (o.pillClass === 'asst') {
+        html += '<div style="padding:8px 12px;background:#fef2f2;border-left:4px solid #ef4444;margin-bottom:14px;"><p style="margin:0;font-size:12px;font-weight:700;color:#dc2626;">TO DO: Kill future tasks in Insights.</p></div>';
+      } else if ((o.totalScore||0) >= 6 && o.customerType === 'Existing Customer') {
+        html += '<div style="padding:8px 12px;background:#f0fdf4;border-left:4px solid #16a34a;margin-bottom:14px;"><p style="margin:0;font-size:12px;font-weight:700;color:#16a34a;">TO DO: Enable tasks in Insights for this customer.</p></div>';
+      }
+    }
 
     // ══════════════════════════════════════════════
     // 1. KNOW THE COMPANY
@@ -13122,10 +13142,16 @@
       : '';
 
     // Contact & Details rows — Employees moves into grid above; Website stays as a clickable row.
-    var contactInner = fRow('Customer Name', o.name) +
+    var nameHtml = (o.name && rd.contactLinkedIn)
+      ? '<a href="'+rd.contactLinkedIn+'" style="color:#1e293b;text-decoration:none;">'+o.name+'</a>'
+      : o.name;
+    var addressHtml = (o.address && o.address !== '\u2014')
+      ? '<a href="https://maps.google.com/?q='+encodeURIComponent(o.address)+'" style="color:#1e293b;text-decoration:none;">'+o.address+'</a>'
+      : o.address;
+    var contactInner = fRow('Customer Name', nameHtml) +
       fRow('Phone', o.phone?(o.phone!=='\u2014'?'<a href="tel:'+o.phone.replace(/\D/g,'')+'" style="color:#1e293b;text-decoration:none;">'+o.phone+'</a>':''):'') +
       fRow('Email', o.email?(o.email!=='\u2014'?'<a href="mailto:'+o.email+'">'+o.email+'</a>':''):'') +
-      fRow('CID', o.cid) + fRow('Company', o.company) + fRow('Address', o.address) +
+      fRow('CID', o.cid) + fRow('Company', o.company) + fRow('Address', addressHtml) +
       (o.website ? fRow('Website', '<a href="'+(o.website.match(/^https?:\/\//)?o.website:'https://'+o.website)+'">'+o.website.replace(/^https?:\/\//i,'')+'</a>') : '');
     if (!o.isRO) {
       contactInner += fRow('Budget Type', o.budgetType) +
@@ -13156,7 +13182,11 @@
     var comps = rd.competitors || [];
     if (comps.length) {
       var compRows = comps.map(function(c) {
-        return fRow((c.name||''), (c.overlap||'')+(c.differentiator?' <span style="color:#dc2626;font-style:italic;font-size:10px;">'+c.differentiator+'</span>':'')+(c.website?' <a href="'+c.website+'" style="font-size:10px;">'+c.website.replace(/^https?:\/\/(www\.)?/,'').replace(/\/.*$/,'')+'</a>':''));
+        var nm = c.name || '';
+        var nmHtml = (nm && c.website)
+          ? '<a href="'+(c.website.match(/^https?:\/\//)?c.website:'https://'+c.website)+'" style="color:inherit;text-decoration:none;">'+nm+'</a>'
+          : nm;
+        return fRow(nmHtml, (c.overlap||'')+(c.differentiator?' <span style="color:#dc2626;font-style:italic;font-size:10px;">'+c.differentiator+'</span>':'')+(c.website?' <a href="'+c.website+'" style="font-size:10px;">'+c.website.replace(/^https?:\/\/(www\.)?/,'').replace(/\/.*$/,'')+'</a>':''));
       }).join('');
       html += fSec('Competitors ('+comps.length+')', compRows);
     }
@@ -13180,15 +13210,28 @@
       html += bWrap('#d97706', 'rgba(217,119,6,0.03)');
       html += bHdr('2', 'Know their events', '#d97706', '#92400e');
 
+      // Inline link helpers for events
+      var linkTitle = function(title, url, color) {
+        if (!title) return '';
+        if (!url) return '<strong>'+title+'</strong>';
+        var safeUrl = url.match(/^https?:\/\//) ? url : 'https://'+url;
+        return '<a href="'+safeUrl+'" style="color:'+color+';text-decoration:none;"><strong>'+title+'</strong></a>';
+      };
+      var linkVenue = function(venue) {
+        if (!venue) return '';
+        return '<a href="https://maps.google.com/?q='+encodeURIComponent(venue)+'" style="color:#64748b;text-decoration:none;">'+venue+'</a>';
+      };
+
       var evtRows = '';
       // Trade shows
       if (pdfTS.length) {
         pdfTS.slice().sort(function(a,b){ var co={confirmed:0,likely:1,'industry-match':2}; var ca=co[a.confidence]!==undefined?co[a.confidence]:2,cb=co[b.confidence]!==undefined?co[b.confidence]:2; if(ca!==cb)return ca-cb; return (dh.parse(a.date)||Infinity)-(dh.parse(b.date)||Infinity); }).forEach(function(t) {
           var diff = dh.daysAway(t.date);
           var isPast = diff !== null && diff < 0;
+          var titleColor = isPast?'#94a3b8':'#1e293b';
           var confLabel = t.confidence==='confirmed'?' <span style="color:#059669;font-weight:700;font-size:9px;">[CONFIRMED]</span>':t.confidence==='likely'?' <span style="color:#d97706;font-weight:700;font-size:9px;">[LIKELY]</span>':'';
           var dateShort = (function(s){ if(!s)return ''; var d=dh.parse(s); if(!d)return s; return d.toLocaleDateString('en-US',{month:'short',day:'numeric'}); })(t.date);
-          evtRows += '<tr style="border-bottom:1px solid #f1f5f9;'+(isPast?'opacity:0.45;':'')+'"><td style="padding:4px 8px 4px 0;width:60px;font-size:10px;font-weight:600;color:'+(isPast?'#94a3b8':'#059669')+';">'+dateShort+'</td><td style="padding:4px 0;"><div style="font-size:11px;font-weight:600;color:'+(isPast?'#94a3b8':'#1e293b')+';"><strong>'+(t.title||'')+'</strong> <span style="font-size:9px;color:#7c3aed;font-weight:700;">[TRADESHOW]</span>'+confLabel+dh.badge(t.date)+'</div>'+(t.venue?'<div style="font-size:10px;color:#64748b;">'+t.venue+'</div>':'')+'</td></tr>';
+          evtRows += '<tr style="border-bottom:1px solid #f1f5f9;'+(isPast?'opacity:0.45;':'')+'"><td style="padding:4px 8px 4px 0;width:60px;font-size:10px;font-weight:600;color:'+(isPast?'#94a3b8':'#059669')+';">'+dateShort+'</td><td style="padding:4px 0;"><div style="font-size:11px;font-weight:600;color:'+titleColor+';">'+linkTitle(t.title, t.source, titleColor)+' <span style="font-size:9px;color:#7c3aed;font-weight:700;">[TRADESHOW]</span>'+confLabel+dh.badge(t.date)+'</div>'+(t.venue?'<div style="font-size:10px;color:#64748b;">'+linkVenue(t.venue)+'</div>':'')+'</td></tr>';
         });
       }
       // Company events
@@ -13196,8 +13239,9 @@
         allEvts.forEach(function(e) {
           var diff = dh.daysAway(e.date);
           var isPast = diff !== null && diff < 0;
+          var titleColor = isPast?'#94a3b8':'#1e293b';
           var dateShort = (function(s){ if(!s)return ''; var d=dh.parse(s); if(!d)return s; return d.toLocaleDateString('en-US',{month:'short',day:'numeric'}); })(e.date);
-          evtRows += '<tr style="border-bottom:1px solid #f1f5f9;'+(isPast?'opacity:0.45;':'')+'"><td style="padding:4px 8px 4px 0;width:60px;font-size:10px;font-weight:600;color:'+(isPast?'#94a3b8':'#059669')+';">'+dateShort+'</td><td style="padding:4px 0;"><div style="font-size:11px;font-weight:600;color:'+(isPast?'#94a3b8':'#1e293b')+';"><strong>'+(e.title||'')+'</strong>'+(e.recurring?' <span style="color:#c2410c;font-size:9px;">[RECURRING]</span>':'')+dh.badge(e.date)+'</div>'+(e.venue?'<div style="font-size:10px;color:#64748b;">'+e.venue+'</div>':'')+'</td></tr>';
+          evtRows += '<tr style="border-bottom:1px solid #f1f5f9;'+(isPast?'opacity:0.45;':'')+'"><td style="padding:4px 8px 4px 0;width:60px;font-size:10px;font-weight:600;color:'+(isPast?'#94a3b8':'#059669')+';">'+dateShort+'</td><td style="padding:4px 0;"><div style="font-size:11px;font-weight:600;color:'+titleColor+';">'+linkTitle(e.title, e.source, titleColor)+(e.recurring?' <span style="color:#c2410c;font-size:9px;">[RECURRING]</span>':'')+dh.badge(e.date)+'</div>'+(e.venue?'<div style="font-size:10px;color:#64748b;">'+linkVenue(e.venue)+'</div>':'')+'</td></tr>';
         });
       }
       // Industry dates
@@ -13218,12 +13262,21 @@
     // ══════════════════════════════════════════════
     var dm = rd.decisionMakers || {};
     var dmRows = '';
+    var renderPerson = function(p) {
+      var nameHtml = p.linkedin
+        ? '<a href="'+p.linkedin+'" style="color:inherit;text-decoration:none;"><strong>'+p.name+'</strong></a>'
+        : '<strong>'+p.name+'</strong>';
+      var line = nameHtml + (p.title?' &mdash; '+p.title:'');
+      if (p.linkedin) line += ' <a href="'+p.linkedin+'">[LinkedIn]</a>';
+      if (p.email) line += ' <a href="mailto:'+p.email+'" style="color:#1D9E75;">[Email]</a>';
+      return line;
+    };
     [{key:'ownerExec',label:'Owner / Exec'},{key:'marketing',label:'Marketing'},{key:'procurement',label:'Procurement'}].forEach(function(r){
       var p = dm[r.key]; if(!p||!p.name) return;
-      dmRows += fRow(r.label, '<strong>'+p.name+'</strong>'+(p.title?' &mdash; '+p.title:'')+(p.linkedin?' <a href="'+p.linkedin+'">[LinkedIn]</a>':''));
+      dmRows += fRow(r.label, renderPerson(p));
     });
     var kp = rd.keyPeople || [];
-    kp.forEach(function(p){ if(p.name) dmRows += fRow((p.role||'Key Person'), '<strong>'+p.name+'</strong>'+(p.title?' &mdash; '+p.title:'')+(p.linkedin?' <a href="'+p.linkedin+'">[LinkedIn]</a>':'')); });
+    kp.forEach(function(p){ if(p.name) dmRows += fRow((p.role||'Key Person'), renderPerson(p)); });
     if (dmRows) {
       html += bWrap('#7c3aed', 'rgba(124,58,237,0.03)');
       html += bHdr('3', "Who\u2019s calling the shots", '#7c3aed', '#5b21b6');
@@ -13338,7 +13391,8 @@
       tierName:owner, priority:tier.priority,
       industry:rd.industry, website:websiteVal, employees:rd.employees,
       foundedYear:rd.foundedYear, blurb:rd.blurb,
-      searchCost:rd.searchCostUSD?'$'+rd.searchCostUSD:''
+      searchCost:rd.searchCostUSD?'$'+rd.searchCostUSD:'',
+      companyLink: websiteVal || rd.companyLinkedIn || ''
     });
     var contentHtml = _pdfContentBlocks(rd, {
       isRO:false, name:name, email:email, phone:phone, cid:cid, company:company,
@@ -13403,7 +13457,8 @@
       tierName:tierTd.name, priority:'RESEARCH ONLY',
       industry:rd.industry, website:website, employees:rd.employees,
       foundedYear:rd.foundedYear, blurb:rd.blurb,
-      searchCost:rd.searchCostUSD?'$'+rd.searchCostUSD:''
+      searchCost:rd.searchCostUSD?'$'+rd.searchCostUSD:'',
+      companyLink: website || rd.companyLinkedIn || ''
     });
     var contentHtml = _pdfContentBlocks(rd, {
       isRO:true, name:name, email:email, phone:phone, company:company,
@@ -13446,7 +13501,8 @@
       tierName:isROArc?'RO':(r.owner||tierTd.name), priority:isROArc?'RESEARCH ONLY':(r.priority||tierTd.priority),
       industry:rd.industry, website:r.website||rd.domain||'', employees:rd.employees||r.employees,
       foundedYear:rd.foundedYear, blurb:rd.blurb,
-      searchCost:rd.searchCostUSD?'$'+rd.searchCostUSD:''
+      searchCost:rd.searchCostUSD?'$'+rd.searchCostUSD:'',
+      companyLink: r.website || rd.domain || rd.companyLinkedIn || ''
     });
     var contentHtml = _pdfContentBlocks(rd, {
       isRO:isROArc, name:r.name||'', email:r.email||'', phone:r.phone||'',
@@ -14957,7 +15013,13 @@
     var _compBadge = document.getElementById('rtab-competitors-badge');
     var _compCount = (_researchData.competitors || []).length;
     if (_compBadge) { _compBadge.textContent = _compCount; _compBadge.style.display = _compCount ? 'inline' : 'none'; }
-    switchResearchTab('events');
+    // Only force the default tab on the FIRST open. During initial open,
+    // populateResearchPopup() runs BEFORE the overlay gets the .open class.
+    // When research callbacks re-populate while the popup is already visible,
+    // the overlay already has .open, so we preserve the user's current tab.
+    var _overlay = document.getElementById('research-overlay');
+    var _alreadyOpen = _overlay && _overlay.classList.contains('open');
+    if (!_alreadyOpen) switchResearchTab('events');
   }
 
   function populateIVCheck() {
@@ -15853,7 +15915,11 @@
   function populateEmailPreviewHTML() {
     var el = document.getElementById('rp-email-preview-html');
     if (!el) return;
+
+    // ── Gather state (archive record or live form) ──────────────────
     var _ar = window._viewingArchiveRecord || null;
+    var rd  = _researchData || {};
+
     var _scIv = _ar ? _validScore(_ar.iv) : scores.iv;
     var _scPv = _ar ? _validScore(_ar.pv) : scores.pv;
     var _scAv = _ar ? _validScore(_ar.av) : scores.av;
@@ -15861,193 +15927,136 @@
     var _lbPv = _ar ? (_ar.pvLabel || '') : labels.pv;
     var _lbAv = _ar ? (_ar.avLabel || '') : labels.av;
     var _arOverride = _ar ? (_ar.assignOverride || null) : _assignOverride;
-    var name    = (_ar ? (_ar.name || '') : document.getElementById('f-name').value).trim() || '\u2014';
-    var company = (_ar ? (_ar.company || '') : document.getElementById('f-company').value).trim() || '\u2014';
-    var phone   = (_ar ? (_ar.phone || '') : document.getElementById('f-phone').value).trim() || '\u2014';
-    var _emailV = (_ar ? (_ar.email || '') : document.getElementById('f-email').value).trim();
-    var emailVal= _emailV || '\u2014';
-    var cid     = (_ar ? (_ar.cid || '') : document.getElementById('f-cid').value).trim() || '\u2014';
-    var budgetAmt = _ar ? (_ar.budget || '') : document.getElementById('f-budget').value.trim();
-    var budgetFmt = budgetAmt ? '$' + Number(budgetAmt).toLocaleString() : '';
-    var notes   = (_ar ? ((_ar.notes && _ar.notes !== '\u2014') ? _ar.notes : '') : document.getElementById('f-notes').value).trim();
-    var allScored = _scIv !== null && _scIv > 0 && _scPv !== null && _scPv > 0 && _scAv !== null && _scAv > 0;
-    var emailValid2 = _emailV && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(_emailV);
-    var contactReady = !!((_ar ? (_ar.phone || '') : document.getElementById('f-phone').value).trim() || emailValid2);
-    var formComplete = allScored && !!(_ar ? (_ar.name || '') : document.getElementById('f-name').value).trim() && contactReady && !!(_ar ? (_ar.budgetType || window._budgetType) : window._budgetType) && !!(_ar ? (_ar.customerType || window._customerType) : window._customerType);
-    var total   = formComplete ? (_scIv||0) + (_scPv||0) + (_scAv||0) : 0;
-    var isHot   = _ar ? !!_ar.isHot : (document.getElementById('hot-btn') && document.getElementById('hot-btn')._isHot);
-    var _formPc = formComplete ? (total >= 7 ? 'ag' : total >= 4 ? 'cp' : 'asst') : '';
-    var _formTd = _formPc ? _tierDisplay(_arOverride || _formPc) : { name:'\u2014', priority:'\u2014' };
-    var owner   = formComplete ? _formTd.name : '\u2014';
-    var priority= formComplete ? _formTd.priority : '\u2014';
-    var stars   = formComplete ? (total >= 7 ? '\u2605\u2605\u2605\u2605\u2605' : total >= 4 ? '\u2605\u2605\u2605' : '\u2605') : '';
-    var rd = _researchData || {};
-    var dm = rd.decisionMakers || {};
-    var sm = rd.socialMedia || {};
-    var website = (_ar ? (_ar.website || '') : (document.getElementById('f-website')||{}).value || '').trim() || rd.domain || '';
+
+    var _v = function(id){ var e=document.getElementById(id); return e?(e.value||'').trim():''; };
+    var name      = (_ar ? (_ar.name    || '') : _v('f-name')).trim();
+    var company   = (_ar ? (_ar.company || '') : _v('f-company')).trim();
+    var phone     = (_ar ? (_ar.phone   || '') : _v('f-phone')).trim();
+    var _emailV   = (_ar ? (_ar.email   || '') : _v('f-email')).trim();
+    var cid       = (_ar ? (_ar.cid     || '') : _v('f-cid')).trim();
+    var notes     = (_ar ? ((_ar.notes && _ar.notes !== '\u2014') ? _ar.notes : '') : _v('f-notes')).trim();
+    var budgetAmt = (_ar ? (_ar.budgetAmount || '') : _v('f-budget'));
+    var avAmt     = (_ar ? (_ar.avAmount     || '') : _v('f-av-amount'));
+    var budgetType= (_ar ? (_ar.budgetType   || '') : (window._budgetType   || ''));
+    var custType  = (_ar ? (_ar.customerType || '') : (window._customerType || ''));
+    var website   = (_ar ? (_ar.website || '') : _v('f-website')) || rd.domain || '';
+
+    // Address: archive stores whole string; live form assembles from 5 parts
+    var address = '';
+    if (_ar) {
+      address = _ar.address || '';
+    } else {
+      var addrParts = [];
+      ['f-street','f-suite','f-city','f-state','f-zip'].forEach(function(id){ var v=_v(id); if(v) addrParts.push(v); });
+      address = addrParts.join(', ');
+    }
+
+    var rep    = window._currentRep || '';
+    var ipaNum = _ar ? (_ar.recordNum || '') : (window._lastSavedRecordNum || '');
+    var isHot  = _ar ? !!_ar.hot : (document.getElementById('hot-btn') && document.getElementById('hot-btn')._isHot);
+
+    var dateStr, timeStr;
+    if (_ar) {
+      dateStr = _ar.date || '';
+      timeStr = _ar.time || '';
+    } else {
+      var now = new Date();
+      dateStr = now.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+      timeStr = now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',hour12:true});
+    }
+
+    // ── Classify state ──────────────────────────────────────────────
+    var allScored    = _scIv !== null && _scIv > 0 && _scPv !== null && _scPv > 0 && _scAv !== null && _scAv > 0;
+    var emailValid2  = _emailV && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(_emailV);
+    var contactReady = !!(phone || emailValid2);
+    var formComplete = allScored && !!name && contactReady && !!budgetType && !!custType;
+    var total        = formComplete ? (_scIv||0)+(_scPv||0)+(_scAv||0) : 0;
+
     var _rdJsonCheck = (function(){ try { return (rd.industry||rd.blurb||(rd.eventsSite&&rd.eventsSite.length)||(rd.salesHooks&&rd.salesHooks.length)) ? JSON.stringify(rd) : ''; } catch(e){ return ''; } })();
-    var isResearch = _classifyStatus(_rdJsonCheck, _scIv, _scPv, _scAv) === 'research';
-    var pc, tc, scoreNum, scoreMax;
-    if (isResearch) { var rIv=_scIv||0; pc=_arOverride||(rIv>=3?'ag':rIv>=2?'cp':'asst'); scoreNum=rIv; scoreMax='3'; }
-    else if (formComplete) { pc=_arOverride||_formPc; scoreNum=total; scoreMax='9'; }
-    else { pc=''; scoreNum=0; scoreMax='9'; }
-    tc = pc ? _pdfTierCalc(pc) : { bg:'#0f172a', blockBg:'#1e293b', clr:'#94a3b8', bdr:'rgba(148,163,184,0.3)' };
-    var tierTd = pc ? _tierDisplay(pc) : { name:'\u2014', priority:'\u2014' };
-    var rep = window._currentRep || '\u2014';
+    var isResearch   = _classifyStatus(_rdJsonCheck, _scIv, _scPv, _scAv) === 'research';
 
-    function prow(label, value) {
-      if (!value || value === '\u2014') return '';
-      return '<tr><td style="padding:3px 10px 3px 0;font-size:11px;color:#64748b;white-space:nowrap;vertical-align:top;width:110px;">'+label+'</td><td style="padding:3px 0;font-size:11px;color:#1e293b;font-weight:500;">'+value+'</td></tr>';
-    }
-    function ssec(title) {
-      return '<tr><td colspan="2" style="padding:10px 0 5px;"><p style="margin:0;font-size:8px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.12em;border-bottom:1px solid #e2e8f0;padding-bottom:4px;">'+title+'</p></td></tr>';
-    }
-    function ebHdr(num, title, color, textColor) {
-      return '<tr><td colspan="2" style="padding:16px 0 6px;"><div style="border-top:2px solid '+color+';padding-top:8px;"><table style="width:100%" cellpadding="0" cellspacing="0"><tr><td style="width:28px;vertical-align:middle;"><div style="width:24px;height:24px;border-radius:50%;background:'+color+';color:#fff;font-size:11px;font-weight:700;text-align:center;line-height:24px;">'+num+'</div></td><td style="padding-left:8px;font-size:10px;font-weight:700;color:'+(textColor||color)+';letter-spacing:0.1em;text-transform:uppercase;vertical-align:middle;">'+title+'</td></tr></table></div></td></tr>';
-    }
-    var dh = _pdfDateHelpers();
-
-    // A2 Header
-    var pillHtml =
-      '<span style="display:inline-block;padding:3px 8px;background:rgba(255,255,255,0.12);font-size:11px;font-weight:700;color:#fff;margin-right:2px;">IV '+(_scIv||0)+'</span>' +
-      '<span style="display:inline-block;padding:3px 8px;background:rgba(255,255,255,0.12);font-size:11px;font-weight:700;color:'+(isResearch?'rgba(255,255,255,0.3)':'#fff')+';margin-right:2px;">PV '+(isResearch?'--':(_scPv||0))+'</span>' +
-      '<span style="display:inline-block;padding:3px 8px;background:rgba(255,255,255,0.12);font-size:11px;font-weight:700;color:'+(isResearch?'rgba(255,255,255,0.3)':'#fff')+';margin-right:6px;">AV '+(isResearch?'--':(_scAv||0))+'</span>' +
-      '<span style="display:inline-block;padding:4px 8px;background:'+tc.blockBg+';border:1px solid '+tc.bdr+';"><span style="font-size:13px;font-weight:700;color:#fff;">'+(isResearch?'RO':(formComplete?owner:'\u2014'))+'</span> <span style="font-size:8px;color:'+tc.clr+';font-weight:600;">'+(isResearch?'RESEARCH ONLY':(formComplete?priority:''))+'</span></span>';
-
-    var headerHtml =
-      (isHot ? '<div style="background:#dc2626;padding:6px 18px;text-align:center;"><span style="font-size:11px;font-weight:700;color:#fff;letter-spacing:0.08em;text-transform:uppercase;">HOT \u2014 Needs Immediate Attention</span></div>' : '') +
-      '<table style="width:100%;border-collapse:collapse;background:'+tc.bg+';" cellpadding="0" cellspacing="0"><tr>' +
-        '<td style="padding:12px 14px;vertical-align:middle;width:55px;text-align:center;"><div style="font-size:28px;font-weight:700;color:#fff;line-height:1;">'+scoreNum+'<span style="font-size:12px;color:rgba(255,255,255,0.5);">/'+scoreMax+'</span></div>'+(isResearch?'<div style="font-size:9px;color:rgba(255,255,255,0.5);margin-top:2px;">IV only</div>':(stars?'<div style="font-size:10px;color:rgba(255,255,255,0.7);margin-top:2px;">'+stars+'</div>':''))+'</td>' +
-        '<td style="width:1px;padding:8px 0;"><div style="width:1px;height:30px;background:rgba(255,255,255,0.15);"></div></td>' +
-        '<td style="padding:10px 12px;"><div style="font-size:13px;font-weight:700;color:#fff;">'+company+(rd.industry?' <span style="font-size:9px;padding:1px 6px;background:rgba(255,255,255,0.18);">'+rd.industry+'</span>':'')+'</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">'+(website?website.replace(/^https?:\/\//i,''):'')+' &middot; '+(rd.employees||'')+' employees'+(rd.foundedYear?' &middot; Est. '+rd.foundedYear:'')+'</div></td>' +
-        '<td style="padding:10px 14px;text-align:right;white-space:nowrap;">'+pillHtml+'</td>' +
-      '</tr></table>';
-
-    var blurbHtml = rd.blurb ? '<div style="padding:6px 18px;font-size:10px;color:#475569;line-height:1.5;border-bottom:1px solid #e2e8f0;">'+rd.blurb+'</div>' : '';
-    var ipaNum = window._lastSavedRecordNum || '';
-    var dateNow = new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
-    var infoBar = '<div style="padding:5px 18px;font-size:9px;color:#94a3b8;border-bottom:1px solid #e2e8f0;">'+
-      (ipaNum?ipaNum+' &middot; ':'')+' Entered by '+rep+' &middot; '+dateNow+'</div>';
-
-    // Body
-    var bodyHtml = '<div style="padding:14px 18px;"><table style="width:100%;border-collapse:collapse;">';
-
-    // TO DO banners
-    var pillClass = formComplete ? (_arOverride ? _arOverride : _formPc) : '';
-    if (!isResearch && formComplete) {
-      if (pillClass === 'asst') bodyHtml += '<tr><td colspan="2" style="padding:8px 12px;background:#fef2f2;border-left:4px solid #ef4444;margin-bottom:8px;"><p style="margin:0;font-size:12px;font-weight:700;color:#dc2626;">TO DO: Kill future tasks in Insights.</p></td></tr>';
-      else if (total >= 6 && (window._customerType||'') === 'Existing Customer') bodyHtml += '<tr><td colspan="2" style="padding:8px 12px;background:#f0fdf4;border-left:4px solid #16a34a;margin-bottom:8px;"><p style="margin:0;font-size:12px;font-weight:700;color:#16a34a;">TO DO: Enable tasks in Insights for this customer.</p></td></tr>';
+    var pc, scoreNum, scoreMax, stars;
+    if (isResearch) {
+      pc       = _arOverride || ((_scIv||0)>=3?'ag':(_scIv||0)>=2?'cp':'asst');
+      scoreNum = _scIv || 0;
+      scoreMax = '3';
+      stars    = '';
+    } else if (formComplete) {
+      pc       = _arOverride || (total>=7?'ag':total>=4?'cp':'asst');
+      scoreNum = total;
+      scoreMax = '9';
+      stars    = total>=7?'\u2605\u2605\u2605\u2605\u2605':total>=4?'\u2605\u2605\u2605':'\u2605';
+    } else {
+      pc       = '';
+      scoreNum = 0;
+      scoreMax = '9';
+      stars    = '';
     }
 
-    // 1. Know the company
-    bodyHtml += ebHdr('1', 'Know the company', '#2563eb', '#1e40af');
-    if (rd.companyIntel) {
-      var cleanIntel = rd.companyIntel.replace(/SAY THIS ON THE CALL/gi, 'TALKING POINTS').replace(/Say This On The Call/gi, 'Talking Points');
-      bodyHtml += '<tr><td colspan="2" style="padding:6px 0;"><div style="border-left:3px solid #60a5fa;padding:6px 0 6px 12px;font-size:10px;color:#334155;line-height:1.6;">'+cleanIntel+'</div></td></tr>';
-    }
-    bodyHtml += ssec('Company Snapshot');
-    bodyHtml += prow('Industry', rd.industry||'') + prow('Employees', rd.employees||'') + prow('Est. Revenue', rd.revenue||'') + prow('Founded', rd.foundedYear||'');
-    if (website) bodyHtml += prow('Website', '<a href="'+(website.match(/^https?:\/\//)?website:'https://'+website)+'" style="color:#1D9E75;">'+website.replace(/^https?:\/\//i,'')+'</a>');
-    var socialLinks = [];
-    if (rd.companyLinkedIn) socialLinks.push('<a href="'+rd.companyLinkedIn+'" style="color:#60a5fa;">LinkedIn</a>');
-    ['facebook','instagram','twitter','tiktok','youtube'].forEach(function(k){ if(sm[k]) socialLinks.push('<a href="'+sm[k]+'" style="color:#60a5fa;">'+k.charAt(0).toUpperCase()+k.slice(1)+'</a>'); });
-    if (socialLinks.length) bodyHtml += prow('Social', socialLinks.join(' &middot; '));
-    var comps = rd.competitors || [];
-    if (comps.length) {
-      bodyHtml += ssec('Competitors ('+comps.length+')');
-      comps.forEach(function(c){ bodyHtml += prow((c.name||''), (c.overlap||'')+(c.differentiator?' <span style="color:#dc2626;font-style:italic;font-size:10px;">'+c.differentiator+'</span>':'')+(c.website?' <a href="'+c.website+'" style="font-size:10px;color:#1D9E75;">'+c.website.replace(/^https?:\/\/(www\.)?/,'').replace(/\/.*$/,'')+'</a>':'')); });
-    }
-    if (rd.recentNews && rd.recentNews.length) {
-      bodyHtml += ssec('Recent News');
-      rd.recentNews.forEach(function(n){ bodyHtml += prow('<span style="color:#f59e0b;font-weight:600;">'+(n.date||'')+'</span>', (n.sourceUrl?'<a href="'+n.sourceUrl+'" style="color:#1e293b;text-decoration:underline;">'+(n.headline||'')+'</a>':(n.headline||''))); });
-    }
+    var tc       = pc ? _pdfTierCalc(pc) : { bg:'#0f172a', blockBg:'#1e293b', clr:'#94a3b8', bdr:'rgba(148,163,184,0.3)' };
+    var tierTd   = pc ? _tierDisplay(pc) : { name:'\u2014', priority:'\u2014' };
+    var owner    = isResearch ? tierTd.name : (formComplete ? tierTd.name : '\u2014');
+    var priority = isResearch ? 'RESEARCH ONLY' : (formComplete ? tierTd.priority : '\u2014');
+    var pillClass= formComplete ? (_arOverride || (total>=7?'ag':total>=4?'cp':'asst')) : '';
 
-    // 2. Know their events
-    var pdfTS = rd.tradeShows || [];
-    var allEvts = dh.sortByDate((rd.eventsSite||[]).concat(rd.eventsWeb||[]));
-    var obs = dh.sortByDate(rd.observances || []);
-    var totalEvts = pdfTS.length + allEvts.length + obs.length;
-    if (totalEvts) {
-      bodyHtml += ebHdr('2', 'Know their events', '#d97706', '#92400e');
-      bodyHtml += ssec('Events & Dates ('+totalEvts+')');
-      function addEvtRow(date, title, extra, isPast) {
-        var dateShort = (function(s){ if(!s)return ''; var d=dh.parse(s); if(!d)return s; return d.toLocaleDateString('en-US',{month:'short',day:'numeric'}); })(date);
-        bodyHtml += '<tr style="'+(isPast?'opacity:0.45;':'')+'"><td style="padding:4px 8px 4px 0;width:60px;font-size:10px;font-weight:600;color:'+(isPast?'#94a3b8':'#059669')+';">'+dateShort+'</td><td style="padding:4px 0;font-size:11px;'+(isPast?'color:#94a3b8;':'font-weight:600;color:#1e293b;')+'">'+title+extra+'</td></tr>';
-      }
-      pdfTS.forEach(function(t){ var diff=dh.daysAway(t.date); addEvtRow(t.date, '<strong>'+(t.title||'')+'</strong> <span style="font-size:9px;color:#7c3aed;font-weight:700;">[TRADESHOW]</span>', dh.badge(t.date), diff!==null&&diff<0); });
-      allEvts.forEach(function(e){ var diff=dh.daysAway(e.date); addEvtRow(e.date, '<strong>'+(e.title||'')+'</strong>'+(e.recurring?' <span style="color:#c2410c;font-size:9px;">[RECURRING]</span>':''), dh.badge(e.date), diff!==null&&diff<0); });
-      obs.forEach(function(oo){ var diff=dh.daysAway(oo.date); addEvtRow(oo.date, (oo.title||'')+' <span style="font-size:9px;color:#64748b;">[INDUSTRY]</span>', dh.badge(oo.date), diff!==null&&diff<0); });
-    }
-
-    // 3. Who's calling the shots
-    var dmRows2 = '';
-    [{key:'ownerExec',label:'Owner / Exec'},{key:'marketing',label:'Marketing'},{key:'procurement',label:'Procurement'}].forEach(function(r){
-      var p = dm[r.key]; if(!p||!p.name) return;
-      dmRows2 += prow(r.label, '<strong>'+p.name+'</strong>'+(p.title?' \u2014 '+p.title:'')+(p.linkedin?' <a href="'+p.linkedin+'" style="color:#60a5fa;">[LinkedIn]</a>':''));
+    // ── Build header + content via shared helpers ──────────────────
+    var headerHtml = _pdfA2Header({
+      mode:'email',
+      company:company||'\u2014', name:name||'\u2014', email:_emailV, phone:phone, rep:rep||'\u2014', ipaNum:ipaNum,
+      dateStr:dateStr, timeStr:timeStr, isRO:isResearch, isHot:isHot,
+      ivScore:_scIv||0, pvScore:_scPv||0, avScore:_scAv||0, totalScore:scoreNum, stars:stars,
+      tierBg:tc.bg, tierBlockBg:tc.blockBg, tierClr:tc.clr, tierBdr:tc.bdr,
+      tierName:owner, priority:priority,
+      industry:rd.industry, website:website, employees:rd.employees,
+      foundedYear:rd.foundedYear, blurb:rd.blurb,
+      searchCost:rd.searchCostUSD?'$'+rd.searchCostUSD:'',
+      companyLink: website || rd.companyLinkedIn || ''
     });
-    var kp = rd.keyPeople || [];
-    kp.forEach(function(p){ if(p.name) dmRows2 += prow((p.role||'Key Person'), '<strong>'+p.name+'</strong>'+(p.title?' \u2014 '+p.title:'')+(p.linkedin?' <a href="'+p.linkedin+'" style="color:#60a5fa;">[LinkedIn]</a>':'')); });
-    if (dmRows2) {
-      bodyHtml += ebHdr('3', "Who\u2019s calling the shots", '#7c3aed', '#5b21b6');
-      bodyHtml += ssec('Decision Makers & Key People');
-      bodyHtml += dmRows2;
-    }
 
-    // 4. How we can help
-    bodyHtml += ebHdr('4', 'How we can help', '#059669', '#166534');
-    var emCtp = rd.companyTalkingPoints || [];
-    if (emCtp.length) {
-      bodyHtml += ssec('Talking Points');
-      emCtp.forEach(function(tp, i) {
-        bodyHtml += '<tr><td colspan="2" style="padding:5px 0;border-bottom:1px solid #f1f5f9;">' +
-          '<div style="display:flex;gap:10px;align-items:flex-start;">' +
-            '<span style="font-size:11px;font-weight:700;color:#059669;flex-shrink:0;min-width:16px;">' + (i+1) + '</span>' +
-            '<span style="font-size:11px;color:#1e293b;line-height:1.5;">' + tp + '</span>' +
-          '</div>' +
-        '</td></tr>';
-      });
-    }
-    if (rd.salesHooks && rd.salesHooks.length) {
-      var hookColors = { milestone:'#92400e', news:'#991b1b', expansion:'#991b1b', hiring:'#991b1b', brand:'#1e40af', award:'#5b21b6', industry:'#5b21b6' };
-      var hookBgs = { milestone:'#fffbeb', news:'#fef2f2', expansion:'#fef2f2', hiring:'#fef2f2', brand:'#eff6ff', award:'#f5f3ff', industry:'#f5f3ff' };
-      var hookBorders = { milestone:'#fde68a', news:'#fecaca', expansion:'#fecaca', hiring:'#fecaca', brand:'#bfdbfe', award:'#ddd6fe', industry:'#ddd6fe' };
-      bodyHtml += ssec('Call Cheat Sheet ('+rd.salesHooks.length+')');
-      rd.salesHooks.forEach(function(h) {
-        var t = (h.type||'').toLowerCase();
-        bodyHtml += '<tr><td colspan="2" style="padding:5px 0;border-bottom:1px solid #f1f5f9;"><div style="margin-bottom:2px;"><span style="font-size:8px;font-weight:700;padding:2px 6px;background:'+(hookBgs[t]||'#f8fafc')+';border:1px solid '+(hookBorders[t]||'#e2e8f0')+';color:'+(hookColors[t]||'#64748b')+';text-transform:uppercase;letter-spacing:0.06em;">'+(h.type||'hook')+'</span></div><div style="font-size:11px;font-weight:600;color:#1e293b;">'+(h.finding||h.hook||'')+'</div>'+(h.pitch?'<div style="font-size:10px;color:#059669;margin-top:1px;">'+h.pitch+'</div>':'')+'</td></tr>';
-      });
-    }
+    var contentHtml = _pdfContentBlocks(rd, {
+      mode:'email',
+      isRO:isResearch, isHot:isHot,
+      name:name, email:_emailV, phone:phone, cid:cid, company:company, address:address, website:website, rep:rep||'\u2014',
+      owner:owner+((_arOverride&&!isResearch)?' (Override)':''), overrideNote:(_arOverride&&!isResearch)?' (Override)':'',
+      ivScore:_scIv||0, pvScore:_scPv||0, avScore:_scAv||0,
+      ivLabel:_lbIv, pvLabel:_lbPv, avLabel:_lbAv,
+      budgetType:budgetType, budgetAmount:budgetAmt, customerType:custType, avAmount:avAmt,
+      notes:notes,
+      pillClass:pillClass, totalScore:total
+    });
 
-    // Scoring (SC only)
-    if (!isResearch && formComplete) {
-      bodyHtml += ssec('Scoring Breakdown');
-      bodyHtml += '<tr><td colspan="2" style="padding:6px 0;"><table style="width:100%;border-collapse:separate;border-spacing:6px 0;"><tr>' +
-        '<td style="background:#f8fafc;border:1px solid #e2e8f0;padding:8px 10px;text-align:center;width:33%;"><div style="font-size:9px;color:#64748b;text-transform:uppercase;">IV</div><div style="font-size:18px;font-weight:700;color:'+(_scIv>=3?'#059669':_scIv>=2?'#d97706':'#ef4444')+';">'+(_scIv||0)+'/3</div><div style="font-size:9px;color:#94a3b8;">'+(_lbIv||'')+'</div></td>' +
-        '<td style="background:#f8fafc;border:1px solid #e2e8f0;padding:8px 10px;text-align:center;width:33%;"><div style="font-size:9px;color:#64748b;text-transform:uppercase;">PV</div><div style="font-size:18px;font-weight:700;color:'+(_scPv>=3?'#059669':_scPv>=2?'#d97706':'#ef4444')+';">'+(_scPv||0)+'/3</div><div style="font-size:9px;color:#94a3b8;">'+(_lbPv||'')+((budgetFmt)?' &middot; '+budgetFmt:'')+'</div></td>' +
-        '<td style="background:#f8fafc;border:1px solid #e2e8f0;padding:8px 10px;text-align:center;width:33%;"><div style="font-size:9px;color:#64748b;text-transform:uppercase;">AV</div><div style="font-size:18px;font-weight:700;color:'+(_scAv>=3?'#059669':_scAv>=2?'#d97706':'#ef4444')+';">'+(_scAv||0)+'/3</div><div style="font-size:9px;color:#94a3b8;">'+(_lbAv||'')+'</div></td>' +
-        '</tr></table></td></tr>';
-    }
+    // ── Full-width HOT banner (edge-to-edge; sits outside the padded content wrapper) ──
+    var hotBannerHtml = isHot
+      ? '<div style="background:#dc2626;padding:8px 18px;text-align:center;"><span style="font-size:11px;font-weight:700;color:#fff;letter-spacing:0.08em;text-transform:uppercase;">&#128293; HOT &mdash; Needs Immediate Attention</span></div>'
+      : '';
 
-    // Contact
-    bodyHtml += ssec('Contact & Details');
-    bodyHtml += prow('Customer Name', name) + prow('Phone', phone!=='\u2014'?phone:'') + prow('Email', emailVal!=='\u2014'?emailVal:'') + prow('CID', cid!=='\u2014'?cid:'') + prow('Company', company!=='\u2014'?company:'');
-    if (website) bodyHtml += prow('Website', '<a href="'+(website.match(/^https?:\/\//)?website:'https://'+website)+'" style="color:#1D9E75;">'+website.replace(/^https?:\/\//i,'')+'</a>');
-    if (rd.employees) bodyHtml += prow('Employees', rd.employees);
-    if (!isResearch && formComplete) {
-      bodyHtml += prow('Budget', (window._budgetType||'')+(budgetFmt?' &middot; '+budgetFmt:''));
-      bodyHtml += prow('Customer Type', window._customerType||'');
-      bodyHtml += prow('Assigned To', owner);
-    }
-    bodyHtml += prow('Rep', rep);
-    if (notes) bodyHtml += prow('Notes', notes);
-    bodyHtml += '</table></div>';
+    // ── Assemble ──────────────────────────────────────────────────
+    var footerLabel = isResearch ? 'Company Research' : 'Scorecard';
+    var emailInner =
+      '<div style="font-family:Arial,Helvetica,sans-serif;width:100%;max-width:740px;margin:0 auto;background:#fff;border:1px solid #e2e8f0;overflow:hidden;">' +
+        hotBannerHtml +
+        '<div style="padding:20px 24px 4px;">' + headerHtml + contentHtml + '</div>' +
+        '<div style="background:#f8fafc;border-top:1px solid #e2e8f0;padding:10px 18px;text-align:center;">' +
+          '<p style="margin:0;font-size:11px;color:#64748b;">'+(ipaNum?ipaNum+' &middot; ':'')+'AG&apos;s IPA Report Card &middot; '+footerLabel+' &middot; Confidential</p>' +
+        '</div>' +
+      '</div>';
 
-    // Assemble
-    var emailInner = '<div style="font-family:Arial,sans-serif;width:100%;background:#fff;border:1px solid #e2e8f0;overflow:hidden;">' +
-      headerHtml + blurbHtml + infoBar + bodyHtml +
-      '<div style="background:#f8fafc;border-top:1px solid #e2e8f0;padding:10px 18px;text-align:center;"><p style="margin:0;font-size:11px;color:#64748b;">AG\'s IPA Report Card &middot; '+(isResearch?'Company Research':'Scorecard')+' &middot; Entered by '+rep+'</p></div></div>';
-    var emailDoc = '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;padding:16px;background:#f1f5f9;font-family:Arial,sans-serif;}a{color:inherit;}</style></head><body>' + emailInner + '</body></html>';
-    el.innerHTML = emailInner;
+    // Full HTML doc — uses _pdfStyles() so shared classes (.section, .block-wrap, td.lbl, etc.) resolve,
+    // with email-specific body override on top.
+    var emailDoc = '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
+      '<style>'+_pdfStyles()+' body{background:#f1f5f9;margin:0;padding:16px 0;max-width:none;}</style>' +
+      '</head><body>' + emailInner + '</body></html>';
+
+    // Live preview: render via iframe so the <style> block applies cleanly (shared classes resolve) and matches what the recipient will see
+    var iframe = el.querySelector('iframe');
+    if (!iframe) {
+      el.innerHTML = '<iframe style="width:100%;border:0;background:#fff;display:block;min-height:600px;" frameborder="0"></iframe>';
+      iframe = el.querySelector('iframe');
+    }
+    iframe.srcdoc = emailDoc;
+    iframe.onload = function() {
+      try { iframe.style.height = (iframe.contentDocument.body.scrollHeight + 20) + 'px'; } catch(e) {}
+    };
     el._fullEmailDoc = emailDoc;
   }
 
